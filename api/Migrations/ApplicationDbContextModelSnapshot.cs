@@ -9,8 +9,8 @@ using api.Data;
 
 namespace api.Migrations
 {
-    [DbContext(typeof(AppicationDbContext))]
-    partial class AppicationDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ApplicationDbContext))]
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

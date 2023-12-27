@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-    public class AppicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public AppicationDbContext(DbContextOptions<AppicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
         public DbSet<Product> Products { get; set; }
