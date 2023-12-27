@@ -10,7 +10,7 @@ using api.Data;
 
 namespace api.Migrations
 {
-    [DbContext(typeof(AppicationDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20231219180428_AddProduct")]
     partial class AddProduct
     {
