@@ -1,3 +1,4 @@
+using api.DAO;
 using api.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Khai bao service cho dependency injection
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,6 +31,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-AppDbInitializer.Seed(app);
+// AppDbInitializer.Seed(app);
 
 app.Run();

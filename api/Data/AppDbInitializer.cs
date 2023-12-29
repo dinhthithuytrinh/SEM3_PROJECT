@@ -9,30 +9,28 @@ namespace api.Data
 {
     public class AppDbInitializer
     {
-        public static void Seed(IApplicationBuilder applicationBuilder)
-        {
-            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
-            {
+        public static void Seed(IApplicationBuilder applicationBuilder) {
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope()) {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
 
                 if (context != null) {
                     context.Database.Migrate();
 
-                    if (context.Products.Any()) {
+                    if (!context.Products.Any()) {
                         context.Products.AddRange(new List<Product>() {
                             new Product() {
-                                Name = "SP 1"
+                                Name = "Product one"
                             },
                             new Product() {
-                                Name = "SP 2"
+                                Name = "Product two"
                             },
                             new Product() {
-                                Name = "SP 3"
+                                Name = "Product three"
                             }
                         });
                         context.SaveChanges();
                     }
-                }
+                } 
             }
         }
     }
