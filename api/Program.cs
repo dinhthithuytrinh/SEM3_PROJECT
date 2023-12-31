@@ -15,6 +15,9 @@ builder.Services.AddSwaggerGen();
 
 // Khai bao service cho dependency injection
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -31,6 +34,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 
-// AppDbInitializer.Seed(app);
+AppDbInitializer.Seed(app);
 
 app.Run();

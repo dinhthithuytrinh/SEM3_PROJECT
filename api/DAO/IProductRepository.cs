@@ -6,9 +6,9 @@ using api.Entities;
 
 namespace api.DAO
 {
-    public interface IProductRepository
-    {
-        Task<List<Product>> GetProducts();
-        Task<Product> GetProductById(int id);
-    }
+  public interface IProductRepository
+  {
+    Task<List<Product>> GetProducts();
+    Task<Product> GetProductById(int id);
+  }
 }

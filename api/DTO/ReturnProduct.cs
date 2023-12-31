@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace api.Entities
+namespace api.DTO
 {
-  public class Product
+  public class ReturnProduct
   {
     public int Id { get; set; }
     public int ProductCode { get; set; }
@@ -18,13 +18,8 @@ namespace api.Entities
     public decimal Price { get; set; }
     public string PictureUrl { get; set; }
 
-    public ProductType ProductType { get; set; }
-    public int ProductTypeId { get; set; }
-
-
-    public ProductBrand ProductBrand { get; set; }
-    public int ProductBrandId { get; set; }
-
+    public string ProductType { get; set; }
+    public string ProductBrand { get; set; }
     public int Quantity { get; set; }
     public Boolean Status { get; set; }
     public DateTime CreatedBy { get; set; } = DateTime.Now;

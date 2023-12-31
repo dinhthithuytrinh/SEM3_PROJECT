@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 
 namespace api.Entities
 {
-    public class ProductBrand
-    {
-        public int Id {get; set;}
-        public string Name { get; set; }
-    }
+  public class ProductBrand
+  {
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public Boolean Status { get; set; }
+    public DateTime CreatedBy { get; set; } = DateTime.Now;
+    public DateTime UpdateBy { get; set; } = DateTime.Now;
+  }
 }
