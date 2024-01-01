@@ -40,7 +40,7 @@ namespace api.DAO
 
       if (filter != null)
       {
-        query.Where(filter);
+        query = query.Where(filter);
       }
 
       if (includeProperties != null && includeProperties != "")
