@@ -64,6 +64,38 @@ namespace api.DAO
       }
     }
 
+    public IQueryable<T> QueryWithCondition(
+        Expression<Func<T, bool>> filter, /// where t.id = 1
+        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, /// q => q.OrderBy(s => s.LasName)
+        string includeProperties)  /// ProductType,ProductBrand
+    {
+      IQueryable<T> query = dbSet.AsQueryable();
+
+      if (filter != null)
+      {
+        query = query.Where(filter);
+      }
+
+      if (includeProperties != null && includeProperties != "")
+      {
+        string[] splittedIncludeProperties =
+            includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+        foreach (var includeProperty in splittedIncludeProperties)
+        {
+          query = query.Include(includeProperty);
+        }
+      }
+
+      if (orderBy != null)
+      {
+        return orderBy(query);
+      }
+      else
+      {
+        return query;
+      }
+    }
     public void Add(T entity)
     {
       dbSet.Add(entity);
