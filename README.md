@@ -5,7 +5,7 @@
 - ng -version: 15.2.0
 - style: scss
 
-* API
+API
 
 #1 - In appsetting.json
 
@@ -16,7 +16,7 @@
 - Run cd api
 - Run dotnet watch run
 
-* CLIENT
+CLIENT
 
 #1 Open Command Prompt
 
