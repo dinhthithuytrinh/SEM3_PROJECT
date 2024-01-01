@@ -1,10 +1,12 @@
 # SEM3_PROJECT
 
-npm -v: 8.5.0
-node -version: 16.20.2
-ng -version: 15.2.0
+- npm -v: 8.5.0
+- node -version: 16.20.2
+- ng -version: 15.2.0
+- style: scss
 
-API
+* API
+
 #1 - In appsetting.json
 
 - Change AnyConnectionName to yours
@@ -14,7 +16,8 @@ API
 - Run cd api
 - Run dotnet watch run
 
-CLIENT
+* CLIENT
+
 #1 Open Command Prompt
 
 - Run cd client
