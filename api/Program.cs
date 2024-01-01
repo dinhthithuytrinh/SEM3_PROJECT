@@ -32,6 +32,14 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
   };
 });
 
+builder.Services.AddCors(options =>
+{
+  options.AddDefaultPolicy(policy =>
+  {
+    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "https://localhost:4200");
+  });
+});
+
 builder.Services.AddAutoMapper(typeof(MyAutoMapper));
 // Khai bao service cho dependency injection
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -50,6 +58,8 @@ if (app.Environment.IsDevelopment())
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 // app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseCors();
 
 app.UseAuthorization();
 
