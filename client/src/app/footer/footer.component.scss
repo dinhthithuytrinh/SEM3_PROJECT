@@ -1,0 +1,13 @@
+.footer {
+  background-color: pink;
+
+  & > * {
+    font-family: fantasy;
+  }
+
+  &-logo {
+    height: 60px;
+    width: 80px;
+    object-fit: contain;
+  }
+}
