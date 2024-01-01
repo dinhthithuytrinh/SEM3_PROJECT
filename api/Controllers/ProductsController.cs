@@ -34,7 +34,8 @@ namespace api.Controllers
       orderBy: q => q.OrderByDescending(s => s.CreatedBy),
       includeProperties: "ProductType,ProductBrand"
   );
-      return Ok(products);
+      // return Ok(products);
+      return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ReturnProduct>>(products));
     }
 
     [HttpGet("{id}")]
@@ -47,7 +48,8 @@ namespace api.Controllers
       );
 
       Product product = query.FirstOrDefault();
-      return Ok(product);
+      return Ok(_mapper.Map<Product, ReturnProduct>(product));
+      // return Ok(product);
       // return Ok(new ReturnProduct
       // {
       //   Id = product.Id,
@@ -69,21 +71,22 @@ namespace api.Controllers
     public async Task<ActionResult<ReturnProduct>> GetDetailProduct(int id)
     {
       Product product = await _productRepository.GetProductById(id);
-      return Ok(new ReturnProduct
-      {
-        Id = product.Id,
-        ProductCode = product.ProductCode,
-        Name = product.Name,
-        Description = product.Description,
-        PictureUrl = product.PictureUrl,
-        Price = product.Price,
-        Quantity = product.Quantity,
-        Status = product.Status,
-        ProductBrand = product.ProductBrand.Name,
-        ProductType = product.ProductType.Name,
-        CreatedBy = product.CreatedBy,
-        UpdateBy = product.UpdateBy
-      });
+      return Ok(_mapper.Map<Product, ReturnProduct>(product));
+      // return Ok(new ReturnProduct
+      // {
+      //   Id = product.Id,
+      //   ProductCode = product.ProductCode,
+      //   Name = product.Name,
+      //   Description = product.Description,
+      //   PictureUrl = product.PictureUrl,
+      //   Price = product.Price,
+      //   Quantity = product.Quantity,
+      //   Status = product.Status,
+      //   ProductBrand = product.ProductBrand.Name,
+      //   ProductType = product.ProductType.Name,
+      //   CreatedBy = product.CreatedBy,
+      //   UpdateBy = product.UpdateBy
+      // });
     }
 
     [HttpGet("origins")]
