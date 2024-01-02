@@ -180,17 +180,38 @@ namespace api.Controllers
     }
 
     [HttpGet("origins")]
+    // public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
+    // {
+    //   IEnumerable<ProductBrand> productBrands = await _unitOfWork.ProductBrandRepository.GetAll();
+    //   return Ok(productBrands);
+    // }
     public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
     {
-      IEnumerable<ProductBrand> productBrands = await _unitOfWork.ProductBrandRepository.GetAll();
-      return Ok(productBrands);
+      IEnumerable<ProductBrand> productBrands = await _unitOfWork.ProductBrandRepository.GetEntities(
+          filter: null,
+          orderBy: null,
+          includeProperties: null
+      );
+      // return Ok(productTypes);
+      return Ok(_mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ReturnProductBrand>>(productBrands));
     }
 
     [HttpGet("types")]
+    // public async Task<ActionResult<List<ProductType>>> GetProductTypes()
+    // {
+    //   // IEnumerable<ProductType> productTypes = await _unitOfWork.ProductTypeRepository.GetAll();
+    //   // // return Ok(productTypes);
+    //   // return Ok(_mapper.Map<ProductType, ReturnProductType>(productTypes));
+    // }
     public async Task<ActionResult<List<ProductType>>> GetProductTypes()
     {
-      IEnumerable<ProductType> productTypes = await _unitOfWork.ProductTypeRepository.GetAll();
-      return Ok(productTypes);
+      IEnumerable<ProductType> productTypes = await _unitOfWork.ProductTypeRepository.GetEntities(
+          filter: null,
+          orderBy: null,
+          includeProperties: null
+      );
+      // return Ok(productTypes);
+      return Ok(_mapper.Map<IEnumerable<ProductType>, IEnumerable<ReturnProductType>>(productTypes));
     }
   }
 }

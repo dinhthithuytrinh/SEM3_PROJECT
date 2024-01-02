@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace api.Entities
+namespace api.DTO
 {
-  public class ProductBrand
+  public class ReturnProductBrand
   {
     public int Id { get; set; }
     public string Name { get; set; }

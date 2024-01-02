@@ -6,6 +6,25 @@
 /* Importing Datepicker SCSS file. */
 @import "node_modules/ngx-bootstrap/datepicker/bs-datepicker";
 
+body {
+  background: black;
+
+  & > * {
+    font-family: fantasy;
+  }
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+  }
+
+  ul {
+    list-style: none;
+  }
+}
 .body {
   height: 100vh;
   display: flex;

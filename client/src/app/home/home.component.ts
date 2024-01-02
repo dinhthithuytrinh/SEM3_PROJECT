@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class HomeComponent {
   types: any[] = [];
   origins: any[] = [];
   constructor(private http: HttpClient) {}
@@ -26,12 +26,13 @@ export class AppComponent implements OnInit {
     this.http
       .get('http://localhost:5000/api/products/types')
       .subscribe((response: any) => {
-        this.types = response.data;
+        this.types = response;
       });
     this.http
       .get('http://localhost:5000/api/products/origins')
       .subscribe((response: any) => {
-        this.origins = response.data;
+        this.origins = response;
+        console.log(response);
       });
   }
 }

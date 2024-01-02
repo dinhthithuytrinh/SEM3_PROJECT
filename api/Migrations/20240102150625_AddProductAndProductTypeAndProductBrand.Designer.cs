@@ -12,7 +12,7 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231230170303_AddProductAndProductTypeAndProductBrand")]
+    [Migration("20240102150625_AddProductAndProductTypeAndProductBrand")]
     partial class AddProductAndProductTypeAndProductBrand
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,7 +86,13 @@ namespace api.Migrations
                     b.Property<DateTime>("CreatedBy")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PictureUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Status")
@@ -111,7 +117,13 @@ namespace api.Migrations
                     b.Property<DateTime>("CreatedBy")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PictureUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Status")

@@ -7,89 +7,111 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
-  public class AppDbInitializer
-  {
-    public static void Seed(IApplicationBuilder applicationBuilder)
+    public class AppDbInitializer
     {
-      using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
-      {
-        var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
-
-        if (context != null)
+        public static void Seed(IApplicationBuilder applicationBuilder)
         {
-          context.Database.Migrate();
-          if (!context.ProductTypes.Any())
-          {
-            context.ProductTypes.AddRange(new List<ProductType>()
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+
+                if (context != null)
+                {
+                    context.Database.Migrate();
+                    if (!context.ProductTypes.Any())
+                    {
+                        context.ProductTypes.AddRange(new List<ProductType>()
                         {
                             new ProductType()
                             {
                                 Name = "Arts",
+                                Description = "Arts for everybody",
+                                PictureUrl = "images/types/art.jpg",
                                 Status = true
                             },
                             new ProductType()
                             {
                                 Name = "Gift",
+                                Description = "Gift for bff",
+                                PictureUrl = "images/types/gift.jpg",
                                 Status = true
                             },
                             new ProductType()
                             {
                                 Name = "Wallet",
+                                Description = "Wallets for lover",
+                                PictureUrl = "images/types/wallet.jpg",
                                 Status = true
                             },
                             new ProductType()
                             {
                                 Name = "Anime",
+                                Description = "Anime for wibuuuu",
+                                PictureUrl = "images/types/anime.jpg",
                                 Status = true
                             },
                             new ProductType()
                             {
                                 Name = "Beauty",
+                                Description = "Beauty for trap",
+                                PictureUrl = "images/types/beauty.jpg",
                                 Status = true
                             }
                         });
-            context.SaveChanges();
-          }
-          if (!context.ProductBrands.Any())
-          {
-            context.ProductBrands.AddRange(new List<ProductBrand>()
+                        context.SaveChanges();
+                    }
+                    if (!context.ProductBrands.Any())
+                    {
+                        context.ProductBrands.AddRange(new List<ProductBrand>()
                         {
                             new ProductBrand()
                             {
                                 Name = "China",
+                                Description = "Hangxom",
+                                PictureUrl = "images/brands/cn.jpg",
                                 Status = true
                             },
                             new ProductBrand()
                             {
                                 Name = "Vietnam",
+                                Description = "Hang VNCLC",
+                                PictureUrl = "images/brands/vn.jpg",
                                 Status = true
                             },
                             new ProductBrand()
                             {
                                 Name = "US",
+                                Description = "Hangmeo",
+                                PictureUrl = "images/brands/us.jpg",
                                 Status = true
                             },
                             new ProductBrand()
                             {
                                 Name = "UK",
+                                Description = "Hangxomnhaanh",
+                                PictureUrl = "images/brands/uk.jpg",
                                 Status = true
                             },
                             new ProductBrand()
                             {
                                 Name = "JP",
+                                Description = "Hangnhat",
+                                PictureUrl = "images/brands/jp.jpg",
                                 Status = true
                             },
                             new ProductBrand()
                             {
                                 Name = "Korea",
+                                Description = "Hangxeng",
+                                PictureUrl = "images/brands/kr.jpg",
                                 Status = true
                             }
                         });
-            context.SaveChanges();
-          }
-          if (!context.Products.Any())
-          {
-            context.Products.AddRange(new List<Product>()
+                        context.SaveChanges();
+                    }
+                    if (!context.Products.Any())
+                    {
+                        context.Products.AddRange(new List<Product>()
                         {
                             new Product()
                             {
@@ -235,10 +257,10 @@ namespace api.Data
                                 Status = false
                             }
                         });
-            context.SaveChanges();
-          }
+                        context.SaveChanges();
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
