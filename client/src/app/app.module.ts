@@ -8,15 +8,16 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';
-import { HomeComponent } from './home/home.component';
+import { ShopModule } from './shop/shop.module';
 @NgModule({
-  declarations: [AppComponent, NavBarComponent, FooterComponent, HomeComponent],
+  declarations: [AppComponent, NavBarComponent, FooterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
     HttpClientModule,
+    ShopModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
