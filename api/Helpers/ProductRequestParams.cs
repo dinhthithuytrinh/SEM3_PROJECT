@@ -10,6 +10,7 @@ namespace api.Helpers
     public int? BrandId { get; set; }
     public int? TypeId { get; set; }
     public string Sort { get; set; }
+    public int? Client { get; set; }
 
 
     private string _search;

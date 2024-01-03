@@ -71,7 +71,9 @@ namespace api.Controllers
                 && (!productRequestParams.TypeId.HasValue
                     || x.ProductTypeId == productRequestParams.TypeId)
                 && (!productRequestParams.BrandId.HasValue
-                    || x.ProductBrandId == productRequestParams.BrandId),
+                    || x.ProductBrandId == productRequestParams.BrandId)
+                    && (!productRequestParams.Client.HasValue
+                    || x.Status == true),
         orderBy: sortedQuery,
         includeProperties: "ProductType,ProductBrand"
 );
