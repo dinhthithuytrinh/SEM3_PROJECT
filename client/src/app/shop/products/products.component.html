@@ -66,12 +66,14 @@
         <span
           >Showing
           <strong *ngIf="pagination">{{ pagination.pageNumber }}</strong> of
-          <strong *ngIf="page > 0">{{ page }}</strong> Results</span
+          <strong *ngIf="pageNum > 0">{{ pageNum }}</strong> Results</span
         >
       </div>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        <div class="col d-flex" *ngFor="let item of products">
-          <app-product-item [product]="item"></app-product-item>
+        <div *ngFor="let item of products">
+          <div class="d-flex col" *ngIf="item?.status == true">
+            <app-product-item [product]="item"></app-product-item>
+          </div>
         </div>
       </div>
     </div>
