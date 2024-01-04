@@ -4,6 +4,6 @@ export interface IType {
   description: string;
   pictureUrl: string;
   status: true;
-  createdBy: Date;
-  updateBy: Date;
+  createdBy?: Date;
+  updateBy?: Date;
 }

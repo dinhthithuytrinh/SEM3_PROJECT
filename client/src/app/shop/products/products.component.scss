@@ -4,10 +4,11 @@
   .sort {
     color: pink;
     border: 2px solid;
-    width: 120px;
+    min-width: 80px;
     margin: 0 10px;
 
-    &:hover {
+    &:hover,
+    &.active {
       color: black;
       background-color: pink;
     }
@@ -20,5 +21,26 @@
 .album {
   a > * {
     width: 100%;
+  }
+}
+
+.pagination1::ng-deep {
+  li {
+    &.disabled {
+      pointer-events: none;
+    }
+    a {
+      background-color: black !important;
+      color: pink !important;
+    }
+
+    &.active,
+    &:hover {
+      a {
+        background-color: pink !important;
+        color: black !important;
+        border-color: white;
+      }
+    }
   }
 }

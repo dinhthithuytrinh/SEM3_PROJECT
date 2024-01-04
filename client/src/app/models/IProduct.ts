@@ -7,7 +7,7 @@ export interface IProduct {
   pictureUrl: string;
   productType: string;
   productBrand: string;
-  quantity: number;
+  quantity?: number;
   status: Boolean;
   createdBy: Date;
   updateBy: Date;
