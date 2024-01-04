@@ -16,13 +16,36 @@ export class ShopService {
   getPages(): Observable<IPagination> {
     return this.http.get<IPagination>(this.baseUrl + 'products?pageSize=9');
   }
-  getProducts(typeId?: number): Observable<IPagination | null> {
+
+  getProducts(
+    sort: string,
+    pageNumber: number,
+    pageSize: number,
+    brandId?: number,
+    typeId?: number
+  ): Observable<IPagination | null> {
     let params = new HttpParams();
 
     if (typeId) {
       params = params.append('typeId', typeId.toString());
     }
-    return this.http.get<IPagination>(this.baseUrl + 'products?pageSize=9', {
+
+    if (brandId) {
+      params = params.append('brandId', brandId.toString());
+    }
+
+    // return this.http.get<IPagination>(
+    //   this.baseUrl + 'products?pageSize=9&client=1',
+    //   {
+    //     params,
+    //   }
+    // );
+
+    params = params.append('sort', sort);
+    params = params.append('pageNumber', pageNumber.toString());
+    params = params.append('pageSize', pageSize.toString());
+
+    return this.http.get<IPagination>(this.baseUrl + 'products?client=1', {
       params,
     });
   }
