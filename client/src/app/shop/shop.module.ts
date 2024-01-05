@@ -6,8 +6,8 @@ import { ProductsComponent } from './products/products.component';
 import { SharedModule } from '../shared/shared.module';
 import { ProductComponent } from './product/product.component';
 import { ProductItemComponent } from './product-item/product-item.component';
-import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { FooterComponent } from './footer/footer.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 @NgModule({
   declarations: [
