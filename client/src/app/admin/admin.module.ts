@@ -6,8 +6,9 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { ManagementComponent } from './management/management.component';
 import { SharedModule } from '../shared/shared.module';
-import { HomeComponent } from '../shop/home/home.component';
-
+import { RouterModule, Routes } from '@angular/router';
+import { AdminRoute } from './admin.routing';
+export const route: Routes = [{ path: '', component: AdminComponent }];
 @NgModule({
   declarations: [
     AdminComponent,
@@ -16,7 +17,7 @@ import { HomeComponent } from '../shop/home/home.component';
     HeaderComponent,
     ManagementComponent,
   ],
-  imports: [CommonModule, SharedModule],
+  imports: [CommonModule, SharedModule, RouterModule.forChild(AdminRoute)],
   exports: [AdminComponent, ManagementComponent],
 })
 export class AdminModule {}

@@ -21,8 +21,9 @@ export class ShopService {
     sort: string,
     pageNumber: number,
     pageSize: number,
-    brandId?: number,
-    typeId?: number
+    originId?: number,
+    typeId?: number,
+    search?: string
   ): Observable<IPagination | null> {
     let params = new HttpParams();
 
@@ -30,8 +31,8 @@ export class ShopService {
       params = params.append('typeId', typeId.toString());
     }
 
-    if (brandId) {
-      params = params.append('brandId', brandId.toString());
+    if (originId) {
+      params = params.append('originId', originId.toString());
     }
 
     // return this.http.get<IPagination>(
@@ -40,6 +41,9 @@ export class ShopService {
     //     params,
     //   }
     // );
+    if (search) {
+      params = params.append('search', search);
+    }
 
     params = params.append('sort', sort);
     params = params.append('pageNumber', pageNumber.toString());

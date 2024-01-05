@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md sticky-top border-bottom">
   <div class="container">
-    <a class="navbar-brand d-flex" href="/">
+    <a class="navbar-brand d-flex" routerLink="../">
       <img src="/assets/img/nav-logo.png" class="navbar-logo" alt="" />
       <p class="navbar-name">ARTS</p>
     </a>
@@ -8,14 +8,16 @@
       <ul
         class="navbar-nav flex-grow-1 justify-content-between align-items-center"
       >
-        <li class="nav-item"><a class="nav-link" href="#">Product</a></li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="./products">Product</a>
+        </li>
         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Sign in</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Sign up</a></li>
         <li class="nav-item">
           <a class="nav-link cart position-relative" href="#">
-            <fa-icon [icon]="faCartArrowDown" size="2x"></fa-icon>
+            <i class="fas fa-shopping-cart"></i>
             <div class="cart-number">2</div>
           </a>
         </li>

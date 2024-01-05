@@ -1,17 +1,16 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { IOrigin } from 'src/app/models/IOrigin';
-import { IType } from 'src/app/models/IType';
-import { ShopService } from '../shop.service';
-import { IPagination } from 'src/app/models/IPagination';
-import { IProduct } from 'src/app/models/IProduct';
+import { Component } from '@angular/core';
+import { ShopService } from '../shop/shop.service';
+import { IProduct } from '../models/IProduct';
+import { IType } from '../models/IType';
+import { IOrigin } from '../models/IOrigin';
+import { IPagination } from '../models/IPagination';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   products: IProduct[] = [];
   types: IType[] = [];
   origins: IOrigin[] = [];
