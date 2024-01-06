@@ -9,11 +9,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ShopModule } from './shop/shop.module';
 import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
-import { NavClientComponent } from './nav-client/nav-client.component';
-import { FooterClientComponent } from './footer-client/footer-client.component';
 
 @NgModule({
-  declarations: [AppComponent, NavClientComponent, FooterClientComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
