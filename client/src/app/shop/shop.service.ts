@@ -4,6 +4,7 @@ import { IPagination } from '../models/IPagination';
 import { Observable } from 'rxjs';
 import { IType } from '../models/IType';
 import { IOrigin } from '../models/IOrigin';
+import { IProduct } from '../models/IProduct';
 
 @Injectable({
   providedIn: 'root',
@@ -54,11 +55,21 @@ export class ShopService {
     });
   }
 
+  getRelateProducts(): Observable<IPagination> {
+    return this.http.get<IPagination>(
+      this.baseUrl + 'products?pageSize=3&client=1'
+    );
+  }
+
   getTypes(): Observable<IType[]> {
     return this.http.get<IType[]>(this.baseUrl + 'products/types');
   }
 
   getOrigins(): Observable<IOrigin[]> {
     return this.http.get<IOrigin[]>(this.baseUrl + 'products/origins');
+  }
+
+  getProductById(id: number): Observable<IProduct> {
+    return this.http.get<IProduct>(this.baseUrl + 'products/' + id);
   }
 }

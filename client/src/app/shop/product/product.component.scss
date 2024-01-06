@@ -1,0 +1,11 @@
+.product-detail {
+  & > * {
+    color: pink;
+  }
+}
+.display {
+  display: block;
+}
+.display-none {
+  display: none;
+}
