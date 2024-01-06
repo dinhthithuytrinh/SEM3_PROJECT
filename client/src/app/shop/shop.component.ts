@@ -62,6 +62,7 @@ export class ShopComponent {
           this.pageNumber = response!.pageNumber;
           this.pageSize = response!.pageSize;
           this.totalCount = response!.totalCount;
+          console.log('data:', response!.data);
         },
         error: (err) => console.log(err),
       });

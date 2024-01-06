@@ -15,9 +15,8 @@
           the creator, etc. Make it short and sweet, but not too short so folks
           don’t simply skip over it entirely.
         </p>
-        <p class="d-flex flex-wrap">
-          <a
-            href="#"
+        <div class="d-flex flex-wrap">
+          <div
             class="btn sort my-2 {{
               item.id === typeIdSelected ? 'active' : ''
             }}"
@@ -25,13 +24,13 @@
             (click)="onSelectProductType(item.id)"
             [class.active]="item.id === typeIdSelected"
           >
-            {{ item?.name }}</a
-          >
-        </p>
-        <div class="d-flex flex-wrap">
+            {{ item?.name }}
+          </div>
+        </div>
+        <ul class="d-flex flex-wrap">
           <li
             class="btn sort my-2  {{
-              item.id === typeIdSelected ? 'active' : ''
+              item.id === originIdSelected ? 'active' : ''
             }}"
             *ngFor="let item of origins"
             [class.active]="item.id === originIdSelected"
@@ -40,7 +39,7 @@
           >
             {{ item?.name }}
           </li>
-        </div>
+        </ul>
       </div>
     </div>
   </section>

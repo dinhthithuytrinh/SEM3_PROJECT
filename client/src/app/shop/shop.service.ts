@@ -33,7 +33,8 @@ export class ShopService {
     }
 
     if (originId) {
-      params = params.append('originId', originId.toString());
+      console.log('aaaa');
+      params = params.append('brandId', originId.toString());
     }
 
     // return this.http.get<IPagination>(
@@ -49,7 +50,7 @@ export class ShopService {
     params = params.append('sort', sort);
     params = params.append('pageNumber', pageNumber.toString());
     params = params.append('pageSize', pageSize.toString());
-
+    console.log(this.baseUrl + 'products?client=1' + params);
     return this.http.get<IPagination>(this.baseUrl + 'products?client=1', {
       params,
     });
