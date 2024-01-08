@@ -1,0 +1,46 @@
+.main {
+  color: pink;
+
+  .sort {
+    color: pink;
+    border: 2px solid;
+    min-width: 80px;
+    margin: 0 10px;
+
+    &:hover,
+    &.active {
+      color: black;
+      background-color: pink;
+    }
+  }
+
+  .mv {
+    margin: 0;
+  }
+}
+.album {
+  a > * {
+    width: 100%;
+  }
+}
+
+.pagination1::ng-deep {
+  li {
+    &.disabled {
+      pointer-events: none;
+    }
+    a {
+      background-color: black !important;
+      color: pink !important;
+    }
+
+    &.active,
+    &:hover {
+      a {
+        background-color: pink !important;
+        color: black !important;
+        border-color: white;
+      }
+    }
+  }
+}

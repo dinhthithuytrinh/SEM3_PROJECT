@@ -1,5 +1,5 @@
 export interface IProduct {
-  id: number;
+  id?: number;
   productCode: number;
   name: string;
   description: string;
@@ -7,7 +7,7 @@ export interface IProduct {
   pictureUrl: string;
   productType: string;
   productBrand: string;
-  quantity: number;
+  quantity?: number;
   status: Boolean;
   createdBy: Date;
   updateBy: Date;

@@ -42,3 +42,17 @@ a:hover {
     }
   }
 }
+
+.btn {
+  .disabled {
+    pointer-events: none;
+  }
+}
+
+.text-number {
+  color: green;
+
+  &.out {
+    color: #a21c1c;
+  }
+}

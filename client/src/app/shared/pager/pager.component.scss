@@ -1,0 +1,20 @@
+.pagination1::ng-deep {
+  li {
+    &.disabled {
+      pointer-events: none;
+    }
+    a {
+      background-color: black !important;
+      color: pink !important;
+    }
+
+    &.active,
+    &:hover {
+      a {
+        background-color: pink !important;
+        color: black !important;
+        border-color: white;
+      }
+    }
+  }
+}
