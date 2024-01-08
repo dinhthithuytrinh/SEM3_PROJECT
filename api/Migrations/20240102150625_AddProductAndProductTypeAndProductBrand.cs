@@ -59,6 +59,7 @@ namespace api.Migrations
                     ProductTypeId = table.Column<int>(type: "int", nullable: false),
                     ProductBrandId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
+                    
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     CreatedBy = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateBy = table.Column<DateTime>(type: "datetime2", nullable: false)
