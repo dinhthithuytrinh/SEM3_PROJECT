@@ -26,7 +26,7 @@ namespace api.Entities
     public int ProductBrandId { get; set; }
 
     public int Quantity { get; set; }
-    public Boolean Status { get; set; }
+    public Boolean Status { get; set; } 
     public DateTime CreatedBy { get; set; } = DateTime.Now;
     public DateTime UpdateBy { get; set; } = DateTime.Now;
   }

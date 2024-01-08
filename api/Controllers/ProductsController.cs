@@ -107,7 +107,7 @@ namespace api.Controllers
     public async Task<IActionResult> CreateProduct([FromForm] FileUpLoadAPI p)
     {
       p.ProductCode = GenerateUniqueProductCode();
-      string baseUrl = _configuration["ApiImgUrl"];
+      string baseUrl = _configuration["ApiUrl"];
       var findP = _Db.Products.Find(p.ProductId);
       if (findP != null)
       {
@@ -115,7 +115,7 @@ namespace api.Controllers
       }
       else
       {
-        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity, Status = p.Status, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
+        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
         if (p.files.Length > 0)
         {
           var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "products", p.files.FileName);
@@ -148,7 +148,7 @@ namespace api.Controllers
     {
 
       var existingProduct = _Db.Products.AsNoTracking().FirstOrDefault(p => p.Id == id);
-      string baseUrl = _configuration["ApiImgUrl"];
+      string baseUrl = _configuration["ApiUrl"];
 
       productUpdate.ProductCode = existingProduct.ProductCode;
       //productUpdate.IsDelete = existingProduct.IsDelete;
@@ -177,7 +177,7 @@ namespace api.Controllers
         var imagePath = SaveImage(f);
 
         existingProduct.PictureUrl = imagePath;
-        productUpdate.PictureUrl = existingProduct.PictureUrl;
+        productUpdate.PictureUrl = baseUrl + existingProduct.PictureUrl;
         
         _unitOfWork.ProductRepository.Update(productUpdate);
 
@@ -189,7 +189,7 @@ namespace api.Controllers
     }
     private string SaveImage(FileUpLoadAPI p)
     {
-      string baseUrl = _configuration["ApiImgUrl"];
+      string baseUrl = _configuration["ApiUrl"];
 
       var imageName = p.files.FileName;
       var contentRoot = _webHostEnvironment.ContentRootPath;
@@ -205,6 +205,7 @@ namespace api.Controllers
       return urlPath;
     }
 
+    [HttpDelete("Delete")]
     public async Task<ActionResult<Product>> Delete([FromForm] int id)
     {
       var product = await _unitOfWork.ProductRepository.GetEntityById(id);
@@ -221,6 +222,27 @@ namespace api.Controllers
       _unitOfWork.Save();
 
       return Ok("delete successfully");
+
+    }
+
+    [HttpPut("Delete/{id}")]
+    public async Task<ActionResult<Product>> DeleteUpdate(int id,[FromForm] Product productUpdate)
+    {
+      var product = await _unitOfWork.ProductRepository.GetEntityById(id);
+
+      if (product == null)
+      {
+        return BadRequest("khong co ma xoa");
+      }
+      else
+      {
+        product.Name = productUpdate.Name;
+        _unitOfWork.ProductRepository.Update(product);
+      }
+
+      _unitOfWork.Save();
+
+      return Ok(product);
 
     }
 
