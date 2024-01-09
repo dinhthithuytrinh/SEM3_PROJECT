@@ -5,7 +5,112 @@
       <!-- Main Content -->
       <div id="content">
         <app-admin-header></app-admin-header>
-        <div class="container-fluid"><p>admin-origins works!</p></div>
+        
+        <div class="container-fluid">
+          <h2>Origins List</h2>
+          <a
+            class="btn btn-primary"
+            (click)="toggleForm()"
+            >Add Origins</a
+          >
+
+          <!-- Hiển thị form nếu displayForm là true -->
+          <div *ngIf="displayForm">
+            <h2>{{ origin.id ? "Edit Origins" : "Add Origins" }}</h2>
+
+            <form (ngSubmit)="saveOrigin()">
+              <div class="form-group">
+                <label for="name">Name:</label>
+                <input
+                  [(ngModel)]="origin.name"
+                  name="name"
+                  id="name"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description:</label>
+                <input
+                  [(ngModel)]="origin.description"
+                  name="description"
+                  id="description"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="pictureUrl">Picture:</label>
+                <input type="file"
+                  [(ngModel)]="origin.pictureUrl"
+                  name="pictureUrl"
+                  id="pictureUrl"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="status">Status:</label>
+                <input
+                  [(ngModel)]="origin.status"
+                  name="status"
+                  id="status"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <!-- Add more form fields for additional properties -->
+
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="toggleForm()"
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
+
+          <table class="table mt-3">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Picture</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let origin of origins">
+                <td>{{ origin.id }}</td>
+                <td>{{ origin.name }}</td>
+                <td>{{ origin.description }}</td>
+                <td><img src="{{ origin.pictureUrl }}" alt="" style="width: 50px;"></td>
+                <td>{{ origin.status }}</td>
+                <td>
+                  <a
+                    class="btn btn-warning"
+                    (click)="editOrigin(origin)"
+                    >Edit</a
+                  >
+                  <button
+                    class="btn btn-danger"
+                    (click)="deleteOrigin(origin.id!)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <!-- <app-footer></app-footer> -->

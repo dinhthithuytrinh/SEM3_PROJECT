@@ -7,6 +7,7 @@ import { AdminRoute } from './admin.routing';
 import { AdminProductsComponent } from './admin-products/admin-products.component';
 import { AdminOriginsComponent } from './admin-origins/admin-origins.component';
 import { AdminTypesComponent } from './admin-types/admin-types.component';
+import { FormsModule } from '@angular/forms';
 // export const route: Routes = [{ path: '', component: AdminComponent }];
 @NgModule({
   declarations: [
@@ -15,7 +16,7 @@ import { AdminTypesComponent } from './admin-types/admin-types.component';
     AdminOriginsComponent,
     AdminTypesComponent,
   ],
-  imports: [CommonModule, SharedModule, RouterModule.forChild(AdminRoute)],
+  imports: [CommonModule, SharedModule,FormsModule, RouterModule.forChild(AdminRoute)],
   exports: [AdminComponent],
 })
 export class AdminModule {}

@@ -5,7 +5,162 @@
       <!-- Main Content -->
       <div id="content">
         <app-admin-header></app-admin-header>
-        <div class="container-fluid"><p>admin-products works!</p></div>
+        <div class="container-fluid">
+          <h2>Product List</h2>
+          <a
+            class="btn btn-primary"
+            (click)="toggleForm()"
+            >Add Product</a
+          >
+
+          <!-- Hiển thị form nếu displayForm là true -->
+          <div *ngIf="displayForm">
+            <h2>{{ product.id ? "Edit Product" : "Add Product" }}</h2>
+
+            <form (ngSubmit)="saveProduct()">
+              <div class="form-group">
+                <label for="name">Name:</label>
+                <input
+                  [(ngModel)]="product.name"
+                  name="name"
+                  id="name"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="description">Description:</label>
+                <input
+                  [(ngModel)]="product.description"
+                  name="description"
+                  id="description"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="price">Price:</label>
+                <input
+                  [(ngModel)]="product.price"
+                  name="price"
+                  id="price"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="pictureUrl">Picture:</label>
+                <input type="file"
+                  [(ngModel)]="product.pictureUrl"
+                  name="pictureUrl"
+                  id="pictureUrl"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="type">Type:</label>
+                <input
+                  [(ngModel)]="product.productType"
+                  name="type"
+                  id="type"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="brand">Brand:</label>
+                <input
+                  [(ngModel)]="product.productBrand"
+                  name="brand"
+                  id="brand"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input
+                  [(ngModel)]="product.quantity"
+                  name="quantity"
+                  id="quantity"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="status">Status:</label>
+                <input
+                  [(ngModel)]="product.status"
+                  name="status"
+                  id="status"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <!-- Add more form fields for additional properties -->
+
+              <button type="submit" class="btn btn-primary">Save</button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="toggleForm()"
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
+
+          <table class="table mt-3">
+            <thead>
+              <tr>
+                <th>SKU</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Picture</th>
+                <th>Type</th>
+                <th>Brand</th>
+                <th>Quantity</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let product of products">
+                <td>{{ product.productCode }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.description }}</td>
+                <td>{{ product.price }}</td>
+                <td><img src="{{ product.pictureUrl }}" alt="" style="width: 50px;"></td>
+                <td>{{ product.productType }}</td>
+                <td>{{ product.productBrand }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.status }}</td>
+                <td>
+                  <a
+                    class="btn btn-warning"
+                    (click)="editProduct(product)"
+                    >Edit</a
+                  >
+                  <button
+                    class="btn btn-danger"
+                    (click)="deleteProduct(product.id!)"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <!-- <app-footer></app-footer> -->
