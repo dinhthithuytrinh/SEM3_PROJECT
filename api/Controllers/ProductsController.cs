@@ -115,7 +115,7 @@ namespace api.Controllers
       }
       else
       {
-        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
+        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity,files = p.files, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
         if (p.files.Length > 0)
         {
           var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "products", p.files.FileName);
