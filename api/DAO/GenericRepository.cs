@@ -4,6 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using api.Data;
+using api.DTO;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.DAO
@@ -15,7 +17,7 @@ namespace api.DAO
 
     public GenericRepository(ApplicationDbContext dbContext)
     {
-      _db = dbContext;
+      _db = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
       dbSet = _db.Set<T>();
     }
 
@@ -63,6 +65,8 @@ namespace api.DAO
         return await query.ToListAsync();
       }
     }
+
+   
 
     public IQueryable<T> QueryWithCondition(
         Expression<Func<T, bool>> filter, /// where t.id = 1
