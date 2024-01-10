@@ -50,7 +50,7 @@ export class AdminService {
   }
 
 
-  // CRUD cho Origins
+  // CRUD cho Products
   getProduct(id: number): Observable<IProduct> {
     return this.http.get<IProduct>(`${this.baseUrl}products/${id}`);
   }
@@ -62,7 +62,7 @@ export class AdminService {
 
   addProduct(product: IProduct): Observable<IProduct> {
     // Gửi HTTP POST request để thêm mới sản phẩm
-    return this.http.post<IProduct>(`${this.baseUrl}products`, product);
+    return this.http.post<IProduct>(`${this.baseUrl}products/Create`, product);
   }
 
   updateProduct(product: IProduct): Observable<IProduct> {
