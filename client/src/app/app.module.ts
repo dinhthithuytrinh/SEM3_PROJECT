@@ -9,6 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ShopModule } from './shop/shop.module';
 import { SharedModule } from './shared/shared.module';
 import { AdminModule } from './admin/admin.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +19,7 @@ import { AdminModule } from './admin/admin.module';
     BrowserAnimationsModule,
     SharedModule,
     HttpClientModule,
+    FormsModule
     // ShopModule,
     // AdminModule,
   ],
