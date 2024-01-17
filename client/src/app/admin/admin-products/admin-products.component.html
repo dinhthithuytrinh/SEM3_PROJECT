@@ -17,7 +17,8 @@
           <div *ngIf="displayForm">
             <h2>{{ product.id ? "Edit Product" : "Add Product" }}</h2>
 
-            <form method="post" action="Create" enctype="multipart/form-data">
+            <form (ngSubmit)="saveProduct()">
+
               <div class="form-group">
                 <label for="name">Name:</label>
                 <input
@@ -54,6 +55,9 @@
               <div class="form-group">
                 <label for="pictureUrl">Picture:</label>
                 <input type="file"
+
+                  [(ngModel)]="product.pictureUrl"
+                       
                   name="pictureUrl"
                   id="pictureUrl"
                   class="form-control"
@@ -63,16 +67,26 @@
 
               <div class="form-group">
                 <label for="type">Type:</label>
-                <select [(ngModel)]="product.id" name="type" id="type" class="form-control" required>
-                  <option *ngFor="let type of types" [value]="type.id">{{ type.name }}</option>
-                </select>
+
+                <input
+                  [(ngModel)]="product.productType"
+                  name="type"
+                  id="type"
+                  class="form-control"
+                  required
+                />
               </div>
 
               <div class="form-group">
-                <label for="origin">Origin:</label>
-                <select [(ngModel)]="product.id" name="origin" id="origin" class="form-control" required>
-                  <option *ngFor="let origin of origins" [value]="origin.id">{{ origin.name }}</option>
-                </select>
+                <label for="brand">Brand:</label>
+                <input
+                  [(ngModel)]="product.productBrand"
+                  name="brand"
+                  id="brand"
+                  class="form-control"
+                  required
+                />
+
               </div>
 
               <div class="form-group">
@@ -87,26 +101,22 @@
               </div>
               <div class="form-group">
                 <label for="status">Status:</label>
-                <div *ngFor="let status of statuses">
-                  <label class="radio-inline">
-                    <input
-                      type="radio"
-                      [(ngModel)]="product.status"
-                      name="status"
-                      [value]="status.value"
-                      required
-                    /> {{ status.label }}
-                  </label>
-                </div>
+
+                <input
+                  [(ngModel)]="product.status"
+                  name="status"
+                  id="status"
+                  class="form-control"
+                  required
+                />
+
               </div>
 
               <!-- Add more form fields for additional properties -->
 
-              <button 
-                type="submit" 
-                class="btn btn-primary"
 
-                >Save</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+
               <button
                 type="button"
                 class="btn btn-secondary"
@@ -145,13 +155,17 @@
                 <td>{{ product.status }}</td>
                 <td>
                   <a
-                    class="btn btn-warning"
+
+                    class="btn btn-success"
+
                     (click)="editProduct(product)"
                     >Edit</a
                   >
                   <button
-                    class="btn btn-danger"
-                    (click)="deleteProduct()"
+
+                    class="btn btn-warning"
+                    (click)="deleteProduct(product.id!)"
+
                   >
                     Delete
                   </button>

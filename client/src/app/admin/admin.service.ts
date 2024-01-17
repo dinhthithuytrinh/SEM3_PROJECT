@@ -51,6 +51,7 @@ export class AdminService {
 
 
   // CRUD cho Products
+
   getProduct(id: number): Observable<IProduct> {
     return this.http.get<IProduct>(`${this.baseUrl}products/${id}`);
   }
@@ -62,6 +63,7 @@ export class AdminService {
 
   addProduct(product: IProduct): Observable<IProduct> {
     // Gửi HTTP POST request để thêm mới sản phẩm
+
     return this.http.post<IProduct>(`${this.baseUrl}products/Create`, product);
   }
 
@@ -80,12 +82,14 @@ export class AdminService {
     return this.http.get<IOrigin[]>(`${this.baseUrl}products/origins`);
   }
 
+
   addOrigin(origin: any): Observable<IOrigin> {
     return this.http.post<any>(`${this.baseUrl}products/origins/Create`, origin);
   }
 
   updateOrigin(origin: any): Observable<IOrigin> {
     return this.http.put<any>(`${this.baseUrl}products/origins/${origin.id}`, origin);
+
   }
 
   deleteOrigin(id: number): Observable<void> {
