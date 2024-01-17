@@ -50,7 +50,8 @@ export class AdminService {
   }
 
 
-  // CRUD cho Origins
+  // CRUD cho Products
+
   getProduct(id: number): Observable<IProduct> {
     return this.http.get<IProduct>(`${this.baseUrl}products/${id}`);
   }
@@ -62,7 +63,8 @@ export class AdminService {
 
   addProduct(product: IProduct): Observable<IProduct> {
     // Gửi HTTP POST request để thêm mới sản phẩm
-    return this.http.post<IProduct>(`${this.baseUrl}products`, product);
+
+    return this.http.post<IProduct>(`${this.baseUrl}products/Create`, product);
   }
 
   updateProduct(product: IProduct): Observable<IProduct> {
@@ -80,16 +82,22 @@ export class AdminService {
     return this.http.get<IOrigin[]>(`${this.baseUrl}products/origins`);
   }
 
-  addOrigin(origin: IOrigin): Observable<IOrigin> {
-    return this.http.post<IOrigin>(`${this.baseUrl}products/origins`, origin);
+
+  addOrigin(origin: any): Observable<IOrigin> {
+    return this.http.post<any>(`${this.baseUrl}products/origins/Create`, origin);
   }
 
-  updateOrigin(origin: IOrigin): Observable<IOrigin> {
-    return this.http.put<IOrigin>(`${this.baseUrl}products/origins/${origin.id}`, origin);
+  updateOrigin(origin: any): Observable<IOrigin> {
+    return this.http.put<any>(`${this.baseUrl}products/origins/${origin.id}`, origin);
+
   }
 
   deleteOrigin(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/products/origins/${id}`);
+  }
+
+  uploadPhoto(photo: any) {
+    return this.http.post(this.baseUrl + 'products/origins/savefile', photo);
   }
 
   // CRUD cho Types

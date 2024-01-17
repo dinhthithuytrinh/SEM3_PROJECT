@@ -29,7 +29,7 @@ namespace api.Controllers
     public ProductsController(IUnitOfWork unitOfWork, IProductRepository productRepository, IMapper mapper, ApplicationDbContext Db, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
     {
       _unitOfWork = unitOfWork;
-      _productRepository = productRepository;
+      _productRepository = productRepository ;
       _mapper = mapper;
       _configuration = configuration;
       _webHostEnvironment = webHostEnvironment;
@@ -115,7 +115,7 @@ namespace api.Controllers
       }
       else
       {
-        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
+        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity,files = p.files, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
         if (p.files.Length > 0)
         {
           var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "products", p.files.FileName);
@@ -146,54 +146,87 @@ namespace api.Controllers
 
     public ActionResult<Product> UpdateProduct(int id, [FromForm] Product productUpdate, [FromForm] FileUpLoadAPI f)
     {
+      try{
+        var existingProduct = _Db.Products.AsNoTracking().FirstOrDefault(p => p.Id == id);
+        string baseUrl = _configuration["ApiUrl"];
 
-      var existingProduct = _Db.Products.AsNoTracking().FirstOrDefault(p => p.Id == id);
-      string baseUrl = _configuration["ApiUrl"];
+        productUpdate.ProductCode = existingProduct.ProductCode;
 
-      productUpdate.ProductCode = existingProduct.ProductCode;
-      //productUpdate.IsDelete = existingProduct.IsDelete;
-      if (existingProduct != null)
-      {
-        _Db.Entry(existingProduct).State = EntityState.Detached;
-      }
-      if (productUpdate != null)
-      {
-        _Db.Entry(productUpdate).State = EntityState.Detached;
-      }
-      if (f == null)
-      {
-        return BadRequest("FileUpLoadAPI f is null");
-      }
 
-      _Db.Entry(productUpdate).State = EntityState.Modified;
-      if (existingProduct.Id != productUpdate.Id)
-      {
-        return BadRequest("NO Data");
-      }
+  
+        if (existingProduct.Id != productUpdate.Id)
+        {
+          return BadRequest("NO Data");
+        }
+        else
+        {
+          if (existingProduct == null)
+          {
+            return NotFound("Product not found");
+          }
+          if (productUpdate.Name != null)
+          {
+            existingProduct.Name = productUpdate.Name;
+          }
 
-      else
-      {
+          if (productUpdate.Status != null)
+          {
+            existingProduct.Status = productUpdate.Status;
+          }
+          if (productUpdate.Description != null)
+          {
+            existingProduct.Description = productUpdate.Description;
+          }
 
-        var imagePath = SaveImage(f);
+          if (productUpdate.Price != null)
+          {
+            existingProduct.Price = productUpdate.Price;
+          }
+          if (productUpdate.ProductBrandId != null)
+          {
+            existingProduct.ProductBrandId = productUpdate.ProductBrandId;
+          }
 
-        existingProduct.PictureUrl = imagePath;
-        productUpdate.PictureUrl = baseUrl + existingProduct.PictureUrl;
+          if (productUpdate.ProductTypeId != null)
+          {
+            existingProduct.ProductTypeId = productUpdate.ProductTypeId;
+          }
+          if (productUpdate.Quantity != null)
+          {
+            existingProduct.Quantity = productUpdate.Quantity;
+          }
+          if (productUpdate.PictureUrl != null)
+          {
+            existingProduct.PictureUrl = productUpdate.PictureUrl;
+          }
+          if (f != null && f.files != null)
+          {
+            var imagePath = SaveImage(f);
+            existingProduct.PictureUrl = baseUrl + imagePath;
+          }
+          _unitOfWork.ProductRepository.Update(existingProduct);
+          _unitOfWork.Save();
+        }
         
-        _unitOfWork.ProductRepository.Update(productUpdate);
 
+        return BadRequest(existingProduct);
 
       }
-      _unitOfWork.Save();
+      catch (Exception ex)
+      {
+        return StatusCode(500, $"Internal Server Error: {ex.Message}");
+      }
 
-      return BadRequest(productUpdate);
     }
+
+   
     private string SaveImage(FileUpLoadAPI p)
     {
       string baseUrl = _configuration["ApiUrl"];
 
       var imageName = p.files.FileName;
-      var contentRoot = _webHostEnvironment.ContentRootPath;
-      var path = Path.Combine("wwwroot", "images", "products", imageName);
+      var directoryPath = Path.Combine("images", "products");
+      var path = Path.Combine(directoryPath, imageName);
       string urlPath = path.Replace("\\", "/");
 
 
@@ -225,27 +258,7 @@ namespace api.Controllers
 
     }
 
-    [HttpPut("Delete/{id}")]
-    public async Task<ActionResult<Product>> DeleteUpdate(int id,[FromForm] Product productUpdate)
-    {
-      var product = await _unitOfWork.ProductRepository.GetEntityById(id);
-
-      if (product == null)
-      {
-        return BadRequest("khong co ma xoa");
-      }
-      else
-      {
-        product.Name = productUpdate.Name;
-        _unitOfWork.ProductRepository.Update(product);
-      }
-
-      _unitOfWork.Save();
-
-      return Ok(product);
-
-    }
-
+  
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ReturnProduct>> GetSingleProduct(int id)

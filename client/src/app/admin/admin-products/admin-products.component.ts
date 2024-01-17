@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from 'src/app/models/IProduct';
 import { AdminService } from '../admin.service';
+
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,6 +13,7 @@ export class AdminProductsComponent implements OnInit {
   products: IProduct[] = [];
 
   product: IProduct = {
+
     productCode: 0,
     name: '',
     description: '',
@@ -25,12 +27,14 @@ export class AdminProductsComponent implements OnInit {
     updateBy: new Date(),
   };
 
+
   displayForm = false;
 
   constructor(private adminService: AdminService, private router: Router) {}
 
   ngOnInit(): void {
     this.getProducts();
+
   }
 
   getProducts(): void {
@@ -48,6 +52,7 @@ export class AdminProductsComponent implements OnInit {
     this.product = { ...product };
     this.toggleForm(); // Hiển thị form
   }
+
 
   saveProduct(): void {
     // Thêm logic để lưu sản phẩm
@@ -85,4 +90,5 @@ export class AdminProductsComponent implements OnInit {
         .subscribe(() => this.getProducts());
     }
   }
+
 }
