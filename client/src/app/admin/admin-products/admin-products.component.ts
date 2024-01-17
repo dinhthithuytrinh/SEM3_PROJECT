@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from 'src/app/models/IProduct';
 import { AdminService } from '../admin.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IType } from 'src/app/models/IType';
 import { IOrigin } from 'src/app/models/IOrigin';
 
@@ -37,7 +37,7 @@ export class AdminProductsComponent implements OnInit {
 
   displayForm = false;
 
-  constructor(private adminService: AdminService, private router: Router) {}
+  constructor(private adminService: AdminService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.getProducts();
@@ -95,27 +95,16 @@ export class AdminProductsComponent implements OnInit {
   //   }
   // }
 
-    saveProduct() : void {
-      const product = {
-        name: this.product.name,
-        description: this.product.description,
-        price: this.product.price,
+    
 
-      };
-      this.adminService.addProduct(this.product)
+    deleteProduct(): void {
+      this.adminService.deleteProduct(this.product.id! as number)
         .subscribe({
           next: (res) => {
             console.log(res);
+            this.router.navigate(['/products']);
           },
           error: (e) => console.error(e)
         });
     }
-
-  deleteProduct(productId: number): void {
-    if (confirm('Are you sure you want to delete this product?')) {
-      this.adminService
-        .deleteProduct(productId)
-        .subscribe(() => this.getProducts());
-    }
-  }
 }

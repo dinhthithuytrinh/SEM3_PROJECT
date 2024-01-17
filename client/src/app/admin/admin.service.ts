@@ -80,16 +80,20 @@ export class AdminService {
     return this.http.get<IOrigin[]>(`${this.baseUrl}products/origins`);
   }
 
-  addOrigin(origin: IOrigin): Observable<IOrigin> {
-    return this.http.post<IOrigin>(`${this.baseUrl}products/origins`, origin);
+  addOrigin(origin: any): Observable<IOrigin> {
+    return this.http.post<any>(`${this.baseUrl}products/origins/Create`, origin);
   }
 
-  updateOrigin(origin: IOrigin): Observable<IOrigin> {
-    return this.http.put<IOrigin>(`${this.baseUrl}products/origins/${origin.id}`, origin);
+  updateOrigin(origin: any): Observable<IOrigin> {
+    return this.http.put<any>(`${this.baseUrl}products/origins/${origin.id}`, origin);
   }
 
   deleteOrigin(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/products/origins/${id}`);
+  }
+
+  uploadPhoto(photo: any) {
+    return this.http.post(this.baseUrl + 'products/origins/savefile', photo);
   }
 
   // CRUD cho Types

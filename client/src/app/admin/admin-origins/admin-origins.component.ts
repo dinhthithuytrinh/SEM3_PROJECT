@@ -8,63 +8,85 @@ import { AdminService } from '../admin.service';
   styleUrls: ['./admin-origins.component.scss']
 })
 export class AdminOriginsComponent implements OnInit {
-  origins: IOrigin[] = [];
 
-  origin: IOrigin = {
-    id: 0,
-    name: '',
-    description: '',
-    pictureUrl: '',
-    status: true,
-    createdBy: new Date(),
-    updateBy: new Date()
-  };
+  constructor(private adminService: AdminService) {}
 
-  displayForm = false;
+  OriginsList: any = [];
+  ModalTitle = "";
+  ActivateAddEditOriginComponent: boolean = false;
+  ori: any;
 
-  constructor(private adminService: AdminService) { }
+  OriginsIdFilter = "";
+  OriginsNameFilter = "";
+  OriginsListWithoutFilter: any = [];
 
   ngOnInit(): void {
-    this.getOrigins();
+      this.refreshOriginsList();
   }
 
-  getOrigins(): void {
-    this.adminService.getOrigins()
-      .subscribe(response => this.origins = response || []);
+  addClick() {
+    this.ori = {
+      id: "0",
+      name: "",
+      description: "",
+      pictureURL: "",
+      status: true,
+    }
+    this.ModalTitle = "Add Origins";
+    this.ActivateAddEditOriginComponent = true;
   }
 
-  toggleForm(): void {
-    this.displayForm = !this.displayForm;
+  editClick(item: any) {
+    this.ori = item;
+    this.ModalTitle = "Edit Origins";
+    this.ActivateAddEditOriginComponent = true;
   }
 
-  editOrigin(origin: IOrigin): void {
-    this.origin = { ...origin };
-    this.toggleForm();
-  }
-
-  saveOrigin(): void {
-    if (this.origin.id) {
-      this.adminService.updateOrigin(this.origin)
-        .subscribe(updatedOrigin => {
-          console.log('Origin updated successfully:', updatedOrigin);
-          this.getOrigins();
-          this.toggleForm();
-        });
-    } else {
-      this.adminService.addOrigin(this.origin)
-        .subscribe(newOrigin => {
-          console.log('Origin added successfully:', newOrigin);
-          this.getOrigins();
-          this.toggleForm();
-        });
+  deleteClick(item: any) {
+    if (confirm('Are you sure??')) {
+      this.adminService.deleteOrigin(item.id).subscribe(data => {
+        alert(data);
+        this.refreshOriginsList();
+      })
     }
   }
 
-  deleteOrigin(id: number): void {
-    this.adminService.deleteOrigin(id)
-      .subscribe(() => {
-        console.log('Origin deleted successfully.');
-        this.getOrigins();
-      });
+  closeClick() {
+    this.ActivateAddEditOriginComponent = false;
+    this.refreshOriginsList();
   }
+
+  refreshOriginsList() {
+    this.adminService.getOrigins().subscribe(data => {
+      this.OriginsList = data;
+      this.OriginsListWithoutFilter = data;
+    });
+  }
+
+  sortResult(prop: any, asc: any) {
+    this.OriginsList = this.OriginsListWithoutFilter.sort(function (a: any, b: any) {
+      if (asc) {
+        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+      }
+      else {
+        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+      }
+    });
+  }
+
+  FilterFn() {
+    var OriginsIdFilter = this.OriginsIdFilter;
+    var OriginsNameFilter = this.OriginsNameFilter;
+
+    this.OriginsList = this.OriginsListWithoutFilter.filter(
+      function (el: any) {
+        return el.DepartmentId.toString().toLowerCase().includes(
+          OriginsIdFilter.toString().trim().toLowerCase()
+        ) &&
+          el.DepartmentName.toString().toLowerCase().includes(
+            OriginsNameFilter.toString().trim().toLowerCase())
+      }
+    );
+  }
+
 }
