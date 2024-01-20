@@ -15,17 +15,16 @@ export class AddEditOriginsComponent implements OnInit {
   name = "";
   description = "";
   pictureURL = "";
-  status = "";
-  OriginsList: any = [];
-
+  status = true;
+  file: File | null = null;
 
 
   ngOnInit(): void {
     this.id = this.ori.id;
     this.name = this.ori.name;
     this.description = this.ori.description;
-    this.pictureURL = this.ori.pictureURL;
-    this.status = this.ori.status;
+    this.pictureURL = this.ori.pictureURL || "";
+    this.status = this.ori.status || "";
 
   }
 
@@ -34,35 +33,83 @@ export class AddEditOriginsComponent implements OnInit {
       id: this.id,
       name: this.name,
       description: this.description,
-      pictureURL: this.pictureURL,
-      status: this.status
+      status: this.status,
+      file: this.file  // Thêm trường file vào đối tượng origin
     };
-    this.adminService.addOrigin(origin).subscribe(res => {
-      alert(res.toString());
-    });
+
+    this.adminService.addOrigin(origin).subscribe(
+      (res) => {
+        // Xử lý thành công
+        alert("Origin added successfully!");
+      },
+      (error) => {
+        // Xử lý lỗi
+        console.error("Error adding origin:", error);
+      }
+    );
   }
 
   updateOrigin() {
-    var origin = {
+    const origin = {
       id: this.id,
       name: this.name,
       description: this.description,
-      pictureURL: this.pictureURL,
-      status: this.status
+      status: this.status,
+      file: this.file  // Thêm trường file vào đối tượng origin
     };
+
     this.adminService.updateOrigin(origin).subscribe(res => {
       alert(res.toString());
     });
   }
 
   uploadPhoto(event: any) {
-    var file = event.target.files[0];
-    const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
+    const file = event.target.files[0];
+    this.file = file;
 
-    this.adminService.uploadPhoto(formData).subscribe((data: any) => {
-      this.pictureURL = data.toString();
-    })
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.pictureURL = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
   }
+
+  // addOrigin() {
+  //   var origin = {
+  //     id: this.id,
+  //     name: this.name,
+  //     description: this.description,
+  //     pictureURL: this.pictureURL,
+  //     status: this.status
+  //   };
+  //   this.adminService.addOrigin(origin).subscribe(res => {
+  //     alert(res.toString());
+  //   });
+  // }
+
+  // updateOrigin() {
+  //   var origin = {
+  //     id: this.id,
+  //     name: this.name,
+  //     description: this.description,
+  //     pictureURL: this.pictureURL,
+  //     status: this.status
+  //   };
+  //   this.adminService.updateOrigin(origin).subscribe(res => {
+  //     alert(res.toString());
+  //   });
+  // }
+
+  // uploadPhoto(event: any) {
+  //   var file = event.target.files[0];
+  //   const formData: FormData = new FormData();
+  //   formData.append('file', file, file.name);
+
+  //   this.adminService.uploadPhoto(formData).subscribe((data: any) => {
+  //     this.pictureURL = data.toString();
+  //   })
+  // }
  
 }
