@@ -31,6 +31,7 @@ export class AdminOriginsComponent implements OnInit {
       description: "",
       pictureURL: "",
       status: true,
+      file: null  // Thêm trường file và gán giá trị null
     }
     this.ModalTitle = "Add Origins";
     this.ActivateAddEditOriginComponent = true;

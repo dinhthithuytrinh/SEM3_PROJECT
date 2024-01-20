@@ -9,13 +9,17 @@
         <input type="text" class="form-control" [(ngModel)]="description">
       </div>
       <div class="input-group mb-3">
-        <span class="input-group-text">Status</span>
-        <input type="text" class="form-control" [(ngModel)]="status">
+        <label class="input-group-text" for="statusSelect">Status</label>
+        <select class="form-select" id="statusSelect" [(ngModel)]="status" name="status">
+          <option [value]="status">Available</option>
+          <option [value]="status">Unavailable</option>
+        </select>
       </div>
+      
     </div>
     <div class="p-2 w-50 bd-highlight">
-      <img width="250px" height="250px" [src]="pictureURL" />
-      <input class="m-2" type="file" (change)="uploadPhoto($event)">
+      <img width="100%" height="auto" [src]="pictureURL"/>
+      <input class="m-2 w-100" type="file" (change)="uploadPhoto($event)">
     </div>
   </div>
   <button type="button" (click)="addOrigin()" *ngIf="ori.id=='0'" class="btn btn-primary">

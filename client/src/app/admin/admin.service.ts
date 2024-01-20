@@ -78,26 +78,64 @@ export class AdminService {
 
 
   // CRUD cho Origins
+  // getOrigins(): Observable<IOrigin[]> {
+  //   return this.http.get<IOrigin[]>(`${this.baseUrl}products/origins`);
+  // }
+
+  // addOrigin(origin: any): Observable<IOrigin> {
+  //   return this.http.post<any>(`${this.baseUrl}products/origins/Create`, origin);
+  // }
+
+  // updateOrigin(origin: any): Observable<IOrigin> {
+  //   return this.http.put<any>(`${this.baseUrl}products/origins/${origin.id}`, origin);
+  // }
+
+  // deleteOrigin(id: number): Observable<void> {
+  //   return this.http.delete<void>(`${this.baseUrl}/products/origins/${id}`);
+  // }
+
+  // uploadPhoto(photo: any) {
+  //   return this.http.post(this.baseUrl + 'products/origins/savefile', photo);
+  // }
+
+  //CRUD cho Origins FormData
   getOrigins(): Observable<IOrigin[]> {
     return this.http.get<IOrigin[]>(`${this.baseUrl}products/origins`);
   }
 
+  getOriginById(id: number): Observable<IOrigin> {
+    return this.http.get<IOrigin>(`${this.baseUrl}products/origins/${id}`);
+  }
 
   addOrigin(origin: any): Observable<IOrigin> {
-    return this.http.post<any>(`${this.baseUrl}products/origins/Create`, origin);
+    const formData: FormData = this.createFormDataFromObject(origin);
+
+    return this.http.post<IOrigin>(`${this.baseUrl}products/origins/Create`, formData);
   }
 
   updateOrigin(origin: any): Observable<IOrigin> {
-    return this.http.put<any>(`${this.baseUrl}products/origins/${origin.id}`, origin);
+    const formData: FormData = this.createFormDataFromObject(origin);
 
+    return this.http.put<IOrigin>(`${this.baseUrl}products/origins/${origin.id}`, formData);
   }
 
   deleteOrigin(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/products/origins/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}products/origins/${id}`);
   }
 
-  uploadPhoto(photo: any) {
-    return this.http.post(this.baseUrl + 'products/origins/savefile', photo);
+  uploadPhoto(photo: any): Observable<string> {
+    const formData: FormData = new FormData();
+    formData.append('file', photo);
+
+    return this.http.post<string>(`${this.baseUrl}products/origins/savefile`, formData);
+  }
+
+  private createFormDataFromObject(obj: any): FormData {
+    const formData: FormData = new FormData();
+    Object.keys(obj).forEach(key => {
+      formData.append(key, obj[key]);
+    });
+    return formData;
   }
 
   // CRUD cho Types

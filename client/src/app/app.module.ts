@@ -19,8 +19,7 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     SharedModule,
     HttpClientModule,
-    FormsModule
-
+    FormsModule,
     // ShopModule,
     // AdminModule,
   ],

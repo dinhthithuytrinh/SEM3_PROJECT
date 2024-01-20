@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from 'src/app/models/IProduct';
 import { AdminService } from '../admin.service';
-
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IType } from 'src/app/models/IType';
+import { IOrigin } from 'src/app/models/IOrigin';
 
 @Component({
   selector: 'app-admin-products',
@@ -11,9 +12,11 @@ import { Router } from '@angular/router';
 })
 export class AdminProductsComponent implements OnInit {
   products: IProduct[] = [];
+  types: IType[] = [];
+  origins: IOrigin[] = [];
 
   product: IProduct = {
-
+    id: 0,
     productCode: 0,
     name: '',
     description: '',
@@ -27,14 +30,24 @@ export class AdminProductsComponent implements OnInit {
     updateBy: new Date(),
   };
 
+  statuses: { value: boolean; label: string }[] = [
+    { value: true, label: 'True' },
+    { value: false, label: 'False'},
+  ];
 
   displayForm = false;
 
-  constructor(private adminService: AdminService, private router: Router) {}
+  constructor(private adminService: AdminService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.getProducts();
-
+    this.adminService.getTypes().subscribe(types => {
+      this.types = types;
+    });
+  
+    this.adminService.getOrigins().subscribe(origins => {
+      this.origins = origins;
+    });
   }
 
   getProducts(): void {
@@ -53,42 +66,45 @@ export class AdminProductsComponent implements OnInit {
     this.toggleForm(); // Hiển thị form
   }
 
+  // saveProduct(): void {
+  //   // Thêm logic để lưu sản phẩm
+  //   if (this.product.id) {
+  //     // Nếu product đã có id, thực hiện logic cập nhật sản phẩm
+  //     // Gọi service để cập nhật sản phẩm
+  //     this.adminService.updateProduct(this.product)
+  //       .subscribe(updatedProduct => {
+  //         // Xử lý khi sản phẩm được cập nhật thành công
+  //         console.log('Product updated successfully:', updatedProduct);
+  //         // Sau khi cập nhật, có thể cần làm mới danh sách sản phẩm
+  //         this.getProducts();
+  //         // Ẩn form hoặc thực hiện các thao tác cần thiết
+  //         this.toggleForm();
+  //       });
+  //   } else {
+  //     // Nếu product chưa có id, thực hiện logic thêm mới sản phẩm
+  //     // Gọi service để thêm mới sản phẩm
+  //     this.adminService.addProduct(this.product)
+  //       .subscribe(newProduct => {
+  //         // Xử lý khi sản phẩm được thêm mới thành công
+  //         console.log('Product added successfully:', newProduct);
+  //         // Sau khi thêm mới, có thể cần làm mới danh sách sản phẩm
+  //         this.getProducts();
+  //         // Ẩn form hoặc thực hiện các thao tác cần thiết
+  //         this.toggleForm();
+  //       });
+  //   }
+  // }
 
-  saveProduct(): void {
-    // Thêm logic để lưu sản phẩm
-    if (this.product.id) {
-      // Nếu product đã có id, thực hiện logic cập nhật sản phẩm
-      // Gọi service để cập nhật sản phẩm
-      this.adminService.updateProduct(this.product)
-        .subscribe(updatedProduct => {
-          // Xử lý khi sản phẩm được cập nhật thành công
-          console.log('Product updated successfully:', updatedProduct);
-          // Sau khi cập nhật, có thể cần làm mới danh sách sản phẩm
-          this.getProducts();
-          // Ẩn form hoặc thực hiện các thao tác cần thiết
-          this.toggleForm();
-        });
-    } else {
-      // Nếu product chưa có id, thực hiện logic thêm mới sản phẩm
-      // Gọi service để thêm mới sản phẩm
-      this.adminService.addProduct(this.product)
-        .subscribe(newProduct => {
-          // Xử lý khi sản phẩm được thêm mới thành công
-          console.log('Product added successfully:', newProduct);
-          // Sau khi thêm mới, có thể cần làm mới danh sách sản phẩm
-          this.getProducts();
-          // Ẩn form hoặc thực hiện các thao tác cần thiết
-          this.toggleForm();
+    
+
+    deleteProduct(): void {
+      this.adminService.deleteProduct(this.product.id! as number)
+        .subscribe({
+          next: (res) => {
+            console.log(res);
+            this.router.navigate(['/products']);
+          },
+          error: (e) => console.error(e)
         });
     }
-  }
-
-  deleteProduct(productId: number): void {
-    if (confirm('Are you sure you want to delete this product?')) {
-      this.adminService
-        .deleteProduct(productId)
-        .subscribe(() => this.getProducts());
-    }
-  }
-
 }

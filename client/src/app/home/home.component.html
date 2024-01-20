@@ -1,29 +1,30 @@
 <app-client-nav></app-client-nav>
-<div class="position-relative overflow-hidden text-center bg-body-white mainvisual" style="
+<div
+  class="position-relative overflow-hidden text-center bg-body-dark mainvisual"
+  style="
     background-image: url(/assets/img/mv3.jpg);
     background-size: cover;
     background-position: center;
-  ">
+  "
+>
   <div class="col-md-6 p-lg-5 mx-auto my-5">
     <h1 class="display-3 fw-bold">Arts for everybody</h1>
     <h3 class="fw-normal mb-3">All art is but imitation of nature.</h3>
-    <div style="padding: 20px; color: #ffffff; text-align: center;">
+    <div class="d-flex gap-3 justify-content-center lead fw-normal">
       <a class="icon-link" href="#">
-        Learn more...
-        <svg class="bi">
-          <use xlink:href="#chevron-right"></use>
-        </svg>
+        Learn more
+        <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
       </a>
       <a class="icon-link" href="#">
         Buy
-        <svg class="bi">
-          <use xlink:href="#chevron-right"></use>
-        </svg>
+        <svg class="bi"><use xlink:href="#chevron-right"></use></svg>
       </a>
     </div>
   </div>
   <div class="product-device shadow-sm d-none d-md-block"></div>
-  <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+  <div
+    class="product-device product-device-2 shadow-sm d-none d-md-block"
+  ></div>
 </div>
 
 <div class="container home-container">
@@ -36,8 +37,10 @@
             <h3 class="">{{ item?.name }}</h3>
             <p class="">{{ item?.description }}</p>
           </div>
-          <div class="bg-body-tertiary shadow-sm mx-auto"
-            style="width: 80%; height: 300px; border-radius: 21px 21px 0 0">
+          <div
+            class="bg-body-tertiary shadow-sm mx-auto"
+            style="width: 80%; height: 300px; border-radius: 21px 21px 0 0"
+          >
             <img src="{{ item?.pictureUrl }}" alt="" />
           </div>
         </div>
@@ -56,8 +59,10 @@
             <h3 class="">{{ item?.name }}</h3>
             <p class="">{{ item?.description }}</p>
           </div>
-          <div class="bg-body-tertiary shadow-sm mx-auto"
-            style="width: 80%; height: 300px; border-radius: 21px 21px 0 0">
+          <div
+            class="bg-body-tertiary shadow-sm mx-auto"
+            style="width: 80%; height: 300px; border-radius: 21px 21px 0 0"
+          >
             <img src="{{ item?.pictureUrl }}" alt="" />
           </div>
         </div>
