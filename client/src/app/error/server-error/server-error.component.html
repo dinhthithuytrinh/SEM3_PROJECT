@@ -1,1 +1,5 @@
-<p>server-error works!</p>
+<ng-container *ngIf="error">
+  <code class="mt-5" style="background-color: whitesmoke">{{
+    error.message
+  }}</code>
+</ng-container>

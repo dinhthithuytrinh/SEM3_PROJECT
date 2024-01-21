@@ -10,6 +10,7 @@ import { ClientFooterComponent } from './client-footer/client-footer.component';
 import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
 import { AdminHeaderComponent } from './admin-header/admin-header.component';
 import { AdminRoute } from '../admin/admin.routing';
+import { ToastrModule } from 'ngx-toastr';
 @NgModule({
   declarations: [
     PagerComponent,
@@ -19,7 +20,16 @@ import { AdminRoute } from '../admin/admin.routing';
     AdminNavbarComponent,
     AdminHeaderComponent,
   ],
-  imports: [CommonModule, PaginationModule.forRoot(), RouterModule],
+  imports: [
+    CommonModule,
+    PaginationModule.forRoot(),
+    RouterModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      tapToDismiss: true,
+      preventDuplicates: true,
+    }),
+  ],
   exports: [
     FontAwesomeModule,
     PaginationModule,

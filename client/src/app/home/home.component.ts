@@ -69,7 +69,7 @@ export class HomeComponent {
           {
             id: 0,
             name: 'All',
-            description: 'Made in your country',
+            description: 'Made in your country - hàng nội địa',
             pictureUrl: '/assets/img/allorigin.jpg',
             status: true,
           },
