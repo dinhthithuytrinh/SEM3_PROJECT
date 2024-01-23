@@ -15,6 +15,9 @@ namespace api.Data
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductType> ProductTypes { get; set; }
     public DbSet<ProductBrand> ProductBrands { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Gender> Genders { get; set; }
+    public DbSet<User> Users { get; set; }
 
   }
 }

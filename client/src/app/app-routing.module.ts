@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   {
@@ -19,6 +21,16 @@ const routes: Routes = [
     loadChildren: () =>
       import('./admin/admin.module').then((mod) => mod.AdminModule),
     title: 'Arts - Admin',
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    title: 'Arts - Login',
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    title: 'Arts - Register',
   },
   {
     path: 'test-error',
