@@ -19,7 +19,7 @@ namespace api.Entities
     public string? Avatar { get; set; }
     public string? Token { get; set; }
     public string? RefreshToken { get; set; }
-    public DateTime RefreshTokenExpiryTime { get; set; }
+    public DateTime? RefreshTokenExpiryTime { get; set; }
     public Role Role { get; set; }
     public int? RoleId { get; set; }
 

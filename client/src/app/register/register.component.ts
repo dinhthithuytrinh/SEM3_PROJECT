@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import Validation from '../utils/validation';
 import ValidateForm from '../helpers/validationform';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +16,8 @@ export class RegisterComponent implements OnInit {
   type: string = 'password';
   public registerForm!: FormGroup;
 
-  constructor(private fb : FormBuilder) { }
+  constructor(private fb : FormBuilder,private auth: AuthService,
+    private router: Router,) { }
 
   ngOnInit() {
     this.registerForm = this.fb.group({
@@ -34,7 +37,7 @@ export class RegisterComponent implements OnInit {
       passwordconfirm:['', Validators.required],
       phone:['', Validators.required],
       address:['', Validators.required],
-      gender:['', Validators.required]
+      genderId:['', Validators.required]
     },
     {
       validators: [Validation.match('password', 'passwordconfirm')]
@@ -51,22 +54,22 @@ export class RegisterComponent implements OnInit {
     console.log('this.registerForm.value');
     if (this.registerForm.valid) {
       console.log(this.registerForm.value);
-      // this.auth.signIn(this.loginForm.value).subscribe({
-      //   next: (res) => {
-      //     console.log(res.message);
-      //     this.loginForm.reset();
-      //     this.auth.storeToken(res.token);
-      //     const tokenPayload = this.auth.decodedToken();
-      //     this.userStore.setFullNameForStore(tokenPayload.name);
-      //     this.userStore.setRoleForStore(tokenPayload.role);
-      //     this.toast.success({detail:"SUCCESS", summary:res.message, duration: 5000});
-      //     this.router.navigate(['dashboard'])
-      //   },
-      //   error: (err) => {
-      //     this.toast.error({detail:"ERROR", summary:"Something when wrong!", duration: 5000});
-      //     console.log(err);
-      //   },
-      // });
+      this.auth.signUp(this.registerForm.value).subscribe({
+        next: (res) => {
+          console.log(res.message);
+          this.registerForm.reset();
+          // this.auth.storeToken(res.token);
+          // const tokenPayload = this.auth.decodedToken();
+          // this.userStore.setFullNameForStore(tokenPayload.name);
+          // this.userStore.setRoleForStore(tokenPayload.role);
+          // this.toast.success({detail:"SUCCESS", summary:res.message, duration: 5000});
+          this.router.navigate(['/'])
+        },
+        error: (err) => {
+          // this.toast.error({detail:"ERROR", summary:"Something when wrong!", duration: 5000});
+          console.log(err);
+        },
+      });
     } else {
       ValidateForm.validateAllFormFields(this.registerForm);
     }
