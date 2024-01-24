@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IProduct } from '../models/IProduct';
@@ -107,11 +107,19 @@ export class AdminService {
     return this.http.get<IOrigin>(`${this.baseUrl}products/origins/${id}`);
   }
 
-  addOrigin(origin: any): Observable<IOrigin> {
-    const formData: FormData = this.createFormDataFromObject(origin);
+  // addOrigin(origin: any): Observable<IOrigin> {
+  //   const formData: FormData = this.createFormDataFromObject(origin);
 
-    return this.http.post<IOrigin>(`${this.baseUrl}products/origins/Create`, formData);
-  }
+  //   return this.http.post<IOrigin>(`${this.baseUrl}products/origins/Create`, formData);
+  // }
+  addOrigin(origins: FormData): Observable<IOrigin[]> {
+    const headers = new HttpHeaders();
+    // Don't set Content-Type here, it will be set automatically for FormData.
+  
+    console.log('aaaaa');
+    return this.http.post<IOrigin[]>(`${this.baseUrl}products/origins/Create`, origins, { headers });
+    }
+  
 
   updateOrigin(origin: any): Observable<IOrigin> {
     const formData: FormData = this.createFormDataFromObject(origin);
@@ -132,6 +140,9 @@ export class AdminService {
 
   private createFormDataFromObject(obj: any): FormData {
     const formData: FormData = new FormData();
+
+    console.log(obj);
+
     Object.keys(obj).forEach(key => {
       formData.append(key, obj[key]);
     });

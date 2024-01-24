@@ -1,115 +1,303 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AdminService } from '../../admin.service';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { IOrigin } from 'src/app/models/IOrigin';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-add-edit-origins',
   templateUrl: './add-edit-origins.component.html',
-  styleUrls: ['./add-edit-origins.component.scss']
+  styleUrls: ['./add-edit-origins.component.scss'],
 })
 export class AddEditOriginsComponent implements OnInit {
+  selectedFile: File | null = null;
+  originForm!: FormGroup;
+  baseUrl = 'http://localhost:5000/api/products/';
 
-  constructor(private adminService: AdminService) {}
-
-  @Input() ori: any;
-  id = "";
-  name = "";
-  description = "";
-  pictureURL = "";
-  status = true;
-  file: File | null = null;
-
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.id = this.ori.id;
-    this.name = this.ori.name;
-    this.description = this.ori.description;
-    this.pictureURL = this.ori.pictureURL || "";
-    this.status = this.ori.status || "";
-
-  }
-
-  addOrigin() {
-    var origin = {
-      id: this.id,
-      name: this.name,
-      description: this.description,
-      status: this.status,
-      file: this.file  // Thêm trường file vào đối tượng origin
-    };
-
-    this.adminService.addOrigin(origin).subscribe(
-      (res) => {
-        // Xử lý thành công
-        alert("Origin added successfully!");
-      },
-      (error) => {
-        // Xử lý lỗi
-        console.error("Error adding origin:", error);
-      }
-    );
-  }
-
-  updateOrigin() {
-    const origin = {
-      id: this.id,
-      name: this.name,
-      description: this.description,
-      status: this.status,
-      file: this.file  // Thêm trường file vào đối tượng origin
-    };
-
-    this.adminService.updateOrigin(origin).subscribe(res => {
-      alert(res.toString());
+    this.originForm = new FormGroup({
+      id: new FormControl(''),
+      name: new FormControl('', Validators.required),
+      description: new FormControl(''),
+      pictureURL: new FormControl(''),
+      status: new FormControl(true),
+      file: new FormControl(null),
     });
   }
 
-  uploadPhoto(event: any) {
-    const file = event.target.files[0];
-    this.file = file;
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.pictureURL = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
+  onSelectFile(fileInput: any) {
+    this.selectedFile = <File>fileInput.target.files[0];
+    this.originForm.patchValue({
+      file: this.selectedFile,
+    });
   }
 
-  // addOrigin() {
-  //   var origin = {
-  //     id: this.id,
-  //     name: this.name,
-  //     description: this.description,
-  //     pictureURL: this.pictureURL,
-  //     status: this.status
-  //   };
-  //   this.adminService.addOrigin(origin).subscribe(res => {
-  //     alert(res.toString());
-  //   });
-  // }
+  createOrigin(data: any) {
+    console.log('data', data);
+    var fileUpLoadProductBrand = new FormData();
+    fileUpLoadProductBrand.append('Name', data.name);
+    fileUpLoadProductBrand.append('Description', data.description);
+    fileUpLoadProductBrand.append('status', data.status.toString());
 
-  // updateOrigin() {
-  //   var origin = {
-  //     id: this.id,
-  //     name: this.name,
-  //     description: this.description,
-  //     pictureURL: this.pictureURL,
-  //     status: this.status
-  //   };
-  //   this.adminService.updateOrigin(origin).subscribe(res => {
-  //     alert(res.toString());
-  //   });
-  // }
+    if (this.selectedFile) {
+      fileUpLoadProductBrand.append(
+        'files',
+        this.selectedFile,
+        this.selectedFile.name
+      );
+    }
 
-  // uploadPhoto(event: any) {
-  //   var file = event.target.files[0];
-  //   const formData: FormData = new FormData();
-  //   formData.append('file', file, file.name);
+    this.http
+      .post(this.baseUrl + 'origins/Create', fileUpLoadProductBrand)
+      .subscribe((response) => {
+        alert('Origin created successfully!');
+      });
 
-  //   this.adminService.uploadPhoto(formData).subscribe((data: any) => {
-  //     this.pictureURL = data.toString();
-  //   })
-  // }
- 
+    this.originForm.reset();
+  }
 }
+
+//   @Input() ori: any;
+//   // id = "";
+//   // name = "";
+//   // description = "";
+//   pictureURL = "";
+//   status = true;
+//   file: File | null = null;
+
+//   @Output() productsUpdate = new EventEmitter<IOrigin[]>;
+
+//   ngOnInit(): void {
+//     this.originForm = this.formBuilder.group({
+//       id: [this.ori.id],
+//       name: [this.ori.name, Validators.required],
+//       description: [this.ori.description],
+//       pictureURL: [this.ori.pictureURL],
+//       status: [this.ori.status || true],
+//       file: null
+//     });
+//   }
+
+//   uploadPhoto(event: any) {
+
+//       const file = event.target.files[0];
+//       this.originForm.patchValue({file});
+
+//   }
+
+// onSubmit() {
+//   const formData = new FormData(this.originForm.value);
+
+//   if (this.ori.id === '0') {
+//     this.createOrigin(formData);
+//   } else {
+//     this.updateOrigin(formData);
+//   }
+// }
+
+//    createOrigin() {
+//     const formdata = new FormData();
+
+//     formdata.append('name',this.originForm)
+//     this.adminService.addOrigin(formdata).subscribe(
+//       (response) => {
+//         // Success
+//         this.originForm.reset();
+//         this.ori = response;
+//       },
+//       error => {
+//         // Error
+//         console.error('Error creating origin:', error);
+//       }
+//     );
+//   }
+
+//   private updateOrigin(formData: FormData) {
+//     this.adminService.updateOrigin(formData).subscribe(
+//       (response) => {
+//         // Success
+//         this.originForm.reset();
+//         this.ori = response;
+//       },
+//       error => {
+//         // Error
+//         console.error('Error updating origin:', error);
+//       }
+//     );
+//   }
+
+//   // onSubmit() {
+//   //   const formData = new FormData(this.originForm.value);
+
+//   //   if (this.ori.id === '0') {
+//   //     // Create origin
+//   //     this.adminService.addOrigin(formData).subscribe(
+//   //       (response: IOrigin) => {
+//   //         // Success
+//   //         this.originForm.reset();
+//   //         this.ori = response;
+//   //       },
+//   //       error => {
+//   //         // Error
+//   //         console.error('Error creating origin:', error);
+//   //       }
+//   //     );
+//   //   } else {
+//   //     // Update origin
+//   //     this.adminService.updateOrigin(formData).subscribe(
+//   //       (response: IOrigin) => {
+//   //         // Success
+//   //         this.originForm.reset();
+//   //         this.ori = response;
+//   //       },
+//   //       error => {
+//   //         // Error
+//   //         console.error('Error updating origin:', error);
+//   //       }
+//   //     );
+//   //   }
+//   // }
+
+//   // addOrigin(){
+//   //   //   if (!this.product.productTypeId) {
+//   //   //   console.error('Invalid ProductTypeId. Please provide a valid identifier.');
+//   //   //   return;
+//   //   // }
+//   //   //  if (!this.product.productBrandId) {
+//   //   //   console.error('Invalid ProductBrandId. Please provide a valid identifier.');
+//   //   //   return;
+//   //   // }
+//   // const formattedDate = (date: Date) => date.toISOString(); // Format date to string
+//   //      const formData = new FormData();
+//   //      const origin = this.originForm.value;
+//   //   formData.append('name', origin.name);
+//   //   formData.append('description', origin.description); // Assuming description is a string
+//   //   formData.append('pictureUrl', origin.pictureUrl); // Assuming pictureUrl is a string
+//   //   formData.append('status',  origin.status ? 'true' : 'false'); // Assuming status is a boolean
+//   //    formData.append('createdBy', formattedDate(new Date()));
+//   //   formData.append('updateBy', formattedDate(new Date()));
+//   //    if (origin.files && origin.files instanceof FileList && origin.files.length > 0) {
+//   //     formData.append('files', origin.files[0]);
+
+//   //   }
+
+//   //     this.adminService.addOrigin(formData).subscribe((origins: IOrigin[])=> {this.productsUpdate.emit(origins);
+
+//   //     },(error) => {console.log(error);})
+//   //   console.log(this.ori);
+
+//   //     }
+
+//   deleteOrigin() {
+//     if (this.ori.id !== '0') {
+//       // Confirm delete
+//       const confirmDelete = window.confirm('Bạn có chắc chắn muốn xóa?');
+
+//       if (confirmDelete) {
+//         // Delete origin
+//         this.adminService.deleteOrigin(this.ori.id).subscribe(
+//           () => {
+//             // Success
+//             this.originForm.reset();
+//           },
+//           error => {
+//             // Error
+//             console.error('Error deleting origin:', error);
+//           }
+//         );
+//       }
+//     }
+//   }
+
+//   // addOrigin() {
+//   //   var origin = {
+//   //     id: this.id,
+//   //     name: this.name,
+//   //     description: this.description,
+//   //     status: this.status,
+//   //     file: this.file  // Thêm trường file vào đối tượng origin
+//   //   };
+
+//   //   this.adminService.addOrigin(origin).subscribe(
+//   //     (res) => {
+//   //       // Xử lý thành công
+//   //       alert("Origin added successfully!");
+//   //     },
+//   //     (error) => {
+//   //       // Xử lý lỗi
+//   //       console.error("Error adding origin:", error);
+//   //     }
+//   //   );
+//   // }
+
+//   // updateOrigin() {
+//   //   const origin = {
+//   //     id: this.id,
+//   //     name: this.name,
+//   //     description: this.description,
+//   //     status: this.status,
+//   //     file: this.file  // Thêm trường file vào đối tượng origin
+//   //   };
+
+//   //   this.adminService.updateOrigin(origin).subscribe(res => {
+//   //     alert(res.toString());
+//   //   });
+//   // }
+
+//   // uploadPhoto(event: any) {
+//   //   const file = event.target.files[0];
+//   //   this.file = file;
+
+//   //   if (file) {
+//   //     const reader = new FileReader();
+//   //     reader.onload = (e: any) => {
+//   //       this.pictureURL = e.target.result;
+//   //     };
+//   //     reader.readAsDataURL(file);
+//   //   }
+//   // }
+
+//   // addOrigin() {
+//   //   var origin = {
+//   //     id: this.id,
+//   //     name: this.name,
+//   //     description: this.description,
+//   //     pictureURL: this.pictureURL,
+//   //     status: this.status
+//   //   };
+//   //   this.adminService.addOrigin(origin).subscribe(res => {
+//   //     alert(res.toString());
+//   //   });
+//   // }
+
+//   // updateOrigin() {
+//   //   var origin = {
+//   //     id: this.id,
+//   //     name: this.name,
+//   //     description: this.description,
+//   //     pictureURL: this.pictureURL,
+//   //     status: this.status
+//   //   };
+//   //   this.adminService.updateOrigin(origin).subscribe(res => {
+//   //     alert(res.toString());
+//   //   });
+//   // }
+
+//   // uploadPhoto(event: any) {
+//   //   var file = event.target.files[0];
+//   //   const formData: FormData = new FormData();
+//   //   formData.append('file', file, file.name);
+
+//   //   this.adminService.uploadPhoto(formData).subscribe((data: any) => {
+//   //     this.pictureURL = data.toString();
+//   //   })
+//   // }
+
+// }
