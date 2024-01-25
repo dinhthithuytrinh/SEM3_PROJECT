@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BasketService } from './basket/basket.service';
 
 @Component({
   selector: 'app-root',
@@ -10,18 +11,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  isAdmin: Boolean = false;
-  constructor(
-    private router: Router,
-    private spinnerService: NgxSpinnerService
-  ) {}
 
-  ngOnInit() {
-    console.log(this.router.url);
-    this.spinnerService.show();
+  constructor(private basketService: BasketService) {
+  }
 
-    setTimeout(() => {
-      this.spinnerService.hide();
-    }, 5000);
+  ngOnInit(): void {
+    var basketId = localStorage.getItem('basket_id');
+
+    if (basketId) {
+      this.basketService.getBasket(basketId).subscribe(() => {});
+    }
   }
 }
