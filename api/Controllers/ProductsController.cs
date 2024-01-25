@@ -132,7 +132,7 @@ namespace api.Controllers
         }
         _unitOfWork.ProductRepository.Add(product);
         _unitOfWork.Save();
-        return BadRequest(product);
+        return Ok(product);
       }
     }
 
@@ -210,7 +210,7 @@ namespace api.Controllers
         }
 
 
-        return BadRequest(existingProduct);
+        return Ok(existingProduct);
 
       }
       catch (Exception ex)
@@ -337,7 +337,7 @@ namespace api.Controllers
 
 
       var findP = _Db.Products.Find(p.ProductBrandId);
-      string baseUrl = _configuration["ApiImgUrl"];
+     
 
 
       if (findP != null)
@@ -346,7 +346,7 @@ namespace api.Controllers
       }
       else
       {
-        var productBrand = new ProductBrand { Id = p.ProductBrandId, Name = p.Name, Description = p.Description, Status = p.Status, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
+        var productBrand = new ProductBrand { Id = p.ProductBrandId, Name = p.Name, Description = p.Description, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
         if (p.files.Length > 0)
         {
           var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "brands", p.files.FileName);
@@ -355,7 +355,7 @@ namespace api.Controllers
             await p.files.CopyToAsync(stream);
           }
 
-          productBrand.PictureUrl = baseUrl + "images/brands/" + p.files.FileName;
+          productBrand.PictureUrl = "images/brands/" + p.files.FileName;
         }
         else
         {
@@ -363,7 +363,7 @@ namespace api.Controllers
         }
         _unitOfWork.ProductBrandRepository.Add(productBrand);
         _unitOfWork.Save();
-        return BadRequest(productBrand);
+        return Ok(productBrand);
       }
     }
 
@@ -389,7 +389,7 @@ namespace api.Controllers
     [HttpPost("AddProductType")]
     public async Task<IActionResult> CreateProductType([FromForm] FileUpLoadProducType p)
     {
-      string baseUrl = _configuration["ApiImgUrl"];
+      
 
       var findP = _Db.Products.Find(p.ProductTypeId);
       if (findP != null)
@@ -407,7 +407,7 @@ namespace api.Controllers
             await p.files.CopyToAsync(stream);
           }
 
-          productType.PictureUrl = baseUrl + "images/types/" + p.files.FileName;
+          productType.PictureUrl = "images/types/" + p.files.FileName;
         }
         else
         {
@@ -415,7 +415,7 @@ namespace api.Controllers
         }
         _unitOfWork.ProductTypeRepository.Add(productType);
         _unitOfWork.Save();
-        return BadRequest(productType);
+        return Ok(productType);
       }
     }
 
