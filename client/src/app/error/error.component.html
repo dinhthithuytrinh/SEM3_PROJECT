@@ -14,4 +14,10 @@
   >
     Test validation error
   </button>
+
+  <div class="row mt-5" *ngIf="this.validationError">
+    <ul class="text-danger">
+      <li *ngFor="let item of validationError">{{ item }}</li>
+    </ul>
+  </div>
 </div>

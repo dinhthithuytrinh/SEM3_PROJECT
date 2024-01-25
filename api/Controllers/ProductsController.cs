@@ -29,7 +29,7 @@ namespace api.Controllers
     public ProductsController(IUnitOfWork unitOfWork, IProductRepository productRepository, IMapper mapper, ApplicationDbContext Db, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
     {
       _unitOfWork = unitOfWork;
-      _productRepository = productRepository ;
+      _productRepository = productRepository;
       _mapper = mapper;
       _configuration = configuration;
       _webHostEnvironment = webHostEnvironment;
@@ -115,7 +115,7 @@ namespace api.Controllers
       }
       else
       {
-        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity,files = p.files, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
+        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity, files = p.files, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
         if (p.files.Length > 0)
         {
           var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "products", p.files.FileName);
@@ -124,7 +124,7 @@ namespace api.Controllers
             await p.files.CopyToAsync(stream);
           }
 
-          product.PictureUrl = baseUrl + "images/products/" + p.files.FileName;
+          product.PictureUrl = "images/products/" + p.files.FileName;
         }
         else
         {
@@ -146,14 +146,15 @@ namespace api.Controllers
 
     public ActionResult<Product> UpdateProduct(int id, [FromForm] Product productUpdate, [FromForm] FileUpLoadAPI f)
     {
-      try{
+      try
+      {
         var existingProduct = _Db.Products.AsNoTracking().FirstOrDefault(p => p.Id == id);
         string baseUrl = _configuration["ApiUrl"];
 
         productUpdate.ProductCode = existingProduct.ProductCode;
 
 
-  
+
         if (existingProduct.Id != productUpdate.Id)
         {
           return BadRequest("NO Data");
@@ -207,7 +208,7 @@ namespace api.Controllers
           _unitOfWork.ProductRepository.Update(existingProduct);
           _unitOfWork.Save();
         }
-        
+
 
         return BadRequest(existingProduct);
 
@@ -219,7 +220,7 @@ namespace api.Controllers
 
     }
 
-   
+
     private string SaveImage(FileUpLoadAPI p)
     {
       string baseUrl = _configuration["ApiUrl"];
@@ -258,7 +259,7 @@ namespace api.Controllers
 
     }
 
-  
+
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ReturnProduct>> GetSingleProduct(int id)

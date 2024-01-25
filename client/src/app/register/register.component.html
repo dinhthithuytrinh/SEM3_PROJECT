@@ -1,0 +1,146 @@
+<div class="outer" style=" height: 100vh">
+  <div class="login-header">
+    <div class="container">
+      <a class="login-brand d-flex" routerLink="../">
+        <img src="/assets/img/unnamed.png" class="login-logo" alt="" />
+        <p class="login-name">ARTS</p>
+      </a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row" style="align-items: center; justify-content: center;">
+      <div class="">
+        <div class="panel border bg-white" style="padding: 30px">
+          <div class="panel-heading">
+            <h3 class="font-weight-bold">Register</h3>
+          </div>
+          <div class="panel-body">
+            <form [formGroup]="registerForm">
+              <div class="form-register">
+                <div class="form-group pt-3">
+                  <div class="input-field"
+                    [class.error]="registerForm.controls['username'].dirty && registerForm.hasError('required','username')">
+                    <span class="fa fa-user p-2"></span>
+                    <input formControlName="username" type="text" placeholder="Username" required>
+                  </div>
+                  <small *ngIf="registerForm.controls['username'].dirty && registerForm.hasError('required','username')"
+                    class="text-danger">*Username is required*</small>
+                  <small *ngIf="registerForm.hasError('minlength','username')" class="text-danger">*Username is >
+                    6</small>
+                  <small *ngIf="registerForm.hasError('maxlength','username')" class="text-danger">*Username is nho hon
+                    20</small>
+                </div>
+                <div class="form-group pt-3">
+                  <div class="input-field"
+                    [class.error]="registerForm.controls['firstname'].dirty && registerForm.hasError('required','firstname')">
+                    <span class="fa fa-user p-2"></span>
+                    <input formControlName="firstname" type="text" placeholder="First Name" required>
+                  </div>
+                  <small
+                    *ngIf="registerForm.controls['firstname'].dirty && registerForm.hasError('required','firstname')"
+                    class="text-danger">*First Name is required*</small>
+                </div>
+                <div class="form-group pt-3">
+                  <div class="input-field"
+                    [class.error]="registerForm.controls['lastname'].dirty && registerForm.hasError('required','lastname')">
+                    <span class="fa fa-envelope-o p-2"></span>
+                    <input formControlName="lastname" type="text" placeholder="Last Name" required>
+                  </div>
+                  <small *ngIf="registerForm.controls['lastname'].dirty && registerForm.hasError('required','lastname')"
+                    class="text-danger">*Last Name is required*</small>
+                </div>
+                <div class="form-group pt-3">
+                  <div class="input-field"
+                    [class.error]="registerForm.controls['email'].dirty && registerForm.hasError('required','email')">
+                    <span class="fa fa-envelope-o p-2"></span>
+                    <input formControlName="email" type="text" placeholder="Email" required>
+                  </div>
+                  <small *ngIf="registerForm.controls['email'].dirty && registerForm.hasError('required','email')"
+                    class="text-danger">*Email is required*</small>
+                  <small *ngIf="registerForm.hasError('email','email')" class="text-danger">*Email is invalid</small>
+                </div>
+                <div class="form-group pt-3">
+                  <div class="input-field"
+                    [class.error]="registerForm.controls['phone'].dirty && registerForm.hasError('required','phone')">
+                    <span class="fa fa-mobile p-2"></span>
+                    <input formControlName="phone" type="text" placeholder="Phone" required>
+                  </div>
+                  <small *ngIf="registerForm.controls['phone'].dirty && registerForm.hasError('required','phone')"
+                    class="text-danger">*Phone number is required*</small>
+                </div>
+                <div class="form-group pt-3">
+                  <div class="input-field"
+                    [class.error]="registerForm.controls['password'].dirty && registerForm.hasError('required','password')">
+                    <span class="fa fa-lock px-2"></span>
+                    <input class="input-setting" formControlName="password" [type]="type" placeholder="Password">
+                    <button type="button" (click)="hideShowPass()" class="btn-eye">
+                      <span class="fa {{eyeIcon}}"></span>
+                    </button>
+                  </div>
+                  <small *ngIf="registerForm.controls['password'].dirty && registerForm.hasError('required','password')"
+                    class="text-danger">*Password is required*</small>
+                  <small *ngIf="registerForm.hasError('minlength','password')" class="text-danger">*Phone number is >
+                    6</small>
+                  <small *ngIf="registerForm.hasError('maxlength','password')" class="text-danger">*Password is nho
+                    hon 20</small>
+                </div>
+
+                <div class="form-group pt-3">
+                  <div class="input-field"
+                    [class.error]="registerForm.controls['passwordconfirm'].dirty && registerForm.hasError('required','passwordconfirm')">
+                    <span class="fa fa-lock px-2"></span>
+                    <input class="input-setting" formControlName="passwordconfirm" [type]="type"
+                      placeholder="Confirm Password">
+                    <button type="button" (click)="hideShowPass()" class="btn-eye">
+                      <span class="fa {{eyeIcon}}"></span>
+                    </button>
+                  </div>
+                  <small
+                    *ngIf="registerForm.controls['passwordconfirm'].dirty && registerForm.hasError('required','passwordconfirm')"
+                    class="text-danger">*Confirm Password is required*</small>
+                  <small
+                    *ngIf="registerForm.controls['passwordconfirm'].dirty && registerForm.hasError('matching','passwordconfirm')"
+                    class="text-danger">*Confirm Password does not match</small>
+                </div>
+
+
+                <div class="form-group pt-3">
+                  <div class="input-field"
+                    [class.error]="registerForm.controls['genderId'].dirty && registerForm.hasError('required','genderId')">
+                    <span class="fa fa-users p-2"></span>
+                    <select class="form-select" aria-label="Default select example" formControlName="genderId"
+                      ng-model="model.id" convert-to-number>
+                      <option value="">Gender</option>
+                      <option value="1">Male</option>
+                      <option value="2">Female</option>
+                      <option value="3">Other</option>
+                    </select>
+                  </div>
+                  <small *ngIf="registerForm.controls['genderId'].dirty && registerForm.hasError('required','genderId')"
+                    class="text-danger">*Gender is required*</small>
+                </div>
+                <div class="form-group pt-3" style="width: 100%">
+                  <div class="input-field"
+                    [class.error]="registerForm.controls['address'].dirty && registerForm.hasError('required','address')">
+                    <span class="fa fa-map-marker p-2"></span>
+                    <input formControlName="address" type="text" placeholder="address" required>
+                  </div>
+                  <small *ngIf="registerForm.controls['address'].dirty && registerForm.hasError('required','address')"
+                    class="text-danger">*Address is required*</small>
+                </div>
+
+              </div>
+              <button (click)="onSubmit()" type="submit" class="btn btn-block mt-4 w-100"
+                style="background: pink; color: #fff">Register</button>
+              <div class="text-center pt-4 text-muted">Already have an account? <a id="forgot" href="#"
+                  routerLink="/login">Login</a> </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="login-footer">
+    <p>Copy right by Sem3</p>
+  </div>
+</div>
