@@ -5,13 +5,20 @@ using api.Helpers;
 using api.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddDbContext<ApplicationDbContext>(option => option.UseSqlServer(builder.Configuration.GetConnectionString("AnyConnectionName")));
-
+builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
+{
+  // var redisUrl = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
+  return ConnectionMultiplexer.Connect("localhost");
+});
+// var multiplexer = ConnectionMultiplexer.Connect("172.0.0.1:6379");
+// builder.Services.AddSingleton<IConnectionMultiplexer>(multiplexer);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -44,7 +51,7 @@ builder.Services.AddAutoMapper(typeof(MyAutoMapper));
 // Khai bao service cho dependency injection
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 var app = builder.Build();
 app.UseMiddleware<ServerErrorExceptionMiddle>();

@@ -17,6 +17,12 @@ const routes: Routes = [
     title: 'Arts - Products',
   },
   {
+    path: 'basket',
+    loadChildren: () =>
+      import('./basket/basket.module').then((mod) => mod.BasketModule),
+    title: 'Arts - Basket',
+  },
+  {
     path: 'admin',
     loadChildren: () =>
       import('./admin/admin.module').then((mod) => mod.AdminModule),

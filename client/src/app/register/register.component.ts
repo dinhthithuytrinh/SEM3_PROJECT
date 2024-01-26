@@ -31,8 +31,12 @@ export class RegisterComponent implements OnInit {
       email:['', [Validators.required, Validators.email,Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]],
       password:['', [
         Validators.required,
-        Validators.minLength(6),
         Validators.maxLength(20),
+        Validators.required,
+        Validators.pattern(
+          /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
+        ),
+        Validators.minLength(8),
       ],],
       passwordconfirm:['', Validators.required],
       phone:['', Validators.required],
@@ -63,7 +67,7 @@ export class RegisterComponent implements OnInit {
           // this.userStore.setFullNameForStore(tokenPayload.name);
           // this.userStore.setRoleForStore(tokenPayload.role);
           // this.toast.success({detail:"SUCCESS", summary:res.message, duration: 5000});
-          this.router.navigate(['/'])
+          this.router.navigate(['/login'])
         },
         error: (err) => {
           // this.toast.error({detail:"ERROR", summary:"Something when wrong!", duration: 5000});
