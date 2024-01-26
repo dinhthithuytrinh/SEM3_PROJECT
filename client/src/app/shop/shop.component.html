@@ -1,13 +1,7 @@
 <app-client-nav></app-client-nav>
 <main class="main">
-  <section
-    class="py-5 text-center mv"
-    style="background-image: url(/assets/img/mv.jpg)"
-  >
-    <div
-      class="row py-lg-5"
-      style="background-color: #000000c9; margin: 0 auto; max-width: 1000px"
-    >
+  <section class="py-5 text-center mv" style="background-image: url(/assets/img/mv.jpg)">
+    <div class="row py-lg-5" style="background-color: #000000c9; margin: 0 auto; max-width: 1000px">
       <div class="mx-auto" style="max-width: 800px">
         <h1 class="">Products of Arts</h1>
         <p class="lead">
@@ -16,27 +10,18 @@
           don’t simply skip over it entirely.
         </p>
         <div class="d-flex flex-wrap">
-          <div
-            class="btn sort my-2 {{
+          <div class="btn sort my-2 {{
               item.id === typeIdSelected ? 'active' : ''
-            }}"
-            *ngFor="let item of types"
-            (click)="onSelectProductType(item.id)"
-            [class.active]="item.id === typeIdSelected"
-          >
+            }}" *ngFor="let item of types" (click)="onSelectProductType(item.id)"
+            [class.active]="item.id === typeIdSelected">
             {{ item?.name }}
           </div>
         </div>
         <ul class="d-flex flex-wrap">
-          <li
-            class="btn sort my-2  {{
+          <li class="btn sort my-2  {{
               item.id === originIdSelected ? 'active' : ''
-            }}"
-            *ngFor="let item of origins"
-            [class.active]="item.id === originIdSelected"
-            [value]="item.id"
-            (click)="item.id < 1 ? onOriginSelect(0) : onOriginSelect(item.id)"
-          >
+            }}" *ngFor="let item of origins" [class.active]="item.id === originIdSelected" [value]="item.id"
+            (click)="item.id < 1 ? onOriginSelect(0) : onOriginSelect(item.id)">
             {{ item?.name }}
           </li>
         </ul>
@@ -44,25 +29,12 @@
     </div>
   </section>
 
-  <div
-    class="album"
-    style="display: flex; box-sizing: border-box; padding: 80px 0"
-  >
+  <div class="album" style="display: flex; box-sizing: border-box; padding: 80px 0">
     <div class="container">
-      <div
-        class="d-flex align-items-center justify-content-between"
-        style="margin-bottom: 30px"
-      >
+      <div class="d-flex align-items-center justify-content-between" style="margin-bottom: 30px">
         <div class="" style="width: 91%">
-          <input
-            #search
-            (keyup.enter)="onSearch()"
-            (keyup.escape)="onReset()"
-            type="text"
-            class="form-control"
-            placeholder="Search"
-            style="width: 100%"
-          />
+          <input #search (keyup.enter)="onSearch()" (keyup.escape)="onReset()" type="text" class="form-control"
+            placeholder="Search" style="width: 100%" />
         </div>
         <div class="">
           <button class="btn btn-outline-primary my-2" (click)="onSearch()">
@@ -75,27 +47,12 @@
           </button>
         </div>
       </div>
-      <!-- <div class="d-flex justify-content-between">
-        <div>
-          <span *ngIf="this.totalCount && this.totalCount > 0">
-            Showing
-            <strong>
-              {{ (this.pageNumber - 1) * this.pageSize + 1 }}
-              -
-              {{
-                this.pageNumber * this.pageSize > this.totalCount
-                  ? this.totalCount
-                  : this.pageNumber * this.pageSize
-              }}
-            </strong>
-            of <strong>{{ this.totalCount }}</strong> Results
-          </span>
-
-          <span *ngIf="this.totalCount === 0">
-            There are <strong>0</strong> result for this filter
-          </span>
+      <div class="d-flex justify-content-between">
+        <div style="width: 47%;">
+          <app-paging-header [pageNumber]="this.pageNumber" [pageSize]="this.pageSize"
+            [totalCount]="this.totalCount"></app-paging-header>
         </div>
-        <div>
+        <div style="width: 47%;">
           <select class="custom-select mb-3" (change)="onSortSelect($event)">
             <option selected="true" disabled="disabled">Sort by</option>
             <option *ngFor="let item of sortOptions" [value]="item.value">
@@ -103,20 +60,10 @@
             </option>
           </select>
         </div>
-      </div> -->
-      <app-paging-header
-        [pageNumber]="this.pageNumber"
-        [pageSize]="this.pageSize"
-        [totalCount]="this.totalCount"
-      ></app-paging-header>
-      <div>
-        <select class="custom-select mb-3" (change)="onSortSelect($event)">
-          <option selected="true" disabled="disabled">Sort by</option>
-          <option *ngFor="let item of sortOptions" [value]="item.value">
-            {{ item.name }}
-          </option>
-        </select>
       </div>
+
+
+
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         <div *ngFor="let item of products">
           <app-product-item [product]="item"></app-product-item>
@@ -124,11 +71,7 @@
       </div>
     </div>
   </div>
-  <div
-    class="d-flex justify-content-center"
-    style="margin-bottom: 80px"
-    *ngIf="this.totalCount && this.totalCount > 0"
-  >
+  <div class="d-flex justify-content-center" style="margin-bottom: 80px" *ngIf="this.totalCount && this.totalCount > 0">
     <!-- <pagination
       [boundaryLinks]="true"
       [totalItems]="this.totalCount"
@@ -140,12 +83,8 @@
       lastText="&raquo;"
       class="pagination1"
     ></pagination> -->
-    <app-pager
-      [pageSize]="this.pageSize"
-      [totalCount]="this.totalCount"
-      (newPageNumber)="onPageChanged($event)"
-      classCss="pagination1"
-    ></app-pager>
+    <app-pager [pageSize]="this.pageSize" [totalCount]="this.totalCount" (newPageNumber)="onPageChanged($event)"
+      classCss="pagination1"></app-pager>
   </div>
 </main>
 <app-client-footer></app-client-footer>
