@@ -32,8 +32,13 @@ svg {
   &-number {
     position: absolute;
     top: 0;
-    right: 0;
-    color: #db4545;
+    right: -9px;
+    color: #fff;
+    background: red;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    text-align: center;
   }
 }
 // .nav-link {

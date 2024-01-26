@@ -1,31 +1,21 @@
-<div
-  class=""
-  style="
+<div class="" style="
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100vh;
-  "
->
+  ">
   <app-client-nav></app-client-nav>
 
   <div class="{{ !product?.id ? 'display-none' : '' }} ">
     <section class="product-detail">
-      <div
-        class="container px-4 px-lg-5 py-5"
-        style="border-bottom: 4px solid pink"
-      >
-        <div class="row gx-4 gx-lg-5 align-items-center">
+      <div class="container px-4 px-lg-5 py-5" style="border-bottom: 4px solid pink">
+        <div class="row gx-4 gx-lg-5 align-items-top">
           <div class="col-md-6">
-            <img
-              class="card-img-top mb-5 mb-md-0"
-              src="{{ product?.pictureUrl }}"
-              alt="..."
-            />
+            <img class="card-img-top mb-5 mb-md-0" src="{{ product?.pictureUrl }}" alt="..." />
           </div>
           <div class="col-md-6">
             <div class="small mb-1">SKU: {{ product?.productCode }}</div>
-            <h1 class="display-5 fw-bolder">{{ product?.name }}</h1>
+            <h2 class="fw-bolder">{{ product?.name }}</h2>
             <div class="fs-5 mb-5">
               <!-- <span class="text-decoration-line-through">{{
             product?.price | currency
@@ -37,45 +27,15 @@
             </p>
             <div class="d-flex">
               <div class="d-flex justify-content-start align-items-center">
-                <fa-icon
-                  [icon]="faPlusCircle"
-                  style="cursor: pointer; font-size: 1.5em"
-                  class="text-warning"
-                ></fa-icon>
-                <span class="fw-bold mx-2" style="font-size: 1.5em">2</span>
-                <fa-icon
-                  [icon]="faMinusCircle"
-                  style="cursor: pointer; font-size: 1.5em"
-                  class="text-warning"
-                ></fa-icon>
-                <button
-                  class="btn btn-outline-secondary btn-lg ms-4 {{
-                    product?.quantity === 0 ? 'disabled' : ''
-                  }}"
-                >
-                  Update Cart
-                </button>
-              </div>
-              <button
-                class="btn  btn-outline-secondary btn-lg ms-4 {{
+                <fa-icon [icon]="faPlusCircle" (click)="this.incrementQty()" style="cursor: pointer; font-size: 1.5em;"
+                  class="text-warning"></fa-icon>
+                <span class="fw-bold mx-2" style="font-size: 1.5em;">{{this.quantity}}</span>
+                <fa-icon [icon]="faMinusCircle" (click)="this.decrementQty()" style="cursor: pointer; font-size: 1.5em;"
+                  class="text-warning"></fa-icon>
+                <button (click)="this.addItemToBasket()" class="btn btn-outline-secondary btn-lg ms-4 {{
                   product?.quantity === 0 ? 'disabled' : ''
-                }}"
-                type="button"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-cart-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"
-                  />
-                </svg>
-                Add to cart
-              </button>
+                }}">Update Cart</button>
+              </div>
             </div>
           </div>
         </div>

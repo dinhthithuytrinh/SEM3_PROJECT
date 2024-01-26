@@ -11,6 +11,7 @@ import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
 import { AdminHeaderComponent } from './admin-header/admin-header.component';
 import { AdminRoute } from '../admin/admin.routing';
 import { ToastrModule } from 'ngx-toastr';
+import { OrderTotalsComponent } from './order-totals/order-totals.component';
 @NgModule({
   declarations: [
     PagerComponent,
@@ -19,6 +20,7 @@ import { ToastrModule } from 'ngx-toastr';
     ClientFooterComponent,
     AdminNavbarComponent,
     AdminHeaderComponent,
+    OrderTotalsComponent,
   ],
   imports: [
     CommonModule,
@@ -39,6 +41,7 @@ import { ToastrModule } from 'ngx-toastr';
     ClientFooterComponent,
     AdminNavbarComponent,
     AdminHeaderComponent,
+    OrderTotalsComponent,
   ],
 })
 export class SharedModule {}

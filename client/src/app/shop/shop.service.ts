@@ -56,7 +56,14 @@ export class ShopService {
     });
   }
 
+  getReProducts(): Observable<IPagination | null> {
+    return this.http.get<IPagination>(this.baseUrl + 'products?client=1&pageSize=3');
+  }
+
   getRelateProducts(): Observable<IPagination> {
+    // console.log('aa', this.http.get<IPagination>(
+    //   this.baseUrl + 'products?pageSize=3&client=1'
+    // ));
     return this.http.get<IPagination>(
       this.baseUrl + 'products?pageSize=3&client=1'
     );

@@ -1,0 +1,19 @@
+<div class="bg-light px-4 py-3 text-uppercase fw-bold">
+  Order Summary
+</div>
+<div class="p-4" style="background: #a32a2a; color: white; margin-bottom: 10px ">
+  <ul class="list-unstyled mb-4">
+    <li class="d-flex justify-content-between py-3 border-bottom">
+      <strong class="text-muted">Order subtotal</strong>
+      <strong>{{this.basketService.basketTotal.subtotal | currency}}</strong>
+    </li>
+    <li class="d-flex justify-content-between py-3 border-bottom">
+      <strong class="text-muted">Shipping cost</strong>
+      <strong>{{this.basketService.basketTotal.shipping | currency}}</strong>
+    </li>
+    <li class="d-flex justify-content-between py-3 border-bottom">
+      <strong class="text-muted">Total</strong>
+      <strong>{{this.basketService.basketTotal.total | currency}}</strong>
+    </li>
+  </ul>
+</div>
