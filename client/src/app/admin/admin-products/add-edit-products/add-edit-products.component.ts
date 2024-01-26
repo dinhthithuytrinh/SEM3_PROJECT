@@ -6,70 +6,105 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { IOrigin } from 'src/app/models/IOrigin';
 import { HttpClient } from '@angular/common/http';
+import { IType } from 'src/app/models/IType';
+import { IOrigin } from 'src/app/models/IOrigin';
 
 @Component({
-  selector: 'app-add-edit-origins',
-  templateUrl: './add-edit-origins.component.html',
-  styleUrls: ['./add-edit-origins.component.scss'],
+  selector: 'app-add-edit-products',
+  templateUrl: './add-edit-products.component.html',
+  styleUrls: ['./add-edit-products.component.scss'],
 })
-export class AddEditOriginsComponent implements OnInit {
+export class AddEditProductsComponent implements OnInit {
   selectedFile: File | null = null;
-  originForm!: FormGroup;
-  baseUrl = 'http://localhost:5000/api/products/';
- @Input() selectedOrigin: any;
+  productForm!: FormGroup;
+  types: IType[] = []; // Array to hold product types
+  origins: IOrigin[] = []; // Array to hold product brands
+
+  baseUrl = 'http://localhost:5000/api/';
+ @Input() selectedProduct: any;
   @Input() mode: 'add' | 'edit' = 'add';
-  constructor(private http: HttpClient,private fb: FormBuilder) {}
+  constructor(private http: HttpClient,private fb: FormBuilder,private adminService: AdminService) {}
+ // Declare and initialize selectedProductType
 
   ngOnInit(): void {
- 
-    this.originForm = this.fb.group({
+    this.productForm = this.fb.group({
       id: [''],
+      productCode:[''],
       name: [''],
       description: [''],
+      price:[''],
+      productTypeId:[''],
+      productBrandId:[''],
+      productBrand:[''],
+      productType:[''],
+
+      quantity:[''],
       status: [true],
       file: [null],
+     
     });
-   if (this.mode === 'edit' && this.selectedOrigin) {
+   if (this.mode === 'edit' && this.selectedProduct) {
       // Initialize form with data for editing
-      this.originForm.patchValue({
-        id: this.selectedOrigin.id,
-        name: this.selectedOrigin.name,
-        description: this.selectedOrigin.description,
-        status: this.selectedOrigin.status,
+      this.productForm.patchValue({
+        id: this.selectedProduct.id,
+        name: this.selectedProduct.name,
+        description: this.selectedProduct.description,
+        price: this.selectedProduct.price,
+        productTypeId: this.selectedProduct.productTypeId,
+        productBrandId: this.selectedProduct.productBrandId,
+        quantity: this.selectedProduct.quantity,
+        status: this.selectedProduct.status,
         // You may need to handle the file separately for editing
       });
-      console.log(this.selectedOrigin);
     }
+       this.adminService.getTypes().subscribe(types => {
+      this.types = types;
+      console.log(types)
+
+    });
+
+    this.adminService.getOrigins().subscribe(origins => {
+      this.origins = origins;
+      console.log(origins)
+    });
     
   }
  
 
   onSelectFile(fileInput: any) {
     this.selectedFile = <File>fileInput.target.files[0];
-    this.originForm.patchValue({
+    this.productForm.patchValue({
       file: this.selectedFile,
     });
   }
    submitForm(action: string) {
     // Kiểm tra hành động và gọi hàm tương ứng
     if (action === 'create') {
-      this.createOrigin(this.originForm.value);
+      this.createProduct(this.productForm.value);
     } else if (action === 'update') {
-      this.updateOrigin(this.originForm.value);
+      this.updateProduct(this.productForm.value);
     }
   }
+  generateRandomCode(): number {
+    const min = 1000000; // Smallest 7-digit number
+    const max = 9999999; // Largest 7-digit number
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
-  createOrigin(data: any) {
+  createProduct(data: any) {
+    data.productCode = this.generateRandomCode();
     console.log('data', data);
-    var fileUpLoadProductBrand = new FormData();
-    fileUpLoadProductBrand.append('Name', data.name);
-    fileUpLoadProductBrand.append('Description', data.description);
-    fileUpLoadProductBrand.append('status', data.status);
-
+    var fileUpLoadProduct = new FormData();
+    fileUpLoadProduct.append('Name', data.name);
+    fileUpLoadProduct.append('Description', data.description);
+    fileUpLoadProduct.append('price', data.price);
+    fileUpLoadProduct.append('productTypeId', data.productTypeId);
+    fileUpLoadProduct.append('productBrandId', data.productBrandId);
+    fileUpLoadProduct.append('quantity', data.quantity);
+    fileUpLoadProduct.append('status', data.status);
     if (this.selectedFile) {
-      fileUpLoadProductBrand.append(
+      fileUpLoadProduct.append(
         'files',
         this.selectedFile,
         this.selectedFile.name
@@ -77,22 +112,26 @@ export class AddEditOriginsComponent implements OnInit {
     }
 
     this.http
-      .post(this.baseUrl + 'origins/Create/', fileUpLoadProductBrand)
+      .post(this.baseUrl + 'products/Create', fileUpLoadProduct)
       .subscribe((response) => {
-        alert('Origin created successfully!');
+        alert('Product created successfully!');
       });
 
-    this.originForm.reset();
+    this.productForm.reset();
     console.log(data);
   }
-  updateOrigin(data: any) {
+  updateProduct(data: any) {
     // Lấy ID của nguồn gốc cần cập nhật
-    const originId = data.id;
+    const productId = data.id;
 
     // Tạo FormData mới để chứa dữ liệu cần cập nhật
     const formData = new FormData();
     formData.append('Name', data.name);
     formData.append('Description', data.description);
+    formData.append('price', data.price);
+    formData.append('productTypeId', data.productTypeId);
+    formData.append('productBrandId', data.productBrandId);
+    formData.append('quantity', data.quantity);
     formData.append('status', data.status);
     formData.append('id', data.id);
     // Kiểm tra nếu có tệp được chọn
@@ -106,13 +145,13 @@ export class AddEditOriginsComponent implements OnInit {
 
     // Gửi yêu cầu cập nhật lên máy chủ
     this.http
-      .put(this.baseUrl + `origins/Update/${originId}`, formData)
+      .put(this.baseUrl + `products/${productId}`, formData)
       .subscribe((response) => {
-        alert('Origin updated successfully!');
+        alert('Product updated successfully!');
       });
 
     // Reset form sau khi cập nhật thành công
-    this.originForm.reset();
+    this.productForm.reset();
     
   }
 }

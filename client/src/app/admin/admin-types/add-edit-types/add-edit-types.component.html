@@ -1,8 +1,8 @@
-<form [formGroup]="originForm"*ngIf="selectedOrigin !== '0' && selectedOrigin !== null">
+<form [formGroup]="typeForm"*ngIf="selectedType !== '0' && selectedType !== null">
   <div class="d-flex flex-row bd-highlight mb-3">
     <div class="p-2 w-50 bd-highlight">
       <div class="input-group mb-3">
-        <span class="input-group-text">Origins Name</span>
+        <span class="input-group-text">Types Name</span>
         <input type="text" class="form-control" formControlName="name" />
         
       </div>
@@ -28,3 +28,4 @@
   <!-- Nút "Update" -->
   <button type="button" class="btn btn-primary" (click)="submitForm('update')">Update</button>
 </form>
+<div>{{ selectedType | json }}</div>

@@ -6,41 +6,38 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { IOrigin } from 'src/app/models/IOrigin';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-add-edit-origins',
-  templateUrl: './add-edit-origins.component.html',
-  styleUrls: ['./add-edit-origins.component.scss'],
+  selector: 'app-add-edit-types',
+  templateUrl: './add-edit-types.component.html',
+  styleUrls: ['./add-edit-types.component.scss'],
 })
-export class AddEditOriginsComponent implements OnInit {
+export class AddEditTypesComponent implements OnInit {
   selectedFile: File | null = null;
-  originForm!: FormGroup;
+  typeForm!: FormGroup;
   baseUrl = 'http://localhost:5000/api/products/';
- @Input() selectedOrigin: any;
+ @Input() selectedType: any;
   @Input() mode: 'add' | 'edit' = 'add';
   constructor(private http: HttpClient,private fb: FormBuilder) {}
 
   ngOnInit(): void {
- 
-    this.originForm = this.fb.group({
+    this.typeForm = this.fb.group({
       id: [''],
       name: [''],
       description: [''],
       status: [true],
       file: [null],
     });
-   if (this.mode === 'edit' && this.selectedOrigin) {
+   if (this.mode === 'edit' && this.selectedType) {
       // Initialize form with data for editing
-      this.originForm.patchValue({
-        id: this.selectedOrigin.id,
-        name: this.selectedOrigin.name,
-        description: this.selectedOrigin.description,
-        status: this.selectedOrigin.status,
+      this.typeForm.patchValue({
+        id: this.selectedType.id,
+        name: this.selectedType.name,
+        description: this.selectedType.description,
+        status: this.selectedType.status,
         // You may need to handle the file separately for editing
       });
-      console.log(this.selectedOrigin);
     }
     
   }
@@ -48,28 +45,28 @@ export class AddEditOriginsComponent implements OnInit {
 
   onSelectFile(fileInput: any) {
     this.selectedFile = <File>fileInput.target.files[0];
-    this.originForm.patchValue({
+    this.typeForm.patchValue({
       file: this.selectedFile,
     });
   }
    submitForm(action: string) {
     // Kiểm tra hành động và gọi hàm tương ứng
     if (action === 'create') {
-      this.createOrigin(this.originForm.value);
+      this.createOrigin(this.typeForm.value);
     } else if (action === 'update') {
-      this.updateOrigin(this.originForm.value);
+      this.updateType(this.typeForm.value);
     }
   }
 
   createOrigin(data: any) {
     console.log('data', data);
-    var fileUpLoadProductBrand = new FormData();
-    fileUpLoadProductBrand.append('Name', data.name);
-    fileUpLoadProductBrand.append('Description', data.description);
-    fileUpLoadProductBrand.append('status', data.status);
+    var fileUpLoadProductType = new FormData();
+    fileUpLoadProductType.append('Name', data.name);
+    fileUpLoadProductType.append('Description', data.description);
+    fileUpLoadProductType.append('status', data.status);
 
     if (this.selectedFile) {
-      fileUpLoadProductBrand.append(
+      fileUpLoadProductType.append(
         'files',
         this.selectedFile,
         this.selectedFile.name
@@ -77,17 +74,18 @@ export class AddEditOriginsComponent implements OnInit {
     }
 
     this.http
-      .post(this.baseUrl + 'origins/Create/', fileUpLoadProductBrand)
+      .post(this.baseUrl + 'types/Create/', fileUpLoadProductType)
       .subscribe((response) => {
         alert('Origin created successfully!');
       });
 
-    this.originForm.reset();
+    this.typeForm.reset();
+      this.selectedType = "";
     console.log(data);
   }
-  updateOrigin(data: any) {
+  updateType(data: any) {
     // Lấy ID của nguồn gốc cần cập nhật
-    const originId = data.id;
+    const typeId = data.id;
 
     // Tạo FormData mới để chứa dữ liệu cần cập nhật
     const formData = new FormData();
@@ -106,13 +104,13 @@ export class AddEditOriginsComponent implements OnInit {
 
     // Gửi yêu cầu cập nhật lên máy chủ
     this.http
-      .put(this.baseUrl + `origins/Update/${originId}`, formData)
+      .put(this.baseUrl + `types/Update/${typeId}`, formData)
       .subscribe((response) => {
         alert('Origin updated successfully!');
       });
 
     // Reset form sau khi cập nhật thành công
-    this.originForm.reset();
+    this.typeForm.reset();
     
   }
 }
