@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IType } from 'src/app/models/IType';
+import { IOrigin } from 'src/app/models/IOrigin';
 import { AdminService } from '../admin.service';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-types',
@@ -8,62 +9,96 @@ import { AdminService } from '../admin.service';
   styleUrls: ['./admin-types.component.scss']
 })
 export class AdminTypesComponent implements OnInit {
-  types: IType[] = [];
-  type: IType = {
-    id: 0,
-    name: '',
-    description: '',
-    pictureUrl: '',
-    status: true,
-    createdBy: new Date(),
-    updateBy: new Date(),
-  };
-
-  displayForm = false;
-
-  constructor(private adminService: AdminService) { }
+ // Declare the form group
+  constructor(private fb: FormBuilder, private adminService: AdminService) {
+    this.typeForm = this.fb.group({ // Initialize originForm using FormBuilder
+      id: [''],
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      status: [true, Validators.required],
+      file: [null]
+    });
+  }
+  typeForm!: FormGroup;
+  TypesList: any = [];
+  ModalTitle = "";
+  ActivateAddEditTypeComponent: boolean = false;
+  typ: any;
+  TypesIdFilter = "";
+  TypesNameFilter = "";
+  TypesListWithoutFilter: any = [];
+  selectedType: any;
 
   ngOnInit(): void {
-    this.getTypes();
+      this.refreshOriginsList();
   }
 
-  getTypes(): void {
-    this.adminService.getTypes()
-      .subscribe(response => this.types = response || []);
+  addClick() {
+    this.typ = {
+      id: "0",
+      name: "",
+      description: "",
+      pictureURL: "",
+      status: true,
+      file: null  // Thêm trường file và gán giá trị null
+    }
+    this.ModalTitle = "Add Types";
+    this.ActivateAddEditTypeComponent = true;
   }
 
-  toggleForm(): void {
-    this.displayForm = !this.displayForm;
+  editClick(item: any) {
+   if (item && item.id !== "0") {
+    this.selectedType = item; // Lưu thông tin của origin được chọn vào selectedOrigin
+    this.ModalTitle = "Edit Types"; // Đặt tiêu đề modal thành "Edit Origins"
+    this.ActivateAddEditTypeComponent = true; // Hiển thị thành phần add-edit origin
+  }
   }
 
-  editType(type: IType): void {
-    this.type = { ...type };
-    this.toggleForm();
-  }
-
-  saveType(): void {
-    if (this.type.id) {
-      this.adminService.updateType(this.type)
-        .subscribe(updatedType => {
-          console.log('Type updated successfully:', updatedType);
-          this.getTypes();
-          this.toggleForm();
-        });
-    } else {
-      this.adminService.addType(this.type)
-        .subscribe(newType => {
-          console.log('Type added successfully:', newType);
-          this.getTypes();
-          this.toggleForm();
-        });
+  deleteClick(item: any) {
+    if (confirm('Are you sure??')) {
+      this.adminService.deleteType(item.id).subscribe(data => {
+        alert(data);
+        this.refreshOriginsList();
+      })
     }
   }
 
-  deleteType(id: number): void {
-    this.adminService.deleteType(id)
-      .subscribe(() => {
-        console.log('Type deleted successfully.');
-        this.getTypes();
-      });
+  closeClick() {
+    this.ActivateAddEditTypeComponent = false;
+    this.refreshOriginsList();
   }
+
+  refreshOriginsList() {
+    this.adminService.getTypes().subscribe(data => {
+      this.TypesList = data;
+      this.TypesListWithoutFilter = data;
+    });
+  }
+
+  sortResult(prop: any, asc: any) {
+    this.TypesList = this.TypesListWithoutFilter.sort(function (a: any, b: any) {
+      if (asc) {
+        return (a[prop] > b[prop]) ? 1 : ((a[prop] < b[prop]) ? -1 : 0);
+      }
+      else {
+        return (b[prop] > a[prop]) ? 1 : ((b[prop] < a[prop]) ? -1 : 0);
+      }
+    });
+  }
+
+  FilterFn() {
+    var OriginsIdFilter = this.TypesIdFilter;
+    var OriginsNameFilter = this.TypesNameFilter;
+
+    this.TypesList = this.TypesListWithoutFilter.filter(
+      function (el: any) {
+        return el.DepartmentId.toString().toLowerCase().includes(
+          OriginsIdFilter.toString().trim().toLowerCase()
+        ) &&
+          el.DepartmentName.toString().toLowerCase().includes(
+            OriginsNameFilter.toString().trim().toLowerCase())
+      }
+    );
+  }
+
 }
