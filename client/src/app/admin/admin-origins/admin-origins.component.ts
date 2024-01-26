@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IOrigin } from 'src/app/models/IOrigin';
 import { AdminService } from '../admin.service';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-admin-origins',
@@ -8,17 +9,25 @@ import { AdminService } from '../admin.service';
   styleUrls: ['./admin-origins.component.scss']
 })
 export class AdminOriginsComponent implements OnInit {
-
-  constructor(private adminService: AdminService) {}
-
+ // Declare the form group
+  constructor(private fb: FormBuilder, private adminService: AdminService) {
+    this.originForm = this.fb.group({ // Initialize originForm using FormBuilder
+      id: [''],
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+      status: [true, Validators.required],
+      file: [null]
+    });
+  }
+  originForm!: FormGroup;
   OriginsList: any = [];
   ModalTitle = "";
   ActivateAddEditOriginComponent: boolean = false;
   ori: any;
-
   OriginsIdFilter = "";
   OriginsNameFilter = "";
   OriginsListWithoutFilter: any = [];
+  selectedOrigin: any;
 
   ngOnInit(): void {
       this.refreshOriginsList();
@@ -38,9 +47,11 @@ export class AdminOriginsComponent implements OnInit {
   }
 
   editClick(item: any) {
-    this.ori = item;
-    this.ModalTitle = "Edit Origins";
-    this.ActivateAddEditOriginComponent = true;
+   if (item && item.id !== "0") {
+    this.selectedOrigin = item; // Lưu thông tin của origin được chọn vào selectedOrigin
+    this.ModalTitle = "Edit Origins"; // Đặt tiêu đề modal thành "Edit Origins"
+    this.ActivateAddEditOriginComponent = true; // Hiển thị thành phần add-edit origin
+  }
   }
 
   deleteClick(item: any) {

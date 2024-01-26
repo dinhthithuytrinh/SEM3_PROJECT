@@ -18,19 +18,33 @@ export class AddEditOriginsComponent implements OnInit {
   selectedFile: File | null = null;
   originForm!: FormGroup;
   baseUrl = 'http://localhost:5000/api/products/';
-
-  constructor(private http: HttpClient) {}
+ @Input() selectedOrigin: any;
+  @Input() mode: 'add' | 'edit' = 'add';
+  constructor(private http: HttpClient,private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.originForm = new FormGroup({
-      id: new FormControl(''),
-      name: new FormControl('', Validators.required),
-      description: new FormControl(''),
-      pictureURL: new FormControl(''),
-      status: new FormControl(true),
-      file: new FormControl(null),
+ 
+    this.originForm = this.fb.group({
+      id: [''],
+      name: [''],
+      description: [''],
+      status: [true],
+      file: [null],
     });
+   if (this.mode === 'edit' && this.selectedOrigin) {
+      // Initialize form with data for editing
+      this.originForm.patchValue({
+        id: this.selectedOrigin.id,
+        name: this.selectedOrigin.name,
+        description: this.selectedOrigin.description,
+        status: this.selectedOrigin.status,
+        // You may need to handle the file separately for editing
+      });
+      console.log(this.selectedOrigin);
+    }
+    
   }
+ 
 
   onSelectFile(fileInput: any) {
     this.selectedFile = <File>fileInput.target.files[0];
@@ -38,13 +52,21 @@ export class AddEditOriginsComponent implements OnInit {
       file: this.selectedFile,
     });
   }
+   submitForm(action: string) {
+    // Kiểm tra hành động và gọi hàm tương ứng
+    if (action === 'create') {
+      this.createOrigin(this.originForm.value);
+    } else if (action === 'update') {
+      this.updateOrigin(this.originForm.value);
+    }
+  }
 
   createOrigin(data: any) {
     console.log('data', data);
     var fileUpLoadProductBrand = new FormData();
     fileUpLoadProductBrand.append('Name', data.name);
     fileUpLoadProductBrand.append('Description', data.description);
-    fileUpLoadProductBrand.append('status', data.status.toString());
+    fileUpLoadProductBrand.append('status', data.status);
 
     if (this.selectedFile) {
       fileUpLoadProductBrand.append(
@@ -55,12 +77,43 @@ export class AddEditOriginsComponent implements OnInit {
     }
 
     this.http
-      .post(this.baseUrl + 'origins/Create', fileUpLoadProductBrand)
+      .post(this.baseUrl + 'origins/Create/', fileUpLoadProductBrand)
       .subscribe((response) => {
         alert('Origin created successfully!');
       });
 
     this.originForm.reset();
+    console.log(data);
+  }
+  updateOrigin(data: any) {
+    // Lấy ID của nguồn gốc cần cập nhật
+    const originId = data.id;
+
+    // Tạo FormData mới để chứa dữ liệu cần cập nhật
+    const formData = new FormData();
+    formData.append('Name', data.name);
+    formData.append('Description', data.description);
+    formData.append('status', data.status);
+    formData.append('id', data.id);
+    // Kiểm tra nếu có tệp được chọn
+    if (this.selectedFile) {
+      formData.append(
+        'files',
+        this.selectedFile,
+        this.selectedFile.name
+      );
+    }
+
+    // Gửi yêu cầu cập nhật lên máy chủ
+    this.http
+      .put(this.baseUrl + `origins/Update/${originId}`, formData)
+      .subscribe((response) => {
+        alert('Origin updated successfully!');
+      });
+
+    // Reset form sau khi cập nhật thành công
+    this.originForm.reset();
+    
   }
 }
 
