@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { IProduct } from 'src/app/models/IProduct';
 import { AdminService } from '../admin.service';
-import { ActivatedRoute, Router } from '@angular/router';
+
+
 import { IType } from 'src/app/models/IType';
 import { IOrigin } from 'src/app/models/IOrigin';
+
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-admin-products',
@@ -11,7 +15,8 @@ import { IOrigin } from 'src/app/models/IOrigin';
   styleUrls: ['./admin-products.component.scss']
 })
 export class AdminProductsComponent implements OnInit {
-  products: IProduct[] = [];
+  
+  products: any = [];
   types: IType[] = [];
   origins: IOrigin[] = [];
 
@@ -30,6 +35,12 @@ export class AdminProductsComponent implements OnInit {
     updateBy: new Date(),
   };
 
+  ActivateAddEditProductsComponent: boolean = false;
+  ModalTitle = "";
+  ProductList: any = [];
+  ProductListWithoutFilter: any = [];
+  pro: any;
+
   statuses: { value: boolean; label: string }[] = [
     { value: true, label: 'True' },
     { value: false, label: 'False'},
@@ -37,7 +48,7 @@ export class AdminProductsComponent implements OnInit {
 
   displayForm = false;
 
-  constructor(private adminService: AdminService, private router: Router, private route: ActivatedRoute) {}
+  constructor(private adminService: AdminService, private router: Router) {}
 
   ngOnInit(): void {
     this.getProducts();
@@ -56,15 +67,44 @@ export class AdminProductsComponent implements OnInit {
       .subscribe((response) => (this.products = response?.data || []));
   }
 
-  toggleForm(): void {
-    this.displayForm = !this.displayForm;
+  // toggleForm(): void {
+  //   this.displayForm = !this.displayForm;
+  // }
+  addClick() {
+    this.pro = {
+      id: "0",
+      name: "",
+      description: "",
+      price: "",
+      pictureURL: "",
+      productType: "",
+      productBrand: "",
+      quantity: "0",
+      status: true,
+      file: null  // Thêm trường file và gán giá trị null
+    }
+    this.ModalTitle = "Add Product";
+    this.ActivateAddEditProductsComponent = true;
   }
 
-  editProduct(product: IProduct): void {
-    // Thiết lập giá trị của product để form hiển thị nó
-    this.product = { ...product };
-    this.toggleForm(); // Hiển thị form
+  editProduct(item: any): void {
+    // // Thiết lập giá trị của product để form hiển thị nó
+    // this.product = { ...product };
+    // // this.toggleForm(); // Hiển thị form
+    this.pro = item;
+    this.ModalTitle = "Edit Product";
+    this.ActivateAddEditProductsComponent = true;
   }
+
+
+  closeClick() {
+    this.ActivateAddEditProductsComponent = false;
+    this.refreshProductList();
+  }
+  refreshProductList() {
+    this.getProducts();
+  }
+  // *****
 
   // saveProduct(): void {
   //   // Thêm logic để lưu sản phẩm
