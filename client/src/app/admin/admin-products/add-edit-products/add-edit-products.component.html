@@ -1,0 +1,54 @@
+<div class="d-flex flex-row bd-highlight mb-3">
+  <div class="p-2 w-100 bd-highlight">
+    <div class="input-group mb-3">
+      <span class="input-group-text">Name:</span>
+      <input type="text" class="form-control" [(ngModel)]="name">
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text">Description</span>
+      <input type="text" class="form-control" [(ngModel)]="description">
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text">Price</span>
+      <input type="text" class="form-control" [(ngModel)]="price">
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text">ProductType</span>
+      <select class="form-select" [(ngModel)]="productType">
+        <option value="">{{productType}}</option>
+      </select>
+    </div>
+
+    <div class="input-group mb-3">
+      <span class="input-group-text">ProductBrand</span>
+      <select class="form-select" [(ngModel)]="productBrand">
+        <option value="brand1">Brand 1</option>
+        <option value="brand2">Brand 2</option>
+        <option value="brand3">Brand 3</option>
+      </select>
+    </div>
+    <div class="input-group mb-3">
+      <span class="input-group-text">Quantity</span>
+      <input type="text" class="form-control" [(ngModel)]="quantity">
+    </div>
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="statusSelect">Status</label>
+      <select class="form-select" id="statusSelect" [(ngModel)]="status" name="status">
+        <option [value]="status">Available</option>
+        <option [value]="status">Unavailable</option>
+      </select>
+    </div>
+
+  </div>
+  <div class="p-2 w-50 bd-highlight">
+    <img width="100%" height="auto" [src]="pictureURL" />
+    <input class="m-2 w-100" type="file" (change)="uploadPhoto($event)">
+  </div>
+</div>
+<button type="button" (click)="addProduct()" *ngIf="pro.id=='0'" class="btn btn-primary">
+  Create
+</button>
+
+<button type="button" (click)="updateProduct()" *ngIf="pro.id!='0'" class="btn btn-primary">
+  Update
+</button>
