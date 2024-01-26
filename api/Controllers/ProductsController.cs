@@ -203,7 +203,7 @@ namespace api.Controllers
           if (f != null && f.files != null)
           {
             var imagePath = SaveImage(f);
-            existingProduct.PictureUrl = baseUrl + imagePath;
+            existingProduct.PictureUrl = imagePath;
           }
           _unitOfWork.ProductRepository.Update(existingProduct);
           _unitOfWork.Save();
@@ -220,10 +220,9 @@ namespace api.Controllers
 
     }
 
-
     private string SaveImage(FileUpLoadAPI p)
     {
-      string baseUrl = _configuration["ApiUrl"];
+      
 
       var imageName = p.files.FileName;
       var directoryPath = Path.Combine("images", "products");
@@ -238,7 +237,7 @@ namespace api.Controllers
 
       return urlPath;
     }
-
+    
     [HttpDelete("Delete")]
     public async Task<ActionResult<Product>> Delete([FromForm] int id)
     {
@@ -367,13 +366,187 @@ namespace api.Controllers
       }
     }
 
+    [HttpPut("origins/Update/{Id}")]
+    public ActionResult<ProductBrand> UpdateProductBrand(int id, [FromForm] ProductBrand productBrandUpdate, [FromForm] FileUpLoadProductBrand f)
+    {
+      try
+      {
+        var existingProduct = _Db.ProductBrands.AsNoTracking().FirstOrDefault(p => p.Id == id);
+        
+        if (existingProduct == null)
+        {
+          return NotFound("Product not found");
+        }
+
+        // Kiểm tra xem productBrandUpdate có null không
+        if (productBrandUpdate == null)
+        {
+          return BadRequest("ProductBrandUpdate is null");
+        }
+
+        // Kiểm tra xem productBrandUpdate có thuộc tính Id không
+        if (productBrandUpdate.Id != id)
+        {
+          return BadRequest("Id mismatch between productBrandUpdate and existingProduct");
+        }
+        else
+        {
+          if (existingProduct == null)
+          {
+            return NotFound("Product not found");
+          }
+          if (productBrandUpdate.Name != null)
+          {
+            existingProduct.Name = productBrandUpdate.Name;
+          }
+
+          if (productBrandUpdate.Status != null)
+          {
+            existingProduct.Status = productBrandUpdate.Status;
+          }
+          if (productBrandUpdate.Description != null)
+          {
+            existingProduct.Description = productBrandUpdate.Description;
+          }
+          if (productBrandUpdate.PictureUrl != null)
+          {
+            existingProduct.PictureUrl = productBrandUpdate.PictureUrl;
+          }
+          if (f != null && f.files != null)
+          {
+            var imagePath = SaveImageBrand(f);
+            existingProduct.PictureUrl = imagePath;
+          }
+          _unitOfWork.ProductBrandRepository.Update(existingProduct);
+          _unitOfWork.Save();
+        }
+
+        return Ok(existingProduct);
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, $"Internal Server Error: {ex.Message}");
+      }
+
+    }
+    private string SaveImageBrand(FileUpLoadProductBrand p)
+    {
+      var imageName = p.files.FileName;
+      var directoryPath = Path.Combine("images", "brands");
+      var path = Path.Combine(directoryPath, imageName);
+      string urlPath = path.Replace("\\", "/");
+
+      // Tạo thư mục nếu nó không tồn tại
+      if (!Directory.Exists(directoryPath))
+      {
+        Directory.CreateDirectory(directoryPath);
+      }
+
+      // Lưu file vào thư mục đã tạo
+      using (var stream = System.IO.File.Create(urlPath))
+      {
+        p.files.CopyToAsync(stream);
+      }
+
+      // Trả về đường dẫn tương đối của hình ảnh mà không bao gồm phần "localhost"
+
+      var baseUrl = _configuration["ApiUrl"];
+      var updatedUrlPath = urlPath.Replace(baseUrl, ""); // Loại bỏ phần "localhost" khỏi đường dẫn
+      return (urlPath.ToString());
+    }
+    [HttpPut("types/Update/{Id}")]
+    public ActionResult<ProductType> UpdateProductType(int id, [FromForm] ProductType productTypeUpdate, [FromForm] FileUpLoadProducType f)
+    {
+      try
+      {
+        var existingProduct = _Db.ProductTypes.AsNoTracking().FirstOrDefault(p => p.Id == id);
+
+        if (existingProduct == null)
+        {
+          return NotFound("Product not found");
+        }
+
+        // Kiểm tra xem productBrandUpdate có null không
+        if (productTypeUpdate == null)
+        {
+          return BadRequest("ProductBrandUpdate is null");
+        }
+
+        // Kiểm tra xem productBrandUpdate có thuộc tính Id không
+        if (productTypeUpdate.Id != id)
+        {
+          return BadRequest("Id mismatch between productBrandUpdate and existingProduct");
+        }
+        else
+        {
+          if (existingProduct == null)
+          {
+            return NotFound("Product not found");
+          }
+          if (productTypeUpdate.Name != null)
+          {
+            existingProduct.Name = productTypeUpdate.Name;
+          }
+
+          if (productTypeUpdate.Status != null)
+          {
+            existingProduct.Status = productTypeUpdate.Status;
+          }
+          if (productTypeUpdate.Description != null)
+          {
+            existingProduct.Description = productTypeUpdate.Description;
+          }
+          if (productTypeUpdate.PictureUrl != null)
+          {
+            existingProduct.PictureUrl = productTypeUpdate.PictureUrl;
+          }
+          if (f != null && f.files != null)
+          {
+            var imagePath = SaveImageType(f);
+            existingProduct.PictureUrl = imagePath;
+          }
+          _unitOfWork.ProductTypeRepository.Update(existingProduct);
+          _unitOfWork.Save();
+        }
+
+        return Ok(existingProduct);
+      }
+      catch (Exception ex)
+      {
+        return StatusCode(500, $"Internal Server Error: {ex.Message}");
+      }
+
+    }
+
+    private string SaveImageType(FileUpLoadProducType p)
+    {
+      var imageName = p.files.FileName;
+      var directoryPath = Path.Combine("images", "types");
+      var path = Path.Combine(directoryPath, imageName);
+      string urlPath = path.Replace("\\", "/");
+
+      // Tạo thư mục nếu nó không tồn tại
+      if (!Directory.Exists(directoryPath))
+      {
+        Directory.CreateDirectory(directoryPath);
+      }
+
+      // Lưu file vào thư mục đã tạo
+      using (var stream = System.IO.File.Create(urlPath))
+      {
+        p.files.CopyToAsync(stream);
+      }
+
+      // Trả về đường dẫn tương đối của hình ảnh mà không bao gồm phần "localhost"
+
+      var baseUrl = _configuration["ApiUrl"];
+      var updatedUrlPath = urlPath.Replace(baseUrl, ""); // Loại bỏ phần "localhost" khỏi đường dẫn
+      return (urlPath.ToString());
+    }
+
+
     [HttpGet("types")]
-    // public async Task<ActionResult<List<ProductType>>> GetProductTypes()
-    // {
-    //   // IEnumerable<ProductType> productTypes = await _unitOfWork.ProductTypeRepository.GetAll();
-    //   // // return Ok(productTypes);
-    //   // return Ok(_mapper.Map<ProductType, ReturnProductType>(productTypes));
-    // }
+ 
     public async Task<ActionResult<List<ProductType>>> GetProductTypes()
     {
       IEnumerable<ProductType> productTypes = await _unitOfWork.ProductTypeRepository.GetEntities(
@@ -386,19 +559,19 @@ namespace api.Controllers
     }
 
 
-    [HttpPost("AddProductType")]
+    [HttpPost("types/Create")]
     public async Task<IActionResult> CreateProductType([FromForm] FileUpLoadProducType p)
     {
       
 
-      var findP = _Db.Products.Find(p.ProductTypeId);
+      var findP = _Db.ProductTypes.Find(p.ProductTypeId);
       if (findP != null)
       {
         return Ok("Co roi khong can tao");
       }
       else
       {
-        var productType = new ProductType { Id = p.ProductTypeId, Name = p.Name, Description = p.Description, Status = p.Status, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
+        var productType = new ProductType { Id = p.ProductTypeId, Name = p.Name, Description = p.Description, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
         if (p.files.Length > 0)
         {
           var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "types", p.files.FileName);
@@ -407,7 +580,7 @@ namespace api.Controllers
             await p.files.CopyToAsync(stream);
           }
 
-          productType.PictureUrl = "images/types/" + p.files.FileName;
+          productType.PictureUrl =  "images/types/" + p.files.FileName;
         }
         else
         {
