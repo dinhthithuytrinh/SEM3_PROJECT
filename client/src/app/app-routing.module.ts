@@ -23,6 +23,12 @@ const routes: Routes = [
     title: 'Arts - Basket',
   },
   {
+    path: 'checkout',
+    loadChildren: () =>
+      import('./checkout/checkout.module').then((mod) => mod.CheckoutModule),
+    title: 'Arts - Checkout',
+  },
+  {
     path: 'admin',
     loadChildren: () =>
       import('./admin/admin.module').then((mod) => mod.AdminModule),
