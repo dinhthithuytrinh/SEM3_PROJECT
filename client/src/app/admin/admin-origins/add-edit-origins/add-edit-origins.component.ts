@@ -20,6 +20,7 @@ export class AddEditOriginsComponent implements OnInit {
   baseUrl = 'http://localhost:5000/api/products/';
  @Input() selectedOrigin: any;
   @Input() mode: 'add' | 'edit' = 'add';
+   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
   constructor(private http: HttpClient,private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -81,7 +82,7 @@ export class AddEditOriginsComponent implements OnInit {
       .subscribe((response) => {
         alert('Origin created successfully!');
       });
-
+      this.closeModal.emit();
     this.originForm.reset();
     console.log(data);
   }

@@ -237,7 +237,7 @@ namespace api.Controllers
 
       return urlPath;
     }
-    
+
     [HttpDelete("Delete")]
     public async Task<ActionResult<Product>> Delete([FromForm] int id)
     {
@@ -245,19 +245,16 @@ namespace api.Controllers
 
       if (product == null)
       {
-        return BadRequest("khong co ma xoa");
+        return BadRequest($"Product with ID {id} not found.");
       }
-      else
-      {
-        _unitOfWork.ProductRepository.DeleteById(id);
-      }
+
+      // Set the Status property to false to mark the product as deleted
+      product.Status = false;
 
       _unitOfWork.Save();
 
-      return Ok("delete successfully");
-
+      return Ok("Product deleted successfully.");
     }
-
 
 
     [HttpGet("{id}")]

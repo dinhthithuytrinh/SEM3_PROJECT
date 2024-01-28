@@ -25,7 +25,7 @@
                 </div>
                 <div class="modal-body">
                   <app-add-edit-products *ngIf="ActivateAddEditProductComponent" [selectedProduct]="selectedProduct"
-                    [mode]="ModalTitle === 'Add Product' ? 'add' : 'edit'"></app-add-edit-products>
+                    [mode]="ModalTitle === 'Add Product' ? 'add' : 'edit'" (closeModal)="onCloseModal()"></app-add-edit-products>
                 </div>
               </div>
             </div>

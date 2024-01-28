@@ -19,7 +19,9 @@ export class AddEditTypesComponent implements OnInit {
   baseUrl = 'http://localhost:5000/api/products/';
  @Input() selectedType: any;
   @Input() mode: 'add' | 'edit' = 'add';
-  constructor(private http: HttpClient,private fb: FormBuilder) {}
+ @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
+
+  constructor(private http: HttpClient,private fb: FormBuilder , private adminService: AdminService) {}
 
   ngOnInit(): void {
     this.typeForm = this.fb.group({
@@ -52,13 +54,13 @@ export class AddEditTypesComponent implements OnInit {
    submitForm(action: string) {
     // Kiểm tra hành động và gọi hàm tương ứng
     if (action === 'create') {
-      this.createOrigin(this.typeForm.value);
+      this.createType(this.typeForm.value);
     } else if (action === 'update') {
       this.updateType(this.typeForm.value);
     }
   }
 
-  createOrigin(data: any) {
+  createType(data: any) {
     console.log('data', data);
     var fileUpLoadProductType = new FormData();
     fileUpLoadProductType.append('Name', data.name);
@@ -76,11 +78,12 @@ export class AddEditTypesComponent implements OnInit {
     this.http
       .post(this.baseUrl + 'types/Create/', fileUpLoadProductType)
       .subscribe((response) => {
-        alert('Origin created successfully!');
+        
+        this.closeModal.emit();
+        
       });
 
     this.typeForm.reset();
-      this.selectedType = "";
     console.log(data);
   }
   updateType(data: any) {

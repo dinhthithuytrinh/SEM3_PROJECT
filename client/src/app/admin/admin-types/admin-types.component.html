@@ -25,7 +25,7 @@
                 </div>
                 <div class="modal-body">
                   <app-add-edit-types *ngIf="ActivateAddEditTypeComponent" [selectedType]="selectedType"
-                    [mode]="ModalTitle === 'Add Types' ? 'add' : 'edit'"></app-add-edit-types>
+                    [mode]="ModalTitle === 'Add Types' ? 'add' : 'edit'"  (closeModal)="onCloseModal()"></app-add-edit-types>
                 </div>
               </div>
             </div>
