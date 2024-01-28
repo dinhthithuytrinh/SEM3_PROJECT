@@ -23,6 +23,8 @@ namespace api.Helpers
       CreateMap<ProductBrand, ReturnProductBrand>().ForMember(d => d.PictureUrl, o => o.MapFrom<BrandImageUrlResolver>());
 
       CreateMap<Address, ReturnAddress>().ReverseMap();
+      CreateMap<ReturnCustomerBasket, CustomerBasket>();
+      CreateMap<ReturnBasketItem, BasketItem>();
     }
   }
 }
