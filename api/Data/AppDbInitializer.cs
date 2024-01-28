@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Entities;
+using api.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Data
 {
 	public class AppDbInitializer
 	{
-		public static void Seed(IApplicationBuilder applicationBuilder)
+		public static async Task Seed(IApplicationBuilder applicationBuilder)
 		{
 			using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
 			{
@@ -259,89 +261,10 @@ namespace api.Data
 												});
 						context.SaveChanges();
 					}
-					if (!context.Roles.Any())
-					{
-						context.Roles.AddRange(new List<Role>()
-												{
-														new Role()
-														{
-																Name = "Admin",
-																Status = true
-														},
-														new Role()
-														{
-																Name = "Staff",
-																Status = true
-														},
-														new Role()
-														{
-																Name = "Customer",
-																Status = true
-														},
-
-												});
-						context.SaveChanges();
-					}
-					if (!context.Genders.Any())
-					{
-						context.Genders.AddRange(new List<Gender>()
-												{
-														new Gender()
-														{
-																Name = "Male",
-																Status = true
-														},
-														new Gender()
-														{
-																Name = "Female",
-																Status = true
-														},
-														new Gender()
-														{
-																Name = "Other",
-																Status = true
-														},
-												});
-						context.SaveChanges();
-					}
-					if (!context.Users.Any())
-					{
-						context.Users.AddRange(new List<User>()
-												{
-														new User()
-														{
-																FirstName = "Ad",
-																LastName = "Văn Minh",
-																RoleId = 1,
-																Username = "admin",
-																Password = "123456",
-																Email = "admin@arts.vn",
-																Status = true
-														},
-														new User()
-														{
-																FirstName = "Sờ",
-																LastName = "Thị Taff",
-																RoleId = 2,
-																Username = "staff1",
-																Password = "123456",
-																Email = "staff1@arts.vn",
-																Status = true
-														},
-														new User()
-														{
-																FirstName = "Khách",
-																LastName = "Hàng",
-																RoleId = 3,
-																Username = "khachhang",
-																Password = "123456",
-																Email = "khachhang111@gmail.vn",
-																Status = true
-														},
-												});
-						context.SaveChanges();
-					}
 				}
+
+				var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+				await IdentityInitializer.SeedUserAsync(userManager);
 			}
 		}
 	}

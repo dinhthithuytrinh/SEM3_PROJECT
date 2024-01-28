@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.DTO;
 using api.Entities;
+using api.Entities.Identity;
 using AutoMapper;
 
 namespace api.Helpers
@@ -20,6 +21,8 @@ namespace api.Helpers
       CreateMap<ProductType, ReturnProductType>().ForMember(d => d.PictureUrl, o => o.MapFrom<TypeImageUrlResolver>());
 
       CreateMap<ProductBrand, ReturnProductBrand>().ForMember(d => d.PictureUrl, o => o.MapFrom<BrandImageUrlResolver>());
+
+      CreateMap<Address, ReturnAddress>().ReverseMap();
     }
   }
 }

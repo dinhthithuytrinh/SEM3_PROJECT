@@ -14,6 +14,9 @@ namespace api.Exceptions
     {
       return statusCode switch
       {
+        201 => "Email already exists!",
+        202 => "User creation failed! Please check user details and try again.",
+        203 => "Username already exists!",
         400 => "A bad request from client",
         401 => "You are not authorized",
         404 => "Resource not found",
