@@ -12,6 +12,10 @@ import { AdminHeaderComponent } from './admin-header/admin-header.component';
 import { AdminRoute } from '../admin/admin.routing';
 import { ToastrModule } from 'ngx-toastr';
 import { OrderTotalsComponent } from './order-totals/order-totals.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { TextInputComponent } from './text-input/text-input.component';
+import { StepperComponent } from './stepper/stepper.component';
+
 @NgModule({
   declarations: [
     PagerComponent,
@@ -21,6 +25,8 @@ import { OrderTotalsComponent } from './order-totals/order-totals.component';
     AdminNavbarComponent,
     AdminHeaderComponent,
     OrderTotalsComponent,
+    TextInputComponent,
+    StepperComponent,
   ],
   imports: [
     CommonModule,
@@ -31,6 +37,7 @@ import { OrderTotalsComponent } from './order-totals/order-totals.component';
       tapToDismiss: true,
       preventDuplicates: true,
     }),
+    ReactiveFormsModule,
   ],
   exports: [
     FontAwesomeModule,
@@ -42,6 +49,9 @@ import { OrderTotalsComponent } from './order-totals/order-totals.component';
     AdminNavbarComponent,
     AdminHeaderComponent,
     OrderTotalsComponent,
+    ReactiveFormsModule,
+    TextInputComponent,
+    StepperComponent,
   ],
 })
 export class SharedModule {}

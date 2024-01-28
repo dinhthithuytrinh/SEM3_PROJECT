@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddEditOriginsComponent } from './admin-origins/add-edit-origins/add-edit-origins.component';
 import { AddEditTypesComponent } from './admin-types/add-edit-types/add-edit-types.component';
 import { AddEditProductsComponent } from './admin-products/add-edit-products/add-edit-products.component';
+import { AdminAccountComponent } from './admin-account/admin-account.component';
 // export const route: Routes = [{ path: '', component: AdminComponent }];
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AddEditProductsComponent } from './admin-products/add-edit-products/add
     AdminTypesComponent,
     AddEditOriginsComponent,
     AddEditTypesComponent,
-    AddEditProductsComponent
+    AddEditProductsComponent,
+    AdminAccountComponent
   ],
   imports: [CommonModule,ReactiveFormsModule, SharedModule,FormsModule, RouterModule.forChild(AdminRoute)],
   exports: [AdminComponent],

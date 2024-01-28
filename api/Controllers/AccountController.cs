@@ -53,7 +53,7 @@ namespace api.Controllers
 		}
 
 		[HttpPost("login")]
-		public async Task<ActionResult<ReturnUser>> Login(ReturnLogin ReturnLogin)
+		public async Task<ActionResult<ReturnUser>> Login([FromBody] ReturnLogin ReturnLogin)
 		{
 			var user = await _userManager.FindByEmailAsync(ReturnLogin.Email);
 
@@ -72,7 +72,7 @@ namespace api.Controllers
 		}
 
 		[HttpPost("register")]
-		public async Task<ActionResult<ReturnUser>> Register(ReturnRegister ReturnRegister)
+		public async Task<ActionResult<ReturnUser>> Register([FromBody] ReturnRegister ReturnRegister)
 		{
 			if (CheckEmailExistsAsync(ReturnRegister.Email).Result.Value)
 			{
@@ -115,7 +115,7 @@ namespace api.Controllers
 
 		[Authorize]
 		[HttpPut("address")]
-		public async Task<ActionResult<ReturnAddress>> UpdateUserAddress(ReturnAddress address)
+		public async Task<ActionResult<ReturnAddress>> UpdateUserAddress([FromBody] ReturnAddress address)
 		{
 			var user = await _userManager.FindUserByClaimsPrincipleWithAddress(User);
 

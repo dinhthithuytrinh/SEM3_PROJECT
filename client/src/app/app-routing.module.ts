@@ -34,15 +34,21 @@ const routes: Routes = [
       import('./admin/admin.module').then((mod) => mod.AdminModule),
     title: 'Arts - Admin',
   },
+  // {
+  //   path: 'login',
+  //   component: LoginComponent,
+  //   title: 'Arts - Login',
+  // },
+  // {
+  //   path: 'register',
+  //   component: RegisterComponent,
+  //   title: 'Arts - Register',
+  // },
   {
-    path: 'login',
-    component: LoginComponent,
+    path: 'account',
+    loadChildren: () =>
+      import('./account/account.module').then((m) => m.AccountModule),
     title: 'Arts - Login',
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
-    title: 'Arts - Register',
   },
   {
     path: 'test-error',

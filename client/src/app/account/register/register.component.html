@@ -1,0 +1,47 @@
+<div class="outer" style=" height: 100vh">
+  <div class="login-header">
+    <div class="container">
+      <a class="login-brand d-flex" routerLink="./">
+        <img src="/assets/img/unnamed.png" class="login-logo" alt="" />
+        <p class="login-name">ARTS</p>
+      </a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row" style="align-items: center; justify-content: center;">
+      <div class="">
+        <div class="panel border bg-white" style="padding: 30px">
+          <div class="panel-heading">
+            <h3 class="font-weight-bold">Register</h3>
+          </div>
+          <div class="panel-body">
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+              <div class=" form-register">
+                <app-text-input [formControl]="registerForm.controls['displayName']"
+                  [label]="'Display Name'"></app-text-input>
+                <app-text-input [formControl]="registerForm.controls['email']"
+                  [label]="'Email Address'"></app-text-input>
+                <app-text-input [formControl]="registerForm.controls['password']" [label]="'Password'"
+                  [type]="'password'"></app-text-input>
+                <app-text-input [formControl]="registerForm.controls['passwordConfirm']" [label]="'Confirm Password'"
+                  [type]="'password'"></app-text-input>
+              </div>
+              <ul class="text-danger list-unstyled" *ngIf="errors">
+                <li *ngFor="let error of errors">
+                  {{error}}
+                </li>
+              </ul>
+              <button [disabled]="registerForm.invalid" type="submit" class="btn btn-block mt-4 w-100"
+                style="background: pink; color: #fff">Register</button>
+              <div class="text-center pt-4 text-muted">Already have an account? <a id="forgot" href="#"
+                  routerLink="/login">Login</a> </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="login-footer">
+    <p>Copy right by Sem3</p>
+  </div>
+</div>

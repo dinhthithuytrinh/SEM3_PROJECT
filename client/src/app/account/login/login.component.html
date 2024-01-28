@@ -1,7 +1,7 @@
 <div class="outer" style=" height: 100vh">
   <div class="login-header">
     <div class="container">
-      <a class="login-brand d-flex" routerLink="/">
+      <a class="login-brand d-flex" routerLink="../">
         <img src="/assets/img/unnamed.png" class="login-logo" alt="" />
         <p class="login-name">ARTS</p>
       </a>
@@ -15,33 +15,39 @@
             <h3 class="font-weight-bold">Login</h3>
           </div>
           <div class="panel-body">
-            <form [formGroup]="loginForm">
-              <div class="form-group pt-3">
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+              <!-- <form> -->
+              <!-- <div class="form-group pt-3">
                 <div class="input-field"
-                  [class.error]="loginForm.controls['username'].dirty && loginForm.hasError('required','username')">
+                  [class.error]="loginForm.controls['email'].dirty && loginForm.hasError('required','email')">
+                <div class="input-field">
                   <span class="fa fa-user p-2"></span>
-                  <input autocomplete formControlName="username" type="text" placeholder="Username" required>
+                  <input autocomplete formControlName="email" type="text" placeholder="Email" required>
                 </div>
-                <small *ngIf="loginForm.controls['username'].dirty && loginForm.hasError('required','username')"
-                  class="text-danger">*Username is required*</small>
-              </div>
-
-              <div class="form-group pt-3">
+                <small *ngIf="loginForm.controls['email'].dirty && loginForm.hasError('required','email')"
+                  class="text-danger">*Email is required*</small>
+              </div> -->
+              <app-text-input [formControl]="loginForm.controls['email']" [label]="'Email Address'"
+                [iconFa]="'user'"></app-text-input>
+              <app-text-input [formControl]="loginForm.controls['password']" [label]="'Password'" [type]="'password'"
+                [iconFa]="'lock'"></app-text-input>
+              <!-- <div class="form-group pt-3">
                 <div class="input-field"
                   [class.error]="loginForm.controls['password'].dirty && loginForm.hasError('required','password')">
                   <span class="fa fa-lock px-2"></span>
-                  <input formControlName="password" [type]="type" placeholder="Password">
+                  <input formControlName="password" type="password" placeholder="Password">
                   <button type="button" (click)="hideShowPass()" class="btn-eye">
                     <span class="fa {{eyeIcon}}"></span>
                   </button>
-
                 </div>
                 <small *ngIf="loginForm.controls['password'].dirty && loginForm.hasError('required','password')"
                   class="text-danger">*Password is required*</small>
-              </div>
+                <small class="text-danger">*Password is required*</small>
+              </div> -->
               <div class="form-inline fr mt-4"> <a id="forgot" data-bs-toggle="modal" data-bs-target="#exampleModal"
                   class="font-weight-bold">Forgot password?</a> </div>
-              <button (click)="onSubmit()" type="submit" class="btn btn-block mt-4 w-100"
+              <!-- <button (click)="onSubmit()" type="submit" class="btn btn-block mt-4 w-100" -->
+              <button [disabled]="loginForm.invalid" type="submit" class="btn btn-block mt-4 w-100"
                 style="background: pink; color: #fff">Login</button>
               <div class="text-center pt-4 text-muted">Don't have an account? <a id="forgot" href="#"
                   routerLink="/register">Register</a> </div>

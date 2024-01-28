@@ -1,0 +1,22 @@
+<!-- <div class="form-floating mb-3">
+  <input type={{type}} [formControl]="control" placeholder="{{label}}" class="form-control {{classCss}}"
+    [ngClass]="(control.touched) ? control.invalid ? 'is-invalid' : 'is-valid' : null">
+  <div *ngIf="control.status === 'PENDING'" class="fa fa-spinner fa-spin loader"></div>
+  <label for="floatingInput">{{label}}</label>
+  <div *ngIf="control.errors?.['required']" class="invalid-feedback">Please enter your {{label}}</div>
+  <div *ngIf="control.errors?.['email']" class="invalid-feedback">Invalid email address</div>
+  <div *ngIf="control.errors?.['pattern']" class="invalid-feedback">Password not complex enough</div>
+  <div *ngIf="control.errors?.['emailExists']" class="invalid-feedback">Email address is taken</div>
+</div> -->
+<div class="form-group">
+  <div class="input-field" [ngClass]="(control.touched) && control.errors?.['required'] ? 'error'  : ''">
+    <span class="fa fa-{{iconFa}} p-2"></span>
+    <input type={{type}} [formControl]="control" placeholder="{{label}}" class="{{classCss}}"
+      [ngClass]="(control.touched) ? control.invalid ? 'is-invalid' : 'is-valid' : null">
+  </div>
+  <small *ngIf="(control.touched) && control.errors?.['required']" class="text-danger">*This Field is required</small>
+  <small *ngIf="control.errors?.['email']" class="text-danger">*Invalid email address</small>
+  <small *ngIf="control.errors?.['pattern']" class="text-danger">*Password not complex enough</small>
+  <small *ngIf="control.errors?.['emailExists']" class="text-danger">*Email address is taken</small>
+  <small *ngIf="control.errors?.['matching']" class="text-danger">*Password is not match</small>
+</div>

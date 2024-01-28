@@ -7,15 +7,18 @@
     <div class="offcanvas-body list">
       <ul class="navbar-nav flex-grow-1 justify-content-between align-items-center">
         <li class="nav-item">
-          <a class="nav-link" routerLink="../" routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }">Home</a>
+          <a class="nav-link" routerLink="../" routerLinkActive="active">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="./products" routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }">Product</a>
+          <a class="nav-link" routerLink="./products" routerLinkActive="active">Product</a>
         </li>
         <li class="nav-item"><a class="nav-link" href="#">About us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+        <li class="nav-item">
+          <a class="nav-link cart position-relative" routerLink="/account/register" routerLinkActive="active">
+            Register
+          </a>
+        </li>
         <li class="nav-item">
           <a class="nav-link cart position-relative" routerLink="/basket">
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="18" viewBox="0 0 576 512">
@@ -30,14 +33,13 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link cart position-relative" routerLink="/login" routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link cart position-relative" routerLink="/account/login" routerLinkActive="active">
             <img style="height: 40px; width: 50px;" src="/assets/img/li.png" alt="">
           </a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link cart position-relative" routerLink="/login" routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link cart position-relative" routerLink="/account/login" routerLinkActive="active">
             <img style="height: 40px; width: 50px;" src="/assets/img/lo.png" alt="">
           </a>
         </li>
