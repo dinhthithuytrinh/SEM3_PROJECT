@@ -23,7 +23,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <app-add-edit-origins *ngIf="ActivateAddEditOriginComponent" [selectedOrigin]="selectedOrigin"[mode]="ModalTitle === 'Add Origins' ? 'add' : 'edit'"></app-add-edit-origins>
+                  <app-add-edit-origins *ngIf="ActivateAddEditOriginComponent" [selectedOrigin]="selectedOrigin"[mode]="ModalTitle === 'Add Origins' ? 'add' : 'edit'" (closeModal)="onCloseModal()"></app-add-edit-origins>
                 </div>
               </div>
             </div>

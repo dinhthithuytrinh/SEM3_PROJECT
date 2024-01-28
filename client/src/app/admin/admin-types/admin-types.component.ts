@@ -68,6 +68,27 @@ export class AdminTypesComponent implements OnInit {
     this.refreshOriginsList();
   }
 
+  closeAddEditModal() {
+    // Tìm đối tượng modal và đóng nó
+    const modal = document.getElementById('staticBackdrop');
+    const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0] as HTMLElement;
+  
+    if (modal && modalBackdrop) {
+      modal.classList.remove('show'); // Xóa class 'show' để ẩn modal
+      modal.setAttribute('aria-hidden', 'true'); // Thiết lập thuộc tính 'aria-hidden' để ẩn modal từ trình đọc màn hình
+  
+      modalBackdrop.classList.remove('show'); // Xóa class 'show' để ẩn backdrop
+      modalBackdrop.parentElement?.removeChild(modalBackdrop); // Loại bỏ backdrop khỏi DOM
+  
+      //window.scrollTo(0, 0); // Cuộn trang lên đầu
+      location.reload();
+    }
+  }
+   onCloseModal() {
+      this.closeAddEditModal(); // Call the method to close the modal
+    }
+  
+
   refreshOriginsList() {
     this.adminService.getTypes().subscribe(data => {
       this.TypesList = data;

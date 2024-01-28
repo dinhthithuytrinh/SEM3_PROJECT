@@ -23,8 +23,8 @@
       <input class="m-2 w-100" type="file" (change)="onSelectFile($event)" />
     </div>
   </div>
-  <button type="button" class="btn btn-primary" (click)="submitForm('create')">Create</button>
+  <button type="button" *ngIf="mode === 'add'" class="btn btn-primary" (click)="submitForm('create')">Create</button>
   
   <!-- Nút "Update" -->
-  <button type="button" class="btn btn-primary" (click)="submitForm('update')">Update</button>
+  <button type="button" *ngIf="mode === 'edit'" class="btn btn-primary" (click)="submitForm('update')">Update</button>
 </form>

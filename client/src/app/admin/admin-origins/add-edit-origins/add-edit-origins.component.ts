@@ -20,6 +20,7 @@ export class AddEditOriginsComponent implements OnInit {
   baseUrl = 'http://localhost:5000/api/products/';
  @Input() selectedOrigin: any;
   @Input() mode: 'add' | 'edit' = 'add';
+  @Output() closeModal: EventEmitter<any> = new EventEmitter();
   constructor(private http: HttpClient,private fb: FormBuilder) {}
 
   ngOnInit(): void {
@@ -59,6 +60,7 @@ export class AddEditOriginsComponent implements OnInit {
     } else if (action === 'update') {
       this.updateOrigin(this.originForm.value);
     }
+    this.closeModal.emit();
   }
 
   createOrigin(data: any) {
@@ -83,6 +85,7 @@ export class AddEditOriginsComponent implements OnInit {
       });
 
     this.originForm.reset();
+    
     console.log(data);
   }
   updateOrigin(data: any) {
@@ -113,7 +116,6 @@ export class AddEditOriginsComponent implements OnInit {
 
     // Reset form sau khi cập nhật thành công
     this.originForm.reset();
-    
   }
 }
 
