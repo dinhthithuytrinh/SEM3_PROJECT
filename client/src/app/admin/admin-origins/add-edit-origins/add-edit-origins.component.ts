@@ -60,6 +60,7 @@ export class AddEditOriginsComponent implements OnInit {
     } else if (action === 'update') {
       this.updateOrigin(this.originForm.value);
     }
+    this.closeModal.emit();
   }
 
   createOrigin(data: any) {
@@ -85,7 +86,7 @@ export class AddEditOriginsComponent implements OnInit {
       });
       
     this.originForm.reset();
-   
+    
     console.log(data);
   }
   updateOrigin(data: any) {
@@ -119,7 +120,6 @@ export class AddEditOriginsComponent implements OnInit {
    
 
     this.originForm.reset();
-    
   }
 }
 

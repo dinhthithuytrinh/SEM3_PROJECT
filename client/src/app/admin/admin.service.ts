@@ -71,7 +71,7 @@ export class AdminService {
   }
 
   deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}products/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}products/Delete?id=${id}`);
   }
 
 

@@ -1,6 +1,6 @@
 <form [formGroup]="originForm"*ngIf="selectedOrigin !== '0' && selectedOrigin !== null">
   <div class="d-flex flex-row bd-highlight mb-3">
-    <div class="p-2 w-50 bd-highlight">
+    <div class="p-2 w-100 bd-highlight">
       <div class="input-group mb-3">
         <span class="input-group-text">Origins Name</span>
         <input type="text" class="form-control" formControlName="name" />
@@ -8,23 +8,24 @@
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text">Description</span>
-        <input type="text" class="form-control" formControlName="description" />
+        <textarea type="text" class="form-control" formControlName="description" ></textarea>
       </div>
         <div class="input-group mb-3">
           <label class="input-group-text" for="statusSelect">Status</label>
           <select class="form-select" id="statusSelect" formControlName="status">
-          <option [ngValue]="true">true</option>
-          <option [ngValue]="false">false</option>
+            <option [ngValue]="true">Available</option>
+            <option [ngValue]="false">Unavailable</option>
           </select>
         </div>
+        <div class="input-group mb-3">
+          <img width="100%" height="auto" src="" />
+          <input class="m-2 w-100" type="file" (change)="onSelectFile($event)" />
+        </div>
     </div>
-    <div class="p-2 w-50 bd-highlight">
-      <img width="100%" height="auto" src="" />
-      <input class="m-2 w-100" type="file" (change)="onSelectFile($event)" />
-    </div>
+    
   </div>
-  <button type="button" class="btn btn-primary" (click)="submitForm('create')">Create</button>
+  <button type="button" *ngIf="mode === 'add'" class="btn btn-primary" (click)="submitForm('create')">Create</button>
   
   <!-- Nút "Update" -->
-  <button type="button" class="btn btn-primary" (click)="submitForm('update')">Update</button>
+  <button type="button" *ngIf="mode === 'edit'" class="btn btn-primary" (click)="submitForm('update')">Update</button>
 </form>

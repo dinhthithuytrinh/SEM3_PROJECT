@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, QueryList  } from '@angular/core';
 import { IOrigin } from 'src/app/models/IOrigin';
 import { AdminService } from '../admin.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +24,9 @@ export class AdminOriginsComponent implements OnInit {
     });
   }
   searchTerm: string = '';
+
+  @ViewChild('modal') modal!: ElementRef;
+
   originForm!: FormGroup;
   OriginsList: IOrigin[] = [];
   ModalTitle = "";
@@ -79,7 +82,8 @@ ngOnInit(): void {
   deleteClick(item: any) {
     if (confirm('Are you sure??')) {
       this.adminService.deleteOrigin(item.id).subscribe(data => {
-        alert(data);
+        alert('Origins deleted successfully');
+        item.status = false; // Cập nhật trạng thái thành false để ẩn đi khỏi danh sách
         this.refreshOriginsList();
       })
     }
@@ -89,10 +93,24 @@ ngOnInit(): void {
     this.ActivateAddEditOriginComponent = false;
     this.refreshOriginsList();
   }
-closeAddEditModal() {
-  this.ActivateAddEditOriginComponent = false;
-  location.reload();
-}
+
+  closeAddEditModal() {
+    // Tìm đối tượng modal và đóng nó
+    const modal = document.getElementById('staticBackdrop');
+    const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0] as HTMLElement;
+  
+    if (modal && modalBackdrop) {
+      modal.classList.remove('show'); // Xóa class 'show' để ẩn modal
+      modal.setAttribute('aria-hidden', 'true'); // Thiết lập thuộc tính 'aria-hidden' để ẩn modal từ trình đọc màn hình
+  
+      modalBackdrop.classList.remove('show'); // Xóa class 'show' để ẩn backdrop
+      modalBackdrop.parentElement?.removeChild(modalBackdrop); // Loại bỏ backdrop khỏi DOM
+  
+     // window.scrollTo(0, 0); // Cuộn trang lên đầu
+     location.reload();
+    }
+  }
+
 
 onCloseModal() {
  
