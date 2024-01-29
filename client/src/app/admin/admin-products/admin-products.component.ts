@@ -96,8 +96,8 @@ fetchOrigins() {
   deleteClick(item: any) {
     if (confirm('Are you sure??')) {
       this.adminService.deleteProduct(item.id).subscribe(data => {
-        alert(data);
-        this.refreshProductsList();
+        alert('Product deleted successfully');
+        item.status = false;
       })
     }
   }
