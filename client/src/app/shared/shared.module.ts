@@ -11,6 +11,9 @@ import { AdminNavbarComponent } from './admin-navbar/admin-navbar.component';
 import { AdminHeaderComponent } from './admin-header/admin-header.component';
 import { AdminRoute } from '../admin/admin.routing';
 import { ToastrModule } from 'ngx-toastr';
+
+import { FormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     PagerComponent,
@@ -18,9 +21,10 @@ import { ToastrModule } from 'ngx-toastr';
     ClientNavComponent,
     ClientFooterComponent,
     AdminNavbarComponent,
-    AdminHeaderComponent,
+    AdminHeaderComponent
   ],
   imports: [
+    FormsModule,
     CommonModule,
     PaginationModule.forRoot(),
     RouterModule,

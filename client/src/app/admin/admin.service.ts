@@ -49,9 +49,7 @@ export class AdminService {
     });
   }
 
-
   // CRUD cho Products
-
   getProduct(id: number): Observable<IProduct> {
     return this.http.get<IProduct>(`${this.baseUrl}products/${id}`);
   }
@@ -73,7 +71,7 @@ export class AdminService {
   }
 
   deleteProduct(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}products/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}products/Delete?id=${id}`);
   }
 
 
@@ -154,8 +152,11 @@ export class AdminService {
     return this.http.get<IType[]>(`${this.baseUrl}products/types`);
   }
 
-  addType(type: IType): Observable<IType> {
-    return this.http.post<IType>(`${this.baseUrl}products/types`, type);
+  addType(types: FormData): Observable<IType[]> {
+    const headers = new HttpHeaders();
+    // Don't set Content-Type here, it will be set automatically for FormData.
+  
+    return this.http.post<IType[]>(`${this.baseUrl}products/origins/Create`, types, { headers });
   }
 
   updateType(type: IType): Observable<IType> {

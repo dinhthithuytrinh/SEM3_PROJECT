@@ -24,6 +24,8 @@ export class AddEditProductsComponent implements OnInit {
   baseUrl = 'http://localhost:5000/api/';
  @Input() selectedProduct: any;
   @Input() mode: 'add' | 'edit' = 'add';
+   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
+
   constructor(private http: HttpClient,private fb: FormBuilder,private adminService: AdminService) {}
  // Declare and initialize selectedProductType
 
@@ -38,6 +40,7 @@ export class AddEditProductsComponent implements OnInit {
       productBrandId:[''],
       productBrand:[''],
       productType:[''],
+
       quantity:[''],
       status: [true],
       file: [null],
@@ -115,6 +118,7 @@ export class AddEditProductsComponent implements OnInit {
       .subscribe((response) => {
         alert('Product created successfully!');
       });
+      this.closeModal.emit();
 
     this.productForm.reset();
     console.log(data);
@@ -150,6 +154,8 @@ export class AddEditProductsComponent implements OnInit {
       });
 
     // Reset form sau khi cập nhật thành công
+      this.closeModal.emit();
+
     this.productForm.reset();
     
   }

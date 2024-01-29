@@ -317,6 +317,7 @@ namespace api.Data
 																Password = "123456",
 																Email = "admin@arts.vn",
 																Status = true
+																
 														},
 														new User()
 														{

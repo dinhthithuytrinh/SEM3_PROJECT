@@ -4,16 +4,18 @@
     <div id="content-wrapper" class="d-flex flex-column">
       <!-- Main Content -->
       <div id="content">
-        <app-admin-header></app-admin-header>
-        
+          <app-admin-header></app-admin-header>
+          
         <div class="container-fluid">
           <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" 
           (click)="addClick()">
             Add origins
           </button>
-
+ 
           <!-- Modal -->
-          <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal fade" id="staticBackdrop"   data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -23,7 +25,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <app-add-edit-origins *ngIf="ActivateAddEditOriginComponent"></app-add-edit-origins>
+                  <app-add-edit-origins *ngIf="ActivateAddEditOriginComponent" [selectedOrigin]="selectedOrigin"[mode]="ModalTitle === 'Add Origins' ? 'add' : 'edit'" (closeModal)="onCloseModal()"></app-add-edit-origins>
                 </div>
               </div>
             </div>
@@ -41,7 +43,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let dataItem of OriginsList">
+              <tr *ngFor="let dataItem of filteredOriginsList">
                 <td>{{dataItem.id}}</td>
                 <td>{{dataItem.name}}</td>
                 <td>{{dataItem.description}}</td>

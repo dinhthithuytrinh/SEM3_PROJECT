@@ -9,7 +9,10 @@ import { AdminOriginsComponent } from './admin-origins/admin-origins.component';
 import { AdminTypesComponent } from './admin-types/admin-types.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddEditOriginsComponent } from './admin-origins/add-edit-origins/add-edit-origins.component';
+import { AddEditTypesComponent } from './admin-types/add-edit-types/add-edit-types.component';
 import { AddEditProductsComponent } from './admin-products/add-edit-products/add-edit-products.component';
+import { Ng2SearchPipeModule} from 'ng2-search-filter';
+
 // export const route: Routes = [{ path: '', component: AdminComponent }];
 @NgModule({
   declarations: [
@@ -18,9 +21,10 @@ import { AddEditProductsComponent } from './admin-products/add-edit-products/add
     AdminOriginsComponent,
     AdminTypesComponent,
     AddEditOriginsComponent,
-    AddEditProductsComponent,
+    AddEditTypesComponent,
+    AddEditProductsComponent
   ],
-  imports: [CommonModule,ReactiveFormsModule, SharedModule,FormsModule, RouterModule.forChild(AdminRoute)],
+  imports: [CommonModule,ReactiveFormsModule, SharedModule,FormsModule, RouterModule.forChild(AdminRoute), Ng2SearchPipeModule],
   exports: [AdminComponent],
 })
 export class AdminModule {}

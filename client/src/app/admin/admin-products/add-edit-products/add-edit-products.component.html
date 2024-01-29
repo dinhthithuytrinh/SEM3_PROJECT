@@ -1,6 +1,6 @@
 <form [formGroup]="productForm" *ngIf="selectedProduct !== '0' && selectedProduct !== null">
   <div class="d-flex flex-row bd-highlight mb-3">
-    <div class="p-2 w-50 bd-highlight">
+    <div class="p-2 w-100 bd-highlight">
       <div class="input-group mb-3">
         <span class="input-group-text">Types Name</span>
         <input type="text" class="form-control" formControlName="name" />
@@ -8,45 +8,45 @@
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text">Description</span>
-        <input type="text" class="form-control" formControlName="description" />
+        <textarea type="text" class="form-control" formControlName="description" ></textarea>
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text">Price</span>
-        <input type="text" class="form-control" formControlName="price" />
-      </div>
-
+        <input type="number" class="form-control" formControlName="price" />
       </div>
       <div class="input-group mb-3">
-        <label class="input-group-text" for="statusSelect">ProductType</label>
-        <select class="form-select" id="statusSelect" formControlName="productType">
-          <option *ngFor="let type of types" [ngValue]="type.id">{{ type.name }}</option>
-        </select>
+        <img width="100%" height="auto" src="" />
+        <input class="m-2 w-100" type="file" (change)="onSelectFile($event)" />
       </div>
-      </div>
+    
+    <div class="input-group mb-3">
+      <label class="input-group-text" for="statusSelect">ProductType</label>
+      <select class="form-select" id="statusSelect" formControlName="productType">
+        <option *ngFor="let type of types" [ngValue]="type.id">{{ type.name }}</option>
+      </select>
+    </div>
       <div class="input-group mb-3">
         <label class="input-group-text" for="statusSelect">ProductBrand</label>
-        <select class="form-select" id="statusSelect"  formControlName="productBrand">
+        <select class="form-select" id="statusSelect"  formControlName="productBrandId">
                   <option *ngFor="let origin of origins"  [ngValue]="origin.id">{{ origin.name }}</option>
 
         </select>
       </div>
       <div class="input-group mb-3">
         <span class="input-group-text">Quantity</span>
-        <input type="text" class="form-control" formControlName="quantity" />
+        <input type="number" class="form-control" formControlName="quantity" />
       </div>
         <div class="input-group mb-3">
           <label class="input-group-text" for="statusSelect">Status</label>
           <select class="form-select" id="statusSelect" formControlName="status">
-          <option [ngValue]="true">true</option>
-          <option [ngValue]="false">false</option>
+            <option [ngValue]="true">Available</option>
+            <option [ngValue]="false">Unavailable</option>
           </select>
         </div>
-    <div class="p-2 w-50 bd-highlight">
-      <img width="100%" height="auto" src="" />
-      <input class="m-2 w-100" type="file" (change)="onSelectFile($event)" />
+      </div>
     </div>
-  <button type="button" class="btn btn-primary" (click)="submitForm('create')">Create</button>
+  <button type="button" *ngIf="mode === 'add'" class="btn btn-primary" (click)="submitForm('create')">Create</button>
   
   <!-- Nút "Update" -->
-  <button type="button" class="btn btn-primary" (click)="submitForm('update')">Update</button>
+  <button type="button" *ngIf="mode === 'edit'" class="btn btn-primary" (click)="submitForm('update')">Update</button>
 </form>

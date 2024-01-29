@@ -1,8 +1,8 @@
-<form [formGroup]="originForm"*ngIf="selectedOrigin !== '0' && selectedOrigin !== null">
+<form [formGroup]="typeForm"*ngIf="selectedType !== '0' && selectedType !== null">
   <div class="d-flex flex-row bd-highlight mb-3">
     <div class="p-2 w-100 bd-highlight">
       <div class="input-group mb-3">
-        <span class="input-group-text">Origins Name</span>
+        <span class="input-group-text">Types Name</span>
         <input type="text" class="form-control" formControlName="name" />
         
       </div>
@@ -10,19 +10,18 @@
         <span class="input-group-text">Description</span>
         <textarea type="text" class="form-control" formControlName="description" ></textarea>
       </div>
-        <div class="input-group mb-3">
-          <label class="input-group-text" for="statusSelect">Status</label>
-          <select class="form-select" id="statusSelect" formControlName="status">
-            <option [ngValue]="true">Available</option>
-            <option [ngValue]="false">Unavailable</option>
-          </select>
-        </div>
-        <div class="input-group mb-3">
-          <img width="100%" height="auto" src="" />
-          <input class="m-2 w-100" type="file" (change)="onSelectFile($event)" />
-        </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="statusSelect">Status</label>
+        <select class="form-select" id="statusSelect" formControlName="status">
+          <option [ngValue]="true">Available</option>
+          <option [ngValue]="false">Unavailable</option>
+        </select>
+      </div>
+      <div class="input-group mb-3">
+        <img width="100%" height="auto" src="" />
+        <input class="m-2 w-100" type="file" (change)="onSelectFile($event)" />
+      </div>
     </div>
-    
   </div>
   <button type="button" *ngIf="mode === 'add'" class="btn btn-primary" (click)="submitForm('create')">Create</button>
   
