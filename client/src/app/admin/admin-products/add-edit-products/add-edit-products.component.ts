@@ -154,6 +154,8 @@ export class AddEditProductsComponent implements OnInit {
       });
 
     // Reset form sau khi cập nhật thành công
+      this.closeModal.emit();
+
     this.productForm.reset();
     
   }

@@ -238,7 +238,7 @@ namespace api.Controllers
       return urlPath;
     }
 
-    [HttpDelete("Delete")]
+    [HttpDelete("Delete/{Id}")]
     public async Task<ActionResult<Product>> Delete([FromForm] int id)
     {
       var product = await _unitOfWork.ProductRepository.GetEntityById(id);

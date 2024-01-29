@@ -7,6 +7,7 @@ import { IOrigin } from 'src/app/models/IOrigin';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IPagination } from 'src/app/models/IPagination';
 import { forkJoin, tap } from 'rxjs';
+import { SharedService } from 'src/app/services/shareservice.service';
 
 @Component({
   selector: 'app-admin-products',
@@ -15,7 +16,7 @@ import { forkJoin, tap } from 'rxjs';
 })
 export class AdminProductsComponent implements OnInit {
  // Declare the form group
-  constructor(private fb: FormBuilder, private adminService: AdminService) {
+  constructor(private fb: FormBuilder, private adminService: AdminService,private sharedService: SharedService) {
     this.productForm = this.fb.group({ // Initialize originForm using FormBuilder
       id: [''],
       name: ['', Validators.required],
@@ -28,20 +29,32 @@ export class AdminProductsComponent implements OnInit {
       file: [null]
     });
   }
+  searchTerm: string = '';
   types: IType[] = []; // Declare types property here
   origins: IOrigin[] = []; // Declare types property here
   productForm!: FormGroup;
-  ProductsList: any = [];
+  ProductsList: IProduct [] = [];
   ModalTitle = "";
   ActivateAddEditProductComponent: boolean = false;
   pro: any;
   ProductsIdFilter = "";
   PruductsNameFilter = "";
   ProductsListWithoutFilter: any = [];
+  filteredProductList: IProduct[] = [];
+
   selectedProduct: any;
 
   ngOnInit(): void {
       this.refreshProductsList();
+    // Lắng nghe sự thay đổi của searchTerm từ service
+    this.sharedService.currentSearchTerm.subscribe((term: string) => { // Đặt kiểu dữ liệu của term là string
+      this.searchTerm = term;
+      this.applyFilter(); // Gọi phương thức apply
+    });
+
+    // Lấy danh sách nguồn từ API hoặc từ nơi khác
+    
+
   }
 
   addClick() {
@@ -107,19 +120,8 @@ fetchOrigins() {
     this.refreshProductsList();
   }
   closeAddEditModal() {
-  // Tìm đối tượng modal và đóng nó
-  const modal = document.getElementById('staticBackdrop');
-  const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0] as HTMLElement;
-
-  if (modal && modalBackdrop) {
-    modal.classList.remove('show'); // Xóa class 'show' để ẩn modal
-    modal.setAttribute('aria-hidden', 'true'); // Thiết lập thuộc tính 'aria-hidden' để ẩn modal từ trình đọc màn hình
-
-    modalBackdrop.classList.remove('show'); // Xóa class 'show' để ẩn backdrop
-    modalBackdrop.parentElement?.removeChild(modalBackdrop); // Loại bỏ backdrop khỏi DOM
-
-    window.scrollTo(0, 0); // Cuộn trang lên đầu
-  }
+  this.ActivateAddEditProductComponent = false;
+  location.reload();
 }
  onCloseModal() {
     this.closeAddEditModal(); // Call the method to close the modal
@@ -134,6 +136,15 @@ refreshProductsList() {
       if (data) {
         this.ProductsList = data.data; // Assuming 'results' contains the list of products in IPagination
         this.ProductsListWithoutFilter = data;
+         
+        //this.OriginsListWithoutFilter = Array.isArray(data) ? data : [];
+        
+        // Đảm bảo rằng filteredOriginsList và OriginsList cũng được cập nhật
+        this.filteredProductList = [...this.ProductsList];
+        this.ProductsList = [...this.filteredProductList];
+
+        // Áp dụng bộ lọc khi danh sách được làm mới
+        this.applyFilter();
       } else {
         console.error('Error fetching products: Data is null');
       }
@@ -142,6 +153,7 @@ refreshProductsList() {
       console.error('Error fetching products:', error);
     }
   );
+  
 }
 
   sortResult(prop: any, asc: any) {
@@ -169,6 +181,20 @@ refreshProductsList() {
       }
     );
   }
+  applyFilter() {
+    if (this.searchTerm.trim().length > 0) { // Sử dụng trim() để loại bỏ khoảng trắng thừa và kiểm tra độ dài của từ khóa tìm kiếm
+        // Sử dụng phương thức filter để lọc danh sách theo trường "id" và "name"
+        this.filteredProductList = this.ProductsList.filter(product =>
+            product.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+            product.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+            product.productType.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+            product.productBrand.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+    } else {
+        // Nếu từ khóa tìm kiếm là rỗng hoặc chỉ chứa khoảng trắng, gán filteredOriginsList là một bản sao của OriginsList
+        this.filteredProductList = [...this.ProductsList];
+    }
+}
 
   // saveProduct(): void {
   //   // Thêm logic để lưu sản phẩm

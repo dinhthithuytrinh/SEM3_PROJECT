@@ -18,14 +18,14 @@
       </div>
       <div class="input-group mb-3">
         <label class="input-group-text" for="statusSelect">ProductType</label>
-        <select class="form-select" id="statusSelect" formControlName="productType">
+        <select class="form-select" id="statusSelect" formControlName="productTypeId">
           <option *ngFor="let type of types" [ngValue]="type.id">{{ type.name }}</option>
         </select>
       </div>
       </div>
       <div class="input-group mb-3">
         <label class="input-group-text" for="statusSelect">ProductBrand</label>
-        <select class="form-select" id="statusSelect"  formControlName="productBrand">
+        <select class="form-select" id="statusSelect"  formControlName="productBrandId">
                   <option *ngFor="let origin of origins"  [ngValue]="origin.id">{{ origin.name }}</option>
 
         </select>

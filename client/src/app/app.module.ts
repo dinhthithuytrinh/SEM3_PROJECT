@@ -15,6 +15,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { LoadingInterceptor } from './middleware/loading.interceptor';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+
 @NgModule({
   declarations: [AppComponent, LoginComponent, RegisterComponent],
   imports: [
@@ -25,7 +26,7 @@ import { RegisterComponent } from './register/register.component';
     HttpClientModule,
     FormsModule,
     NgxSpinnerModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

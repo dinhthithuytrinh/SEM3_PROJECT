@@ -110,9 +110,13 @@ export class AddEditTypesComponent implements OnInit {
       .put(this.baseUrl + `types/Update/${typeId}`, formData)
       .subscribe((response) => {
         alert('Origin updated successfully!');
+      this.closeModal.emit();
+
       });
 
     // Reset form sau khi cập nhật thành công
+  
+
     this.typeForm.reset();
     
   }

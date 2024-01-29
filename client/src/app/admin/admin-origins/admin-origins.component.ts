@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, QueryList, ViewChild } from '@angular/core';
 import { IOrigin } from 'src/app/models/IOrigin';
 import { AdminService } from '../admin.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Ng2SearchPipe } from 'ng2-search-filter';
+import { SharedService } from 'src/app/services/shareservice.service';
+
 
 @Component({
   selector: 'app-admin-origins',
@@ -9,8 +12,9 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
   styleUrls: ['./admin-origins.component.scss']
 })
 export class AdminOriginsComponent implements OnInit {
+   @ViewChild('modalRef') modalRefs!: QueryList<any>;
  // Declare the form group
-  constructor(private fb: FormBuilder, private adminService: AdminService) {
+  constructor(private fb: FormBuilder, private adminService: AdminService,private sharedService: SharedService) {
     this.originForm = this.fb.group({ // Initialize originForm using FormBuilder
       id: [''],
       name: ['', Validators.required],
@@ -19,21 +23,33 @@ export class AdminOriginsComponent implements OnInit {
       file: [null]
     });
   }
+  searchTerm: string = '';
   originForm!: FormGroup;
-  OriginsList: any = [];
+  OriginsList: IOrigin[] = [];
   ModalTitle = "";
   ActivateAddEditOriginComponent: boolean = false;
   ori: any;
   OriginsIdFilter = "";
   OriginsNameFilter = "";
-  OriginsListWithoutFilter: any = [];
+  OriginsListWithoutFilter:any;
+  filteredOriginsList: IOrigin[] = [];
   selectedOrigin: any;
+ 
 
-  ngOnInit(): void {
-      this.refreshOriginsList();
-  }
+ngOnInit(): void {
+    this.refreshOriginsList();
+    // Lắng nghe sự thay đổi của searchTerm từ service
+    this.sharedService.currentSearchTerm.subscribe(term => {
+      this.searchTerm = term;
+      this.applyFilter(); // Gọi phương thức applyFilter() khi searchTerm thay đổi
+    });
+
+    // Lấy danh sách nguồn từ API hoặc từ nơi khác
+    
+}
 
   addClick() {
+
     this.ori = {
       id: "0",
       name: "",
@@ -44,8 +60,14 @@ export class AdminOriginsComponent implements OnInit {
     }
     this.ModalTitle = "Add Origins";
     this.ActivateAddEditOriginComponent = true;
+    const modal = document.getElementById('staticBackdrop');
+  const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0] as HTMLElement | undefined;
+  if (modal && modalBackdrop) {
+    modal.style.display = 'block';
+    modalBackdrop.style.display = 'block';
   }
-
+  }
+ 
   editClick(item: any) {
    if (item && item.id !== "0") {
     this.selectedOrigin = item; // Lưu thông tin của origin được chọn vào selectedOrigin
@@ -67,31 +89,29 @@ export class AdminOriginsComponent implements OnInit {
     this.ActivateAddEditOriginComponent = false;
     this.refreshOriginsList();
   }
-  closeAddEditModal() {
-  // Tìm đối tượng modal và đóng nó
-  const modal = document.getElementById('staticBackdrop');
-  const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0] as HTMLElement;
-
-  if (modal && modalBackdrop) {
-    modal.classList.remove('show'); // Xóa class 'show' để ẩn modal
-    modal.setAttribute('aria-hidden', 'true'); // Thiết lập thuộc tính 'aria-hidden' để ẩn modal từ trình đọc màn hình
-
-    modalBackdrop.classList.remove('show'); // Xóa class 'show' để ẩn backdrop
-    modalBackdrop.parentElement?.removeChild(modalBackdrop); // Loại bỏ backdrop khỏi DOM
-
-    window.scrollTo(0, 0); // Cuộn trang lên đầu
-  }
+closeAddEditModal() {
+  this.ActivateAddEditOriginComponent = false;
+  location.reload();
 }
- onCloseModal() {
-    this.closeAddEditModal(); // Call the method to close the modal
-  }
 
-  refreshOriginsList() {
-    this.adminService.getOrigins().subscribe(data => {
-      this.OriginsList = data;
-      this.OriginsListWithoutFilter = data;
-    });
+onCloseModal() {
+ 
+  this.closeAddEditModal();
   }
+refreshOriginsList() {
+    this.adminService.getOrigins().subscribe(data => {
+        // Kiểm tra nếu data là một mảng, nếu không, gán cho OriginsListWithoutFilter một mảng rỗng
+        this.OriginsList = data
+        //this.OriginsListWithoutFilter = Array.isArray(data) ? data : [];
+        
+        // Đảm bảo rằng filteredOriginsList và OriginsList cũng được cập nhật
+        this.filteredOriginsList = [...this.OriginsList];
+        this.OriginsList = [...this.filteredOriginsList];
+
+        // Áp dụng bộ lọc khi danh sách được làm mới
+        this.applyFilter();
+    });
+}
 
   sortResult(prop: any, asc: any) {
     this.OriginsList = this.OriginsListWithoutFilter.sort(function (a: any, b: any) {
@@ -103,20 +123,19 @@ export class AdminOriginsComponent implements OnInit {
       }
     });
   }
-
-  FilterFn() {
-    var OriginsIdFilter = this.OriginsIdFilter;
-    var OriginsNameFilter = this.OriginsNameFilter;
-
-    this.OriginsList = this.OriginsListWithoutFilter.filter(
-      function (el: any) {
-        return el.DepartmentId.toString().toLowerCase().includes(
-          OriginsIdFilter.toString().trim().toLowerCase()
-        ) &&
-          el.DepartmentName.toString().toLowerCase().includes(
-            OriginsNameFilter.toString().trim().toLowerCase())
-      }
-    );
-  }
+applyFilter() {
+    if (this.searchTerm.trim().length > 0) { // Sử dụng trim() để loại bỏ khoảng trắng thừa và kiểm tra độ dài của từ khóa tìm kiếm
+        // Sử dụng phương thức filter để lọc danh sách theo trường "id" và "name"
+        this.filteredOriginsList = this.OriginsList.filter(origin =>
+            origin.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+            origin.name.toLowerCase().includes(this.searchTerm.toLowerCase()),
+           
+        );
+    } else {
+        // Nếu từ khóa tìm kiếm là rỗng hoặc chỉ chứa khoảng trắng, gán filteredOriginsList là một bản sao của OriginsList
+        this.filteredOriginsList = [...this.OriginsList];
+        
+    }
+}
 
 }

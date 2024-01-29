@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { IOrigin } from 'src/app/models/IOrigin';
 import { AdminService } from '../admin.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { IType } from 'src/app/models/IType';
+import { SharedService } from 'src/app/services/shareservice.service';
 
 @Component({
   selector: 'app-admin-types',
@@ -10,7 +12,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 })
 export class AdminTypesComponent implements OnInit {
  // Declare the form group
-  constructor(private fb: FormBuilder, private adminService: AdminService) {
+  constructor(private fb: FormBuilder, private adminService: AdminService,private sharedService: SharedService) {
     this.typeForm = this.fb.group({ // Initialize originForm using FormBuilder
       id: [''],
       name: ['', Validators.required],
@@ -19,19 +21,30 @@ export class AdminTypesComponent implements OnInit {
       file: [null]
     });
   }
+  searchTerm: string = '';
   typeForm!: FormGroup;
-  TypesList: any = [];
+  TypesList: IType [] = [];
   ModalTitle = "";
   ActivateAddEditTypeComponent: boolean = false;
   typ: any;
   TypesIdFilter = "";
   TypesNameFilter = "";
   TypesListWithoutFilter: any = [];
+  filteredTypesList: IOrigin[] = [];
+
   selectedType: any;
 
   ngOnInit(): void {
-      this.refreshOriginsList();
-  }
+    this.refreshTypesList();
+    // Lắng nghe sự thay đổi của searchTerm từ service
+    this.sharedService.currentSearchTerm.subscribe(term => {
+      this.searchTerm = term;
+      this.applyFilter(); // Gọi phương thức applyFilter() khi searchTerm thay đổi
+    });
+
+    // Lấy danh sách nguồn từ API hoặc từ nơi khác
+    
+}
 
   addClick() {
     this.typ = {
@@ -58,40 +71,51 @@ export class AdminTypesComponent implements OnInit {
     if (confirm('Are you sure??')) {
       this.adminService.deleteType(item.id).subscribe(data => {
         alert(data);
-        this.refreshOriginsList();
+        this.refreshTypesList();
       })
     }
   }
 
   closeClick() {
     this.ActivateAddEditTypeComponent = false;
-    this.refreshOriginsList();
+    this.refreshTypesList();
   }
   closeAddEditModal() {
-  // Tìm đối tượng modal và đóng nó
-  const modal = document.getElementById('staticBackdrop');
-  const modalBackdrop = document.getElementsByClassName('modal-backdrop')[0] as HTMLElement;
-
-  if (modal && modalBackdrop) {
-    modal.classList.remove('show'); // Xóa class 'show' để ẩn modal
-    modal.setAttribute('aria-hidden', 'true'); // Thiết lập thuộc tính 'aria-hidden' để ẩn modal từ trình đọc màn hình
-
-    modalBackdrop.classList.remove('show'); // Xóa class 'show' để ẩn backdrop
-    modalBackdrop.parentElement?.removeChild(modalBackdrop); // Loại bỏ backdrop khỏi DOM
-
-    window.scrollTo(0, 0); // Cuộn trang lên đầu
-  }
+  this.ActivateAddEditTypeComponent = false;
+  location.reload();
 }
  onCloseModal() {
     this.closeAddEditModal(); // Call the method to close the modal
   }
 
-  refreshOriginsList() {
+  refreshTypesList() {
     this.adminService.getTypes().subscribe(data => {
-      this.TypesList = data;
-      this.TypesListWithoutFilter = data;
+        // Kiểm tra nếu data là một mảng, nếu không, gán cho OriginsListWithoutFilter một mảng rỗng
+        this.TypesList = data
+        //this.OriginsListWithoutFilter = Array.isArray(data) ? data : [];
+        
+        // Đảm bảo rằng filteredOriginsList và OriginsList cũng được cập nhật
+        this.filteredTypesList = [...this.TypesList];
+        this.TypesList = [...this.filteredTypesList];
+
+        // Áp dụng bộ lọc khi danh sách được làm mới
+        this.applyFilter();
     });
   }
+  applyFilter() {
+    if (this.searchTerm.trim().length > 0) { // Sử dụng trim() để loại bỏ khoảng trắng thừa và kiểm tra độ dài của từ khóa tìm kiếm
+        // Sử dụng phương thức filter để lọc danh sách theo trường "id" và "name"
+        this.filteredTypesList = this.TypesList.filter(type =>
+            type.id.toString().toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+            type.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+          
+        );
+    } else {
+        // Nếu từ khóa tìm kiếm là rỗng hoặc chỉ chứa khoảng trắng, gán filteredOriginsList là một bản sao của OriginsList
+        this.filteredTypesList = [...this.TypesList];
+        
+    }
+}
 
   sortResult(prop: any, asc: any) {
     this.TypesList = this.TypesListWithoutFilter.sort(function (a: any, b: any) {

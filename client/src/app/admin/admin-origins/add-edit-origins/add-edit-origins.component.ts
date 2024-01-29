@@ -81,9 +81,11 @@ export class AddEditOriginsComponent implements OnInit {
       .post(this.baseUrl + 'origins/Create/', fileUpLoadProductBrand)
       .subscribe((response) => {
         alert('Origin created successfully!');
+         this.closeModal.emit();
       });
-      this.closeModal.emit();
+      
     this.originForm.reset();
+   
     console.log(data);
   }
   updateOrigin(data: any) {
@@ -110,9 +112,12 @@ export class AddEditOriginsComponent implements OnInit {
       .put(this.baseUrl + `origins/Update/${originId}`, formData)
       .subscribe((response) => {
         alert('Origin updated successfully!');
+         this.closeModal.emit();
       });
 
     // Reset form sau khi cập nhật thành công
+   
+
     this.originForm.reset();
     
   }
