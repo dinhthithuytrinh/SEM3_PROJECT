@@ -19,12 +19,12 @@
               <div class=" form-register">
                 <app-text-input [formControl]="registerForm.controls['displayName']"
                   [label]="'Display Name'"></app-text-input>
-                <app-text-input [formControl]="registerForm.controls['email']"
+                <app-text-input [isCheck]="true" [formControl]="registerForm.controls['email']"
                   [label]="'Email Address'"></app-text-input>
-                <app-text-input [formControl]="registerForm.controls['password']" [label]="'Password'"
-                  [type]="'password'"></app-text-input>
-                <app-text-input [formControl]="registerForm.controls['passwordConfirm']" [label]="'Confirm Password'"
-                  [type]="'password'"></app-text-input>
+                <app-text-input [isPassword]="true" [formControl]="registerForm.controls['password']"
+                  [label]="'Password'" [type]="'password'"></app-text-input>
+                <app-text-input [isPassword]="true" [formControl]="registerForm.controls['passwordConfirm']"
+                  [label]="'Confirm Password'" [type]="'password'"></app-text-input>
               </div>
               <ul class="text-danger list-unstyled" *ngIf="errors">
                 <li *ngFor="let error of errors">

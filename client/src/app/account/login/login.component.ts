@@ -25,7 +25,7 @@ export class LoginComponent {
     private activatedRoute: ActivatedRoute
   ) {
     this.returnUrl =
-      this.activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';
+      this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
   }
   hideShowPass() {
     this.isText = !this.isText;

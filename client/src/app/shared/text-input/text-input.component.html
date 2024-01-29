@@ -8,11 +8,19 @@
   <div *ngIf="control.errors?.['pattern']" class="invalid-feedback">Password not complex enough</div>
   <div *ngIf="control.errors?.['emailExists']" class="invalid-feedback">Email address is taken</div>
 </div> -->
-<div class="form-group">
+<div class="form-group" style="position: relative;">
   <div class="input-field" [ngClass]="(control.touched) && control.errors?.['required'] ? 'error'  : ''">
     <span class="fa fa-{{iconFa}} p-2"></span>
     <input type={{type}} [formControl]="control" placeholder="{{label}}" class="{{classCss}}"
       [ngClass]="(control.touched) ? control.invalid ? 'is-invalid' : 'is-valid' : null">
+    <ng-container *ngIf="isPassword === true">
+      <button type="button" (click)="hideShowPass()" class="btn-eye">
+        <span class="fa {{eyeIcon}}"></span>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="isCheck === true && control.pending">
+      <div class="fa fa-spinner fa-spin loader"></div>
+    </ng-container>
   </div>
   <small *ngIf="(control.touched) && control.errors?.['required']" class="text-danger">*This Field is required</small>
   <small *ngIf="control.errors?.['email']" class="text-danger">*Invalid email address</small>

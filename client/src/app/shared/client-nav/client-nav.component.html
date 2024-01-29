@@ -4,8 +4,8 @@
       <img src="/assets/img/unnamed.png" class="navbar-logo" alt="" />
       <p class="navbar-name">ARTS</p>
     </a>
-    <div class="offcanvas-body list">
-      <ul class="navbar-nav flex-grow-1 justify-content-between align-items-center">
+    <div class="offcanvas-body list d-flex">
+      <ul class="navbar-nav flex-grow-1 align-items-center">
         <li class="nav-item">
           <a class="nav-link" routerLink="../" routerLinkActive="active">Home</a>
         </li>
@@ -14,11 +14,7 @@
         </li>
         <li class="nav-item"><a class="nav-link" href="#">About us</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
-        <li class="nav-item">
-          <a class="nav-link cart position-relative" routerLink="/account/register" routerLinkActive="active">
-            Register
-          </a>
-        </li>
+
         <li class="nav-item">
           <a class="nav-link cart position-relative" routerLink="/basket">
             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="18" viewBox="0 0 576 512">
@@ -32,18 +28,68 @@
             </div>
           </a>
         </li>
-        <li class="nav-item">
+
+      </ul>
+      <ng-container *ngIf="(accountService.currentUser$ | async) === null">
+        <div class="nav-item">
           <a class="nav-link cart position-relative" routerLink="/account/login" routerLinkActive="active">
             <img style="height: 40px; width: 50px;" src="/assets/img/li.png" alt="">
           </a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link cart position-relative" routerLink="/account/login" routerLinkActive="active">
-            <img style="height: 40px; width: 50px;" src="/assets/img/lo.png" alt="">
+        </div>
+        <div class="nav-item">
+          <a class="nav-link cart position-relative" routerLink="/account/register" routerLinkActive="active">
+            Register
           </a>
-        </li>
-      </ul>
+        </div>
+      </ng-container>
+      <!-- <li class="nav-item">
+        <a class="nav-link cart position-relative" routerLink="/account/login" routerLinkActive="active">
+          <img style="height: 40px; width: 50px;" src="/assets/img/lo.png" alt="">
+        </a>
+      </li> -->
+
+      <ng-container *ngIf="accountService.currentUser$ | async as user">
+        <div class="dropdown ms-3 me-5" style="cursor: pointer;position: absolute; right: 10%;" dropdown>
+          <a style="" dropdownToggle class="dropdown-toggle">
+            <img src="/assets/img/user.png"
+              style="height: 40px;width: 40px; border-radius: 50%; border: 2px solid #000; margin-right: 15px;" alt="">
+            <strong class="text-dark">Welcome {{user.displayName}}</strong>
+          </a>
+          <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+            <li class="py-1">
+              <a routerLink="/basket" class="dropdown-item">
+                <i class="fa fa-shopping-cart me-3"></i> View basket
+              </a>
+            </li>
+            <li class="py-1">
+              <a routerLink="/orders" class="dropdown-item">
+                <i class="fa fa-history me-3"></i> View orders
+              </a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li class="py-1">
+              <a (click)="accountService.logout()" class="dropdown-item">
+                <i class="fa fa-sign-out me-3"></i> Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+      <!-- <ng-container *ngIf="accountService.currentUser$ | async as user">
+        <div class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">
+            Button dropdown <span class="caret"></span>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu" role="menu">
+            <li role="menuitem"><a class="dropdown-item" href="#">Action</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Another action</a></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Something else here</a></li>
+            <li class="divider dropdown-divider"></li>
+            <li role="menuitem"><a class="dropdown-item" href="#">Separated link</a>
+            </li>
+          </ul>
+        </div>
+      </ng-container> -->
     </div>
   </div>
 </nav>

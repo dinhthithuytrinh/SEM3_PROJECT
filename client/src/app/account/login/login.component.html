@@ -29,8 +29,8 @@
               </div> -->
               <app-text-input [formControl]="loginForm.controls['email']" [label]="'Email Address'"
                 [iconFa]="'user'"></app-text-input>
-              <app-text-input [formControl]="loginForm.controls['password']" [label]="'Password'" [type]="'password'"
-                [iconFa]="'lock'"></app-text-input>
+              <app-text-input [isPassword]="true" [formControl]="loginForm.controls['password']" [label]="'Password'"
+                [type]="'password'" [iconFa]="'lock'"></app-text-input>
               <!-- <div class="form-group pt-3">
                 <div class="input-field"
                   [class.error]="loginForm.controls['password'].dirty && loginForm.hasError('required','password')">

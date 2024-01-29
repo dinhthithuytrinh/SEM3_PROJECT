@@ -11,6 +11,11 @@ export class TextInputComponent {
   @Input() label = '';
   @Input() classCss = '';
   @Input() iconFa = '';
+  @Input() isPassword = false;
+  @Input() isCheck = false;
+
+  isText: boolean = false;
+  eyeIcon: string = 'fa-eye-slash';
 
   constructor(@Self() public controlDir: NgControl) {
     this.controlDir.valueAccessor = this;
@@ -19,6 +24,12 @@ export class TextInputComponent {
   writeValue(obj: any): void {}
   registerOnChange(fn: any): void {}
   registerOnTouched(fn: any): void {}
+
+  hideShowPass() {
+    this.isText = !this.isText;
+    this.isText ? (this.eyeIcon = 'fa-eye') : (this.eyeIcon = 'fa-eye-slash');
+    this.isText ? (this.type = 'text') : (this.type = 'password');
+  }
 
   get control(): FormControl {
     return this.controlDir.control as FormControl;

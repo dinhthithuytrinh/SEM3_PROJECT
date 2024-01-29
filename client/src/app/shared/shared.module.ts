@@ -15,7 +15,7 @@ import { OrderTotalsComponent } from './order-totals/order-totals.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TextInputComponent } from './text-input/text-input.component';
 import { StepperComponent } from './stepper/stepper.component';
-
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 @NgModule({
   declarations: [
     PagerComponent,
@@ -38,6 +38,7 @@ import { StepperComponent } from './stepper/stepper.component';
       preventDuplicates: true,
     }),
     ReactiveFormsModule,
+    BsDropdownModule.forRoot(),
   ],
   exports: [
     FontAwesomeModule,
@@ -52,6 +53,7 @@ import { StepperComponent } from './stepper/stepper.component';
     ReactiveFormsModule,
     TextInputComponent,
     StepperComponent,
+    BsDropdownModule,
   ],
 })
 export class SharedModule {}
