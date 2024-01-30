@@ -86,7 +86,7 @@ namespace api.Data
 																},
 																new ProductBrand()
 																{
-																		Name = "US",
+																		Name = "USA",
 																		Description = "Hangmeo",
 																		PictureUrl = "images/brands/us.jpg",
 																		Status = true
@@ -100,7 +100,7 @@ namespace api.Data
 																},
 																new ProductBrand()
 																{
-																		Name = "JP",
+																		Name = "Japan",
 																		Description = "Hangnhat",
 																		PictureUrl = "images/brands/jp.jpg",
 																		Status = true
@@ -110,6 +110,13 @@ namespace api.Data
 																		Name = "Korea",
 																		Description = "Hangxeng",
 																		PictureUrl = "images/brands/kr.jpg",
+																		Status = true
+																},
+																new ProductBrand()
+																{
+																		Name = "Thailand",
+																		Description = "Thaisgei",
+																		PictureUrl = "images/brands/tl.jpg",
 																		Status = true
 																}
 								}

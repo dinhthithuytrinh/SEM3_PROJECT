@@ -118,13 +118,26 @@ public class ProductsController : ControllerBase
   [HttpGet("origins")]
   public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
   {
-    return Ok(await _unitOfWork.ProductBrandRepository.GetAll());
+    IEnumerable<ProductBrand> productBrands = await _unitOfWork.ProductBrandRepository.GetEntities(
+          filter: null,
+          orderBy: null,
+          includeProperties: null
+      );
+    // return Ok(productTypes);
+    return Ok(_mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ReturnProductBrand>>(productBrands));
   }
 
   [HttpGet("types")]
   public async Task<ActionResult<List<ProductType>>> GetProductTypes()
   {
-    return Ok(await _unitOfWork.ProductTypeRepository.GetAll());
+    // return Ok(await _unitOfWork.ProductTypeRepository.GetAll());
+    IEnumerable<ProductType> productTypes = await _unitOfWork.ProductTypeRepository.GetEntities(
+          filter: null,
+          orderBy: null,
+          includeProperties: null
+      );
+    // return Ok(productTypes);
+    return Ok(_mapper.Map<IEnumerable<ProductType>, IEnumerable<ReturnProductType>>(productTypes));
   }
 
   [HttpPost]

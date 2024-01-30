@@ -1,0 +1,14 @@
+.nav-link .fa {
+  color: red;
+}
+.nav-link.active {
+  background-color: pink;
+  color: #fff;
+}
+.nav-link.ok {
+  background-color: #a91a1a;
+  color: #fff;
+  .fa {
+    color: green;
+  }
+}

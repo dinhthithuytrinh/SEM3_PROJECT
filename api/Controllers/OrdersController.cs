@@ -40,11 +40,17 @@ namespace api.Controllers
             return Ok(order);
         }
 
+        // [HttpGet("deliveryMethods")]
+        // public async Task<ActionResult<List<DeliveryMethod>>> GetDeliveryMethods()
+        // {
+        //     List<DeliveryMethod> deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
+        //     return Ok(deliveryMethods);
+        // }
+
         [HttpGet("deliveryMethods")]
-        public async Task<ActionResult<List<DeliveryMethod>>> GetDeliveryMethods()
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
         {
-            List<DeliveryMethod> deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
-            return Ok(deliveryMethods);
+            return Ok(await _orderService.GetDeliveryMethodsAsync());
         }
 
         [HttpGet]

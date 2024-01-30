@@ -23,14 +23,15 @@
                 d="M528.1 301.3l47.3-208C578.8 78.3 567.4 64 552 64H159.2l-9.2-44.8C147.8 8 137.9 0 126.5 0H24C10.7 0 0 10.7 0 24v16c0 13.3 10.7 24 24 24h69.9l70.2 343.4C147.3 417.1 136 435.2 136 456c0 30.9 25.1 56 56 56s56-25.1 56-56c0-15.7-6.4-29.8-16.8-40h209.6C430.4 426.2 424 440.3 424 456c0 30.9 25.1 56 56 56s56-25.1 56-56c0-22.2-12.9-41.3-31.6-50.4l5.5-24.3c3.4-15-8-29.3-23.4-29.3H218.1l-6.5-32h293.1c11.2 0 20.9-7.8 23.4-18.7z" />
             </svg>
             <!-- <div class="cart-number">2</div> -->
-            <div class="cart-number" *ngIf="(this.basketService.basket)">
-              {{this.basketService.basket.items.length}}
+            <div class="cart-number" *ngIf="(this.basketService.basket$ | async) as basket">
+              {{basket.items.length}}
             </div>
           </a>
         </li>
 
       </ul>
-      <ng-container *ngIf="(accountService.currentUser$ | async) === null">
+      <ng-container
+        *ngIf="(this.accountService.currentUser$ | async) === null || (this.accountService.currentUser$ | async)?.token === ''; else displayUserProfileMenu">
         <div class="nav-item">
           <a class="nav-link cart position-relative" routerLink="/account/login" routerLinkActive="active">
             <img style="height: 40px; width: 50px;" src="/assets/img/li.png" alt="">
@@ -48,13 +49,14 @@
         </a>
       </li> -->
 
-      <ng-container *ngIf="accountService.currentUser$ | async as user">
+      <ng-template #displayUserProfileMenu>
         <div class="dropdown ms-3 me-5" style="cursor: pointer;position: absolute; right: 10%;" dropdown>
           <a style="" dropdownToggle class="dropdown-toggle">
             <img src="/assets/img/user.png"
               style="height: 40px;width: 40px; border-radius: 50%; border: 2px solid #000; margin-right: 15px;" alt="">
-            <strong class="text-dark">Welcome {{user.displayName}}</strong>
+            <strong class="text-dark">Welcome {{(this.accountService.currentUser$ | async)?.displayName}}</strong>
           </a>
+
           <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
             <li class="py-1">
               <a routerLink="/basket" class="dropdown-item">
@@ -73,8 +75,9 @@
               </a>
             </li>
           </ul>
+
         </div>
-      </ng-container>
+      </ng-template>
       <!-- <ng-container *ngIf="accountService.currentUser$ | async as user">
         <div class="btn-group" dropdown>
           <button dropdownToggle type="button" class="btn btn-primary dropdown-toggle">

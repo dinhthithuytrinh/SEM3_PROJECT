@@ -23,12 +23,24 @@ export class AppComponent implements OnInit {
   }
 
   loadBasket() {
-    const basketId = localStorage.getItem('basket_id');
-    if (basketId) this.basketService.getBasket(basketId);
+    var basketId = localStorage.getItem('basket_id');
+    if (basketId) {
+      this.basketService.getBasket(basketId).subscribe(
+        () => {},
+        (error) => console.log(error)
+      );
+    }
   }
 
   loadCurrentUser() {
     const token = localStorage.getItem('token');
-    this.accountService.loadCurrentUser(token).subscribe();
+    if (token) {
+      this.accountService.loadCurrentUser(token).subscribe(
+        () => {
+          console.log('loaded user header');
+        },
+        (error) => console.log(error)
+      );
+    }
   }
 }

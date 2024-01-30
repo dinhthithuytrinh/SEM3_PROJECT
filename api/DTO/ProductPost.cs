@@ -20,5 +20,7 @@ namespace api.DTO
 
     public string ProductType { get; set; }
     public string ProductBrand { get; set; }
+    public int Quantity { get; set; }
+    public bool Status { get; set; }
   }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
-import { AccountService } from 'src/app/account/account.service';
-import { BasketService } from 'src/app/basket/basket.service';
+import { BasketService } from '../../basket/basket.service';
+import { AccountService } from '../../account/account.service';
 
 @Component({
   selector: 'app-client-nav',
@@ -15,7 +15,5 @@ export class ClientNavComponent {
     public accountService: AccountService
   ) {}
 
-  // getCount(items: BasketItem[]) {
-  //   return items.reduce((sum, item) => sum + item.quantity, 0);
-  // }
+  logout() {}
 }

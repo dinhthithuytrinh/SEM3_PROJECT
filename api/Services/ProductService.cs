@@ -13,7 +13,7 @@ namespace api.Services
     private readonly IUnitOfWork _unitOfWork;
     public static IWebHostEnvironment _environment;
     private IConfiguration _config;
-
+    private static readonly Random random = new Random();
     public ProductService(IUnitOfWork unitOfWork,
                         IWebHostEnvironment environment,
                         IConfiguration config)
@@ -83,6 +83,8 @@ namespace api.Services
           product.PictureUrl = input.PictureUrl;
           product.ProductBrand = brand.FirstOrDefault();
           product.ProductType = type.FirstOrDefault();
+          product.UpdateBy = DateTime.Now;
+          product.Status = input.Status;
 
           _unitOfWork.ProductRepository.Update(product);
 
@@ -92,11 +94,14 @@ namespace api.Services
           product = new Product
           {
             Name = input.Name,
+            ProductCode = GenerateUniqueProductCode(),
             Description = input.Description,
             Price = input.Price,
+            Quantity = input.Quantity,
             PictureUrl = input.PictureUrl,
             ProductBrand = brand.FirstOrDefault(),
             ProductType = type.FirstOrDefault(),
+            Status = true,
           };
           _unitOfWork.ProductRepository.Add(product);
         }
@@ -114,6 +119,11 @@ namespace api.Services
       }
     }
 
+    private int GenerateUniqueProductCode()
+    {
+      // Sử dụng hàm ngẫu nhiên để tạo mã ngẫu nhiên với độ dài 7
+      return random.Next(1000000, 9999999);
+    }
 
     public async Task deleteProduct(int productId)
     {
