@@ -5,6 +5,7 @@ using api.Entities.Identity;
 using api.Exceptions;
 using api.Helpers;
 using api.Middleware;
+using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -105,6 +106,8 @@ builder.Services.AddAutoMapper(typeof(MyAutoMapper));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 app.UseMiddleware<ServerErrorExceptionMiddle>();

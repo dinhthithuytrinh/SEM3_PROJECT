@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,10 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240129173640_OrderEntityAdded")]
+    partial class OrderEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -143,8 +145,7 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(38, 2)
-                        .HasColumnType("decimal(38,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ShortName")
                         .HasColumnType("nvarchar(max)");
@@ -168,8 +169,8 @@ namespace api.Migrations
                     b.Property<int?>("DeliveryMethodId")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset>("OrderDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentIntentId")
                         .HasColumnType("nvarchar(max)");
@@ -179,8 +180,7 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Subtotal")
-                        .HasPrecision(38, 2)
-                        .HasColumnType("decimal(38,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -197,15 +197,37 @@ namespace api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("ItemOrderedId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemOrderedId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
+                });
+
+            modelBuilder.Entity("api.Entities.OrderAggregate.ProductItemOrdered", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("PictureUrl")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(38, 2)
-                        .HasColumnType("decimal(38,2)");
 
                     b.Property<int>("ProductItemId")
                         .HasColumnType("int");
@@ -213,14 +235,9 @@ namespace api.Migrations
                     b.Property<string>("ProductName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("OrderItems");
+                    b.ToTable("ProductItemOrdered");
                 });
 
             modelBuilder.Entity("api.Entities.Product", b =>
@@ -243,7 +260,7 @@ namespace api.Migrations
                     b.Property<string>("PictureUrl")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal?>("Price")
                         .HasPrecision(38, 2)
                         .HasColumnType("decimal(38,2)");
 
@@ -492,27 +509,21 @@ namespace api.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("City")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("FirstName")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("LastName")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("State")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Street")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("ZipCode")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("OrderId");
@@ -530,10 +541,16 @@ namespace api.Migrations
 
             modelBuilder.Entity("api.Entities.OrderAggregate.OrderItem", b =>
                 {
+                    b.HasOne("api.Entities.OrderAggregate.ProductItemOrdered", "ItemOrdered")
+                        .WithMany()
+                        .HasForeignKey("ItemOrderedId");
+
                     b.HasOne("api.Entities.OrderAggregate.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("ItemOrdered");
                 });
 
             modelBuilder.Entity("api.Entities.Product", b =>

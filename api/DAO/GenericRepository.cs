@@ -4,39 +4,37 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using api.Data;
-using api.DTO;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.DAO
 {
   public class GenericRepository<T> where T : class
   {
+
     private readonly ApplicationDbContext _db;
     private DbSet<T> dbSet;
 
     public GenericRepository(ApplicationDbContext dbContext)
     {
-      _db = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-      dbSet = _db.Set<T>();
+      _db = dbContext;
+      this.dbSet = _db.Set<T>();
     }
 
-    public async Task<T> GetEntityById(object id)
+    public virtual async Task<T> GetEntityById(object id)
     {
       return await dbSet.FindAsync(id);
     }
 
-    public async Task<IEnumerable<T>> GetAll()
+    public virtual async Task<List<T>> GetAll()
     {
-      var query = dbSet.AsQueryable();
+      IQueryable<T> query = dbSet.AsQueryable();
       return await query.ToListAsync();
     }
 
-
-    public async Task<IEnumerable<T>> GetEntities(
-        Expression<Func<T, bool>> filter, /// where t.id = 1
-        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, /// q => q.OrderBy(s => s.Date)
-        string includeProperties)  /// ProductType,ProductBrand
+    public virtual async Task<IEnumerable<T>> GetEntities(
+            Expression<Func<T, bool>> filter,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy,
+            string includeProperties)
     {
       IQueryable<T> query = dbSet.AsQueryable();
 
@@ -55,6 +53,7 @@ namespace api.DAO
           query = query.Include(includeProperty);
         }
       }
+
 
       if (orderBy != null)
       {
@@ -66,12 +65,40 @@ namespace api.DAO
       }
     }
 
-   
 
-    public IQueryable<T> QueryWithCondition(
-        Expression<Func<T, bool>> filter, /// where t.id = 1
-        Func<IQueryable<T>, IOrderedQueryable<T>> orderBy, /// q => q.OrderBy(s => s.LasName)
-        string includeProperties)  /// ProductType,ProductBrand
+    public virtual void Add(T entity)
+    {
+      dbSet.Add(entity);
+    }
+
+    public virtual void Update(T entity)
+    {
+      dbSet.Attach(entity);
+
+      _db.Entry(entity).State = EntityState.Modified;
+
+    }
+
+
+    public virtual void Delete(T entity)
+    {
+      if (_db.Entry(entity).State == EntityState.Detached)
+      {
+        dbSet.Attach(entity);
+      }
+      dbSet.Remove(entity);
+    }
+    public virtual void DeleteById(object id)
+    {
+      T entityToDelete = dbSet.Find(id);
+      Delete(entityToDelete);
+    }
+
+
+    public virtual IQueryable<T> QueryWithConditions(
+            Expression<Func<T, bool>> filter,
+            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy,
+            string includeProperties)
     {
       IQueryable<T> query = dbSet.AsQueryable();
 
@@ -91,6 +118,7 @@ namespace api.DAO
         }
       }
 
+
       if (orderBy != null)
       {
         return orderBy(query);
@@ -100,30 +128,8 @@ namespace api.DAO
         return query;
       }
     }
-    public void Add(T entity)
-    {
-      dbSet.Add(entity);
-    }
 
-    public void Update(T entity)
-    {
-      dbSet.Attach(entity);
-      _db.Entry(entity).State = EntityState.Modified;
-    }
 
-    public void Delete(T entity)
-    {
-      if (_db.Entry(entity).State == EntityState.Detached)
-      {
-        dbSet.Attach(entity);
-      }
-      dbSet.Remove(entity);
-    }
 
-    public void DeleteById(object id)
-    {
-      T entity = dbSet.Find(id);
-      Delete(entity);
-    }
   }
 }

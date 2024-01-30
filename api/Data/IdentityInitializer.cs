@@ -15,9 +15,9 @@ namespace api.Data
       {
         var user = new AppUser
         {
-          DisplayName = "Trinh",
-          Email = "trinhdinh@email.com",
-          UserName = "trinhdinh",
+          DisplayName = "Admin",
+          Email = "adminh@arts.com",
+          UserName = "adminh@arts.com",
           Address = new Address
           {
             FirstName = "Trinh",

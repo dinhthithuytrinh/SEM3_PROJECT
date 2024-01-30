@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Entities;
+using api.Entities.OrderAggregate;
 
 namespace api.DAO
 {
@@ -11,22 +12,25 @@ namespace api.DAO
   {
     private readonly ApplicationDbContext _db;
     private GenericRepository<Product> _productRepository;
-    private GenericRepository<ProductType> _productTypeRepository;
     private GenericRepository<ProductBrand> _productBrandRepository;
+    private GenericRepository<ProductType> _productTypeRepository;
+    private GenericRepository<Order> _orderRepository;
+    private GenericRepository<DeliveryMethod> _deliveryMethodRepository;
 
-    public UnitOfWork(ApplicationDbContext db)
+    public UnitOfWork(ApplicationDbContext dbContext)
     {
-      _db = db;
+      _db = dbContext;
     }
+
+    public int Save()
+    {
+      return _db.SaveChanges();
+    }
+
 
     public void Dispose()
     {
       _db.Dispose();
-    }
-
-    public void Save()
-    {
-      _db.SaveChanges();
     }
 
     public GenericRepository<Product> ProductRepository
@@ -64,6 +68,31 @@ namespace api.DAO
         return _productTypeRepository;
       }
     }
+
+    public GenericRepository<Order> OrderRepository
+    {
+      get
+      {
+        if (this._orderRepository == null)
+        {
+          this._orderRepository = new GenericRepository<Order>(_db);
+        }
+        return _orderRepository;
+      }
+    }
+
+    public GenericRepository<DeliveryMethod> DeliveryMethodRepository
+    {
+      get
+      {
+        if (this._deliveryMethodRepository == null)
+        {
+          this._deliveryMethodRepository = new GenericRepository<DeliveryMethod>(_db);
+        }
+        return _deliveryMethodRepository;
+      }
+    }
+
 
   }
 }
