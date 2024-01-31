@@ -238,8 +238,8 @@ namespace api.Controllers
       return urlPath;
     }
 
-    [HttpDelete("Delete/{Id}")]
-    public async Task<ActionResult<Product>> Delete([FromForm] int id)
+    [HttpPut("Delete/{Id}")]
+    public async Task<ActionResult<Product>> Delete(int id)
     {
       var product = await _unitOfWork.ProductRepository.GetEntityById(id);
 
@@ -249,7 +249,7 @@ namespace api.Controllers
       }
 
       // Set the Status property to false to mark the product as deleted
-      product.Status = false;
+      product.Status = true;
 
       _unitOfWork.Save();
 

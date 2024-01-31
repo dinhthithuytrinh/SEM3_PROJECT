@@ -83,7 +83,7 @@ ngOnInit(): void {
     if (confirm('Are you sure??')) {
       this.adminService.deleteOrigin(item.id).subscribe(data => {
         alert('Origins deleted successfully');
-        item.status = false; // Cập nhật trạng thái thành false để ẩn đi khỏi danh sách
+        item.status == false; // Cập nhật trạng thái thành false để ẩn đi khỏi danh sách
         this.refreshOriginsList();
       })
     }

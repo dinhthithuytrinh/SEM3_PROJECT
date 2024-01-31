@@ -112,6 +112,7 @@ fetchOrigins() {
         alert('Product deleted successfully');
         item.status = false;
       })
+      location.reload(); // Tải lại trang
     }
   }
 
