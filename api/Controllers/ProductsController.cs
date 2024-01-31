@@ -25,6 +25,7 @@ namespace api.Controllers
     private readonly ApplicationDbContext _Db;
     private static readonly Random random = new Random();
 
+
     private readonly IWebHostEnvironment _webHostEnvironment;
     public ProductsController(IUnitOfWork unitOfWork, IProductRepository productRepository, IMapper mapper, ApplicationDbContext Db, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
     {
@@ -115,7 +116,7 @@ namespace api.Controllers
       }
       else
       {
-        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity, files = p.files, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
+        var product = new Product { Id = p.ProductId, ProductCode = p.ProductCode, Name = p.Name, Description = p.Description, Price = p.Price, ProductBrandId = p.ProductBrandId, ProductTypeId = p.ProductTypeId, Quantity = p.Quantity, Status = true, CreatedBy = p.CreatedBy, UpdateBy = p.UpdateBy };
         if (p.files.Length > 0)
         {
           var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "products", p.files.FileName);
@@ -144,12 +145,12 @@ namespace api.Controllers
 
     [HttpPut("{Id}")]
 
-    public ActionResult<Product> UpdateProduct(int id, [FromForm] Product productUpdate, [FromForm] FileUpLoadAPI f)
+    public async  Task<ActionResult<Product>> UpdateProduct(int id, [FromForm] Product productUpdate, [FromForm] FileUpLoadAPI f)
     {
       try
       {
         var existingProduct = _Db.Products.AsNoTracking().FirstOrDefault(p => p.Id == id);
-        string baseUrl = _configuration["ApiUrl"];
+       
 
         productUpdate.ProductCode = existingProduct.ProductCode;
 
@@ -200,12 +201,33 @@ namespace api.Controllers
           {
             existingProduct.PictureUrl = productUpdate.PictureUrl;
           }
+          var clonedProduct = CloneProduct(existingProduct);
+
+          // Cập nhật các trường dữ liệu của sản phẩm
+          if (!string.IsNullOrEmpty(productUpdate.Name))
+          {
+            clonedProduct.Name = productUpdate.Name;
+          }
+          // Cập nhật các trường dữ liệu khác tương tự
+
+          // Cập nhật URL hình ảnh
           if (f != null && f.files != null)
           {
-            var imagePath = SaveImage(f);
-            existingProduct.PictureUrl = imagePath;
+            // Xóa hình ảnh cũ
+            if (!string.IsNullOrEmpty(existingProduct.PictureUrl))
+            {
+              DeleteImage(existingProduct.PictureUrl);
+            }
+            var imagePath = await SaveImageAsync(f);
+            clonedProduct.PictureUrl = $"{imagePath}?timestamp={DateTime.Now.Ticks}";
+
+            // Lưu hình ảnh mới
           }
-          _unitOfWork.ProductRepository.Update(existingProduct);
+
+          // Các logic cập nhật thông tin sản phẩm khác ở đây
+
+          // Cập nhật sản phẩm trong cơ sở dữ liệu
+          _unitOfWork.ProductRepository.Update(clonedProduct);
           _unitOfWork.Save();
         }
 
@@ -219,41 +241,79 @@ namespace api.Controllers
       }
 
     }
-
-    private string SaveImage(FileUpLoadAPI p)
+    private Product CloneProduct(Product product)
     {
-      
-
-      var imageName = p.files.FileName;
-      var directoryPath = Path.Combine("images", "products");
-      var path = Path.Combine(directoryPath, imageName);
-      string urlPath = path.Replace("\\", "/");
-
-
-      using (var stream = System.IO.File.Create(urlPath))
+      return new Product
       {
-        p.files.CopyToAsync(stream);
-      }
+        Id = product.Id,
+        ProductCode = product.ProductCode,
+        Name = product.Name,
+        Description = product.Description,
+        Price = product.Price,
+        PictureUrl = product.PictureUrl,
+        ProductTypeId = product.ProductTypeId,
+        ProductBrandId = product.ProductBrandId,
+        Quantity = product.Quantity,
+        Status = product.Status,
 
-      return urlPath;
+        // Sao chép các trường dữ liệu khác cần thiết
+      };
+    }
+    private ProductBrand CloneProductBrand(ProductBrand product)
+    {
+      return new ProductBrand
+      {
+        Id = product.Id,
+        Name = product.Name,
+        Description = product.Description,
+        PictureUrl = product.PictureUrl,
+        Status = product.Status,
+
+        // Sao chép các trường dữ liệu khác cần thiết
+      };
+    }
+    private ProductType CloneProductType(ProductType product)
+    {
+      return new ProductType
+      {
+        Id = product.Id,
+     
+        Name = product.Name,
+        Description = product.Description,
+        PictureUrl = product.PictureUrl,
+        Status = product.Status,
+
+        // Sao chép các trường dữ liệu khác cần thiết
+      };
     }
 
-    [HttpDelete("Delete/{Id}")]
-    public async Task<ActionResult<Product>> Delete([FromForm] int id)
+    private async Task<string> SaveImageAsync(FileUpLoadAPI p)
     {
-      var product = await _unitOfWork.ProductRepository.GetEntityById(id);
+      var imageName = Path.GetFileName(p.files.FileName);
+      var directoryPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "products");
+      var filePath = Path.Combine(directoryPath, imageName);
+    
+      // Create directory if it doesn't exist
+      Directory.CreateDirectory(directoryPath);
 
-      if (product == null)
+      // Save the image file
+      using (var stream = new FileStream(filePath, FileMode.Create))
       {
-        return BadRequest($"Product with ID {id} not found.");
+        await p.files.CopyToAsync(stream);
       }
 
-      // Set the Status property to false to mark the product as deleted
-      product.Status = false;
+      // Return the relative URL of the saved image
+      return Path.Combine("images", "products", imageName).Replace("\\", "/");
+    }
 
-      _unitOfWork.Save();
+    private void DeleteImage(string imageUrl)
+    {
+      var physicalPath = Path.Combine(_webHostEnvironment.WebRootPath, imageUrl.TrimStart('/'));
 
-      return Ok("Product deleted successfully.");
+      if (System.IO.File.Exists(physicalPath))
+      {
+        System.IO.File.Delete(physicalPath);
+      }
     }
 
 
@@ -268,22 +328,7 @@ namespace api.Controllers
 
       Product product = query.FirstOrDefault();
       return Ok(_mapper.Map<Product, ReturnProduct>(product));
-      // return Ok(product);
-      // return Ok(new ReturnProduct
-      // {
-      //   Id = product.Id,
-      //   ProductCode = product.ProductCode,
-      //   Name = product.Name,
-      //   Description = product.Description,
-      //   PictureUrl = product.PictureUrl,
-      //   Price = product.Price,
-      //   Quantity = product.Quantity,
-      //   Status = product.Status,
-      //   ProductBrand = product.ProductBrand.Name,
-      //   ProductType = product.ProductType.Name,
-      //   CreatedBy = product.CreatedBy,
-      //   UpdateBy = product.UpdateBy
-      // });
+    
     }
 
 
@@ -311,11 +356,8 @@ namespace api.Controllers
     }
 
     [HttpGet("origins")]
-    // public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
-    // {
-    //   IEnumerable<ProductBrand> productBrands = await _unitOfWork.ProductBrandRepository.GetAll();
-    //   return Ok(productBrands);
-    // }
+
+
     public async Task<ActionResult<List<ProductBrand>>> GetProductBrands()
     {
       IEnumerable<ProductBrand> productBrands = await _unitOfWork.ProductBrandRepository.GetEntities(
@@ -364,7 +406,7 @@ namespace api.Controllers
     }
 
     [HttpPut("origins/Update/{Id}")]
-    public ActionResult<ProductBrand> UpdateProductBrand(int id, [FromForm] ProductBrand productBrandUpdate, [FromForm] FileUpLoadProductBrand f)
+    public async Task<ActionResult<ProductBrand>> UpdateProductBrand(int id, [FromForm] ProductBrand productBrandUpdate, [FromForm] FileUpLoadProductBrand f)
     {
       try
       {
@@ -409,12 +451,29 @@ namespace api.Controllers
           {
             existingProduct.PictureUrl = productBrandUpdate.PictureUrl;
           }
+           var clonedProduct = CloneProductBrand(existingProduct);
+
+          // Cập nhật các trường dữ liệu của sản phẩm
+          if (!string.IsNullOrEmpty(productBrandUpdate.Name))
+          {
+            clonedProduct.Name = productBrandUpdate.Name;
+          }
+          // Cập nhật các trường dữ liệu khác tương tự
+
+          // Cập nhật URL hình ảnh
           if (f != null && f.files != null)
           {
-            var imagePath = SaveImageBrand(f);
-            existingProduct.PictureUrl = imagePath;
+            // Xóa hình ảnh cũ
+            if (!string.IsNullOrEmpty(existingProduct.PictureUrl))
+            {
+              DeleteImage(existingProduct.PictureUrl);
+            }
+            var imagePath = await SaveBrandImageAsync(f);
+            clonedProduct.PictureUrl = $"{imagePath}?timestamp={DateTime.Now.Ticks}";
+
+            // Lưu hình ảnh mới
           }
-          _unitOfWork.ProductBrandRepository.Update(existingProduct);
+          _unitOfWork.ProductBrandRepository.Update(clonedProduct);
           _unitOfWork.Save();
         }
 
@@ -426,33 +485,45 @@ namespace api.Controllers
       }
 
     }
-    private string SaveImageBrand(FileUpLoadProductBrand p)
+    private async Task<string> SaveBrandImageAsync(FileUpLoadProductBrand p)
     {
-      var imageName = p.files.FileName;
-      var directoryPath = Path.Combine("images", "brands");
-      var path = Path.Combine(directoryPath, imageName);
-      string urlPath = path.Replace("\\", "/");
+      var imageName = Path.GetFileName(p.files.FileName);
+      var directoryPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "products");
+      var filePath = Path.Combine(directoryPath, imageName);
 
-      // Tạo thư mục nếu nó không tồn tại
-      if (!Directory.Exists(directoryPath))
+      // Create directory if it doesn't exist
+      Directory.CreateDirectory(directoryPath);
+
+      // Save the image file
+      using (var stream = new FileStream(filePath, FileMode.Create))
       {
-        Directory.CreateDirectory(directoryPath);
+        await p.files.CopyToAsync(stream);
       }
 
-      // Lưu file vào thư mục đã tạo
-      using (var stream = System.IO.File.Create(urlPath))
+      // Return the relative URL of the saved image
+      return Path.Combine("images", "products", imageName).Replace("\\", "/");
+    }
+
+
+    [HttpPut("Delete/Brand/{Id}")]
+    public async Task<ActionResult<Product>> DeleteBrand(int id)
+    {
+      var productBrand = await _unitOfWork.ProductBrandRepository.GetEntityById(id);
+
+      if (productBrand == null)
       {
-        p.files.CopyToAsync(stream);
+        return BadRequest($"Product with ID {id} not found.");
       }
 
-      // Trả về đường dẫn tương đối của hình ảnh mà không bao gồm phần "localhost"
+      // Set the Status property to false to mark the product as deleted
+      productBrand.Status = false;
 
-      var baseUrl = _configuration["ApiUrl"];
-      var updatedUrlPath = urlPath.Replace(baseUrl, ""); // Loại bỏ phần "localhost" khỏi đường dẫn
-      return (urlPath.ToString());
+      _unitOfWork.Save();
+
+      return Ok("Product deleted successfully.");
     }
     [HttpPut("types/Update/{Id}")]
-    public ActionResult<ProductType> UpdateProductType(int id, [FromForm] ProductType productTypeUpdate, [FromForm] FileUpLoadProducType f)
+    public async Task<ActionResult<ProductType>> UpdateProductType(int id, [FromForm] ProductType productTypeUpdate, [FromForm] FileUpLoadProducType f)
     {
       try
       {
@@ -497,10 +568,27 @@ namespace api.Controllers
           {
             existingProduct.PictureUrl = productTypeUpdate.PictureUrl;
           }
+          var clonedProduct = CloneProductType(existingProduct);
+
+          // Cập nhật các trường dữ liệu của sản phẩm
+          if (!string.IsNullOrEmpty(productTypeUpdate.Name))
+          {
+            clonedProduct.Name = productTypeUpdate.Name;
+          }
+          // Cập nhật các trường dữ liệu khác tương tự
+
+          // Cập nhật URL hình ảnh
           if (f != null && f.files != null)
           {
-            var imagePath = SaveImageType(f);
-            existingProduct.PictureUrl = imagePath;
+            // Xóa hình ảnh cũ
+            if (!string.IsNullOrEmpty(existingProduct.PictureUrl))
+            {
+              DeleteImage(existingProduct.PictureUrl);
+            }
+            var imagePath = await SaveTypeImageAsync(f);
+            clonedProduct.PictureUrl = $"{imagePath}?timestamp={DateTime.Now.Ticks}";
+
+            // Lưu hình ảnh mới
           }
           _unitOfWork.ProductTypeRepository.Update(existingProduct);
           _unitOfWork.Save();
@@ -514,6 +602,28 @@ namespace api.Controllers
       }
 
     }
+
+
+
+    private async Task<string> SaveTypeImageAsync(FileUpLoadProducType p)
+    {
+      var imageName = Path.GetFileName(p.files.FileName);
+      var directoryPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "products");
+      var filePath = Path.Combine(directoryPath, imageName);
+
+      // Create directory if it doesn't exist
+      Directory.CreateDirectory(directoryPath);
+
+      // Save the image file
+      using (var stream = new FileStream(filePath, FileMode.Create))
+      {
+        await p.files.CopyToAsync(stream);
+      }
+
+      // Return the relative URL of the saved image
+      return Path.Combine("images", "products", imageName).Replace("\\", "/");
+    }
+
 
     private string SaveImageType(FileUpLoadProducType p)
     {
@@ -587,6 +697,24 @@ namespace api.Controllers
         _unitOfWork.Save();
         return Ok(productType);
       }
+    }
+
+    [HttpPut("Delete/Type/{Id}")]
+    public async Task<ActionResult<Product>> DeleteType(int id)
+    {
+      var productType = await _unitOfWork.ProductTypeRepository.GetEntityById(id);
+
+      if (productType == null)
+      {
+        return BadRequest($"Product with ID {id} not found.");
+      }
+
+      // Set the Status property to false to mark the product as deleted
+      productType.Status = false;
+
+      _unitOfWork.Save();
+
+      return Ok("Product deleted successfully.");
     }
 
   }
