@@ -10,7 +10,7 @@ import { CheckoutPaymentComponent } from './checkout-payment/checkout-payment.co
 import { CheckoutReviewComponent } from './checkout-review/checkout-review.component';
 import { CheckoutSuccessComponent } from './checkout-success/checkout-success.component';
 import { CheckoutRoutes } from './checkout-routing.module';
-// import { NgxPayPalModule } from 'ngx-paypal';
+import { NgxPayPalModule } from 'ngx-paypal';
 
 @NgModule({
   declarations: [
@@ -24,7 +24,7 @@ import { CheckoutRoutes } from './checkout-routing.module';
   imports: [
     CommonModule,
     SharedModule,
-    // NgxPayPalModule,
+    NgxPayPalModule,
     RouterModule.forChild(CheckoutRoutes),
   ],
 })
