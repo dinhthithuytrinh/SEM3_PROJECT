@@ -19,7 +19,12 @@ namespace api.DTO
     public string PictureUrl { get; set; }
 
     public string ProductType { get; set; }
+    public int ProductTypeId { get; set; }
+
+
     public string ProductBrand { get; set; }
+    public int ProductBrandId { get; set; }
+
     public int Quantity { get; set; }
     public Boolean Status { get; set; }
     public DateTime CreatedBy { get; set; } = DateTime.Now;

@@ -25,8 +25,6 @@ namespace api.Entities
     public ProductBrand ProductBrand { get; set; }
     public int ?ProductBrandId { get; set; }
 
-    [NotMapped]
-    public IFormFile files { get; set; }
 
     public int ?Quantity { get; set; }
     public Boolean ?Status { get; set; }

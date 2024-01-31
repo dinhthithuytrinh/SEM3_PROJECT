@@ -79,21 +79,22 @@ export class AdminProductsComponent implements OnInit {
   if (item && item.id !== "0") {
     this.selectedProduct = item;
     this.ModalTitle = "Edit Product";
-
     // Wait for both fetch operations to complete
     forkJoin([
       this.fetchTypes(),
       this.fetchOrigins()
     ]).subscribe(() => {
+        this.selectedProduct.productBrandId = this.selectedProduct.productBrandId || ''; // Gán giá trị mặc định nếu không có giá trị
+      this.selectedProduct.productBrandId = this.selectedProduct.productBrandId || ''; // Gán giá trị mặc định nếu không có giá trị
       this.ActivateAddEditProductComponent = true;
     });
   }
-  console.log(item)
 }
-  fetchTypes() {
+ fetchTypes() {
   return this.adminService.getTypes().pipe(
     tap((types: IType[]) => {
-      this.types = types;
+      console.log('Types from API:', types); // Kiểm tra dữ liệu được trả về từ API
+      this.types = types; // Gán dữ liệu cho biến this.types
     })
   );
 }
@@ -101,7 +102,8 @@ export class AdminProductsComponent implements OnInit {
 fetchOrigins() {
   return this.adminService.getOrigins().pipe(
     tap((origins: IOrigin[]) => {
-      this.origins = origins;
+      console.log('Origins from API:', origins); // Kiểm tra dữ liệu được trả về từ API
+      this.origins = origins; // Gán dữ liệu cho biến this.origins
     })
   );
 }
@@ -181,20 +183,7 @@ refreshProductsList() {
     });
   }
 
-  FilterFn() {
-    var ProductsIdFilter = this.ProductsIdFilter;
-    var ProductsNameFilter = this.PruductsNameFilter;
-
-    this.ProductsList = this.ProductsListWithoutFilter.filter(
-      function (el: any) {
-        return el.DepartmentId.toString().toLowerCase().includes(
-          ProductsIdFilter.toString().trim().toLowerCase()
-        ) &&
-          el.DepartmentName.toString().toLowerCase().includes(
-            ProductsNameFilter.toString().trim().toLowerCase())
-      }
-    );
-  }
+ 
   applyFilter() {
     if (this.searchTerm.trim().length > 0) { // Sử dụng trim() để loại bỏ khoảng trắng thừa và kiểm tra độ dài của từ khóa tìm kiếm
         // Sử dụng phương thức filter để lọc danh sách theo trường "id" và "name"
