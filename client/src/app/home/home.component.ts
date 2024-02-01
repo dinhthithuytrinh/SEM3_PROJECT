@@ -4,6 +4,8 @@ import { IProduct } from '../models/IProduct';
 import { IType } from '../models/IType';
 import { IOrigin } from '../models/IOrigin';
 import { IPagination } from '../models/IPagination';
+import { faTags } from '@fortawesome/free-solid-svg-icons';
+import { BasketService } from '../basket/basket.service';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +14,7 @@ import { IPagination } from '../models/IPagination';
 })
 export class HomeComponent {
   products: IProduct[] = [];
+  products2: IProduct[] = [];
   types: IType[] = [];
   origins: IOrigin[] = [];
 
@@ -19,29 +22,56 @@ export class HomeComponent {
   brandIdSelected: number = 0;
   sortSelected = 'name';
   pageNumber = 1;
-  pageSize = 9;
+  pageSize = 10;
   totalCount = 0;
-
+  sortOption = 'priceAsc';
   sortOptions = [
     { name: 'Alphabetical', value: 'name' },
     { name: 'Price: Low to High', value: 'priceAsc' },
     { name: 'Price: High to Low', value: 'priceDesc' },
   ];
 
-  constructor(private shopService: ShopService) {}
+  constructor(
+    private shopService: ShopService,
+    private basketService: BasketService
+  ) {}
+  faTags = faTags;
+  product: IProduct | undefined;
+
   ngOnInit(): void {
     this.getProducts();
+    this.getProducts2();
     this.getOrigins();
     this.getTypes();
   }
 
-  // callApi() {
-  //   this.http
-  //     .get('http://localhost:5000/api/products')
-  //     .subscribe((response) => {
-  //       console.log(response);
-  //     });
-  // }
+  addItemToBasket() {
+    if (this.product) {
+      this.basketService.addItemToBasket(this.product);
+    }
+  }
+
+  slides = [
+    { img: '/assets/img/mv1.jpg' },
+    { img: '/assets/img/mv2.jpg' },
+    { img: '/assets/img/mv3.jpg' },
+    { img: '/assets/img/mv4.jpg' },
+    { img: '/assets/img/mv5.jpg' },
+  ];
+  slideConfig = {
+    speed: 300,
+    autoplay: true,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+  };
+
+  slideConfig2 = {
+    speed: 500,
+    autoplay: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
   getProducts(): void {
     this.shopService
       .getProducts(
@@ -54,6 +84,26 @@ export class HomeComponent {
       .subscribe({
         next: (response: IPagination | null) => {
           this.products = response!.data;
+          this.pageNumber = response!.pageNumber;
+          this.pageSize = response!.pageSize;
+          this.totalCount = response!.totalCount;
+        },
+        error: (err) => console.log(err),
+      });
+  }
+
+  getProducts2(): void {
+    this.shopService
+      .getProducts(
+        this.sortOption,
+        this.pageNumber,
+        this.pageSize,
+        this.brandIdSelected,
+        this.typeIdSelected
+      )
+      .subscribe({
+        next: (response: IPagination | null) => {
+          this.products2 = response!.data;
           this.pageNumber = response!.pageNumber;
           this.pageSize = response!.pageSize;
           this.totalCount = response!.totalCount;

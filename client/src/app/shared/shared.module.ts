@@ -18,6 +18,7 @@ import { StepperComponent } from './stepper/stepper.component';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { BasketSummaryComponent } from './basket-summary/basket-summary.component';
+import { SlickCarouselModule } from 'ngx-slick-carousel';
 @NgModule({
   declarations: [
     PagerComponent,
@@ -43,6 +44,7 @@ import { BasketSummaryComponent } from './basket-summary/basket-summary.componen
     ReactiveFormsModule,
     BsDropdownModule.forRoot(),
     FontAwesomeModule,
+    SlickCarouselModule,
   ],
   exports: [
     FontAwesomeModule,
@@ -60,6 +62,7 @@ import { BasketSummaryComponent } from './basket-summary/basket-summary.componen
     BsDropdownModule,
     CdkStepperModule,
     BasketSummaryComponent,
+    SlickCarouselModule,
   ],
 })
 export class SharedModule {}

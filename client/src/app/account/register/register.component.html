@@ -10,21 +10,22 @@
   <div class="container">
     <div class="row" style="align-items: center; justify-content: center;">
       <div class="">
-        <div class="panel border bg-white" style="padding: 30px">
+        <div class="panel border bg-white" style="padding: 30px;max-width: 600px;
+        margin: 0 auto;">
           <div class="panel-heading">
             <h3 class="font-weight-bold">Register</h3>
           </div>
           <div class="panel-body">
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
               <div class=" form-register">
-                <app-text-input [formControl]="registerForm.controls['displayName']"
-                  [label]="'Display Name'"></app-text-input>
+                <app-text-input [formControl]="registerForm.controls['displayName']" [label]="'Display Name'"
+                  [iconFa]="'user'"></app-text-input>
                 <app-text-input [isCheck]="true" [formControl]="registerForm.controls['email']"
-                  [label]="'Email Address'"></app-text-input>
-                <app-text-input [isPassword]="true" [formControl]="registerForm.controls['password']"
+                  [label]="'Email Address'" [iconFa]="'envelope-o'"></app-text-input>
+                <app-text-input [isPassword]="true" [formControl]="registerForm.controls['password']" [iconFa]="'lock'"
                   [label]="'Password'" [type]="'password'"></app-text-input>
                 <app-text-input [isPassword]="true" [formControl]="registerForm.controls['passwordConfirm']"
-                  [label]="'Confirm Password'" [type]="'password'"></app-text-input>
+                  [iconFa]="'lock'" [label]="'Confirm Password'" [type]="'password'"></app-text-input>
               </div>
               <ul class="text-danger list-unstyled" *ngIf="errors">
                 <li *ngFor="let error of errors">

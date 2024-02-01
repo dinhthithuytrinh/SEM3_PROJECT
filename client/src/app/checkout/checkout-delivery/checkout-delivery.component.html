@@ -1,5 +1,7 @@
 <div class="mt-4" [formGroup]="checkoutForm">
-  <div class="row" formGroupName="deliveryForm">
+  <div class="row" formGroupName="deliveryForm" style="background: #fff;
+  padding: 10px;
+  margin-bottom: 20px;">
     <div class="col-6 form-group" *ngFor="let method of deliveryMethods">
       <input type="radio" id="{{method.id}}" (click)="setShippingPrice(method)" value="{{method.id}}"
         formControlName="deliveryMethod" class="mx-2">

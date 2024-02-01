@@ -41,7 +41,7 @@ export class CheckoutPaymentComponent {
     const orderToCreate = this.getOrderToCreate(basket);
     this.checkoutService.createOrder(orderToCreate).subscribe(
       (order: IOrder) => {
-        // this.basketService.deleteBasket(basket);
+        this.basketService.deleteBasket(basket);
         this.toastr.success('Order created successfully');
         this.basketService.deleteBasketWithoutCallingToAPI(basket.id);
         const navigationExtras: NavigationExtras = { state: order };
@@ -70,145 +70,145 @@ export class CheckoutPaymentComponent {
     };
   }
 
-  // ngOnInit(): void {
-  //   this.accountService.getUserAddress().subscribe((address: Address) => {
-  //     this.userAddress = address;
-  //     console.log('aaaa');
-  //     console.log(address);
-  //     console.log(this.userAddress);
-  //   });
-  //   this.basket = this.basketService.getCurrentBasketValue();
+  ngOnInit(): void {
+    this.accountService.getUserAddress().subscribe((address: Address) => {
+      this.userAddress = address;
+      console.log('aaaa');
+      console.log(address);
+      console.log(this.userAddress);
+    });
+    this.basket = this.basketService.getCurrentBasketValue();
 
-  //   this.basket.items.forEach((item: IBasketItem) => {
-  //     this.itemListToPaypal.push({
-  //       name: item.productName.substring(0, 126),
-  //       quantity: item.quantity.toString(),
-  //       category: 'PHYSICAL_GOODS',
-  //       unit_amount: {
-  //         currency_code: 'USD',
-  //         value: item.price.toFixed(2),
-  //       },
-  //     });
-  //   });
-  // }
+    this.basket.items.forEach((item: IBasketItem) => {
+      this.itemListToPaypal.push({
+        name: item.productName.substring(0, 126),
+        quantity: item.quantity.toString(),
+        category: 'PHYSICAL_GOODS',
+        unit_amount: {
+          currency_code: 'USD',
+          value: item.price.toFixed(2),
+        },
+      });
+    });
+  }
 
-  // submitOrderAndClearBasket(): void {
-  //   let basket = this.basketService.getCurrentBasketValue();
-  //   let orderToCreate = {
-  //     basketId: basket.id,
-  //     deliveryMethodId: +this.checkoutForm
-  //       .get('deliveryForm')
-  //       ?.get('deliveryMethod')?.value,
-  //     shipToAddress: this.checkoutForm.get('addressForm')?.value,
-  //   };
+  submitOrderAndClearBasket(): void {
+    let basket = this.basketService.getCurrentBasketValue();
+    let orderToCreate = {
+      basketId: basket.id,
+      deliveryMethodId: +this.checkoutForm
+        .get('deliveryForm')
+        ?.get('deliveryMethod')?.value,
+      shipToAddress: this.checkoutForm.get('addressForm')?.value,
+    };
 
-  //   this.checkoutService.createOrder(orderToCreate).subscribe(
-  //     (order: IOrder) => {
-  //       this.toastr.success('Order created successfully');
-  //       this.basketService.deleteBasketWithoutCallingToAPI(basket.id);
-  //       let navigationExtras: NavigationExtras = { state: order };
-  //       this.router
-  //         .navigate(['checkout/success'], navigationExtras)
-  //         .then((r) => {});
-  //     },
-  //     (error) => {
-  //       this.toastr.error(error.message);
-  //       console.log(error);
-  //     }
-  //   );
-  // }
+    this.checkoutService.createOrder(orderToCreate).subscribe(
+      (order: IOrder) => {
+        this.toastr.success('Order created successfully');
+        this.basketService.deleteBasketWithoutCallingToAPI(basket.id);
+        let navigationExtras: NavigationExtras = { state: order };
+        this.router
+          .navigate(['checkout/success'], navigationExtras)
+          .then((r) => {});
+      },
+      (error) => {
+        this.toastr.error(error.message);
+        console.log(error);
+      }
+    );
+  }
 
-  // showPaypalButtons(): void {
-  //   this.initConfig();
-  //   this.orderIsSubmittedStatus = true;
-  // }
+  showPaypalButtons(): void {
+    this.initConfig();
+    this.orderIsSubmittedStatus = true;
+  }
 
-  // private initConfig(): void {
-  //   this.payPalConfig = {
-  //     currency: 'USD',
-  //     clientId:
-  //       'AWMH-v3wyJSJCa1Q7rw-C7w1jQvLjaplxHTbLsQC_SX7eHhqz6r3STFDmDSPfXfzDMdY0S3-LptnjhjA',
-  //     createOrderOnClient: (data) =>
-  //       <ICreateOrderRequest>{
-  //         intent: 'CAPTURE',
-  //         purchase_units: [
-  //           {
-  //             amount: {
-  //               currency_code: 'USD',
-  //               value: this.basketService
-  //                 .getCurrentTotalBasketValue()
-  //                 .total.toFixed(2),
-  //               breakdown: {
-  //                 item_total: {
-  //                   currency_code: 'USD',
-  //                   value: this.basketService
-  //                     .getCurrentTotalBasketValue()
-  //                     .subtotal.toFixed(2),
-  //                 },
-  //                 shipping: {
-  //                   currency_code: 'USD',
-  //                   value: this.basketService
-  //                     .getCurrentTotalBasketValue()
-  //                     .shipping.toFixed(2),
-  //                 },
-  //               },
-  //             },
-  //             items: this.itemListToPaypal,
-  //             shipping: {
-  //               name: {
-  //                 full_name:
-  //                   this.userAddress!.firstName +
-  //                   ' ' +
-  //                   this.userAddress!.lastName,
-  //               },
-  //               address: {
-  //                 address_line_1: this.userAddress!.street,
-  //                 address_line_2: '',
-  //                 admin_area_2: this.userAddress!.city,
-  //                 admin_area_1: this.userAddress!.state,
-  //                 postal_code: this.userAddress!.zipcode,
-  //                 country_code: 'VN',
-  //               },
-  //             },
-  //           },
-  //         ],
-  //       },
-  //     advanced: {
-  //       commit: 'true',
-  //     },
-  //     style: {
-  //       label: 'paypal',
-  //       layout: 'vertical',
-  //     },
-  //     onApprove: (data, actions) => {
-  //       console.log(
-  //         'onApprove - transaction was approved, but not authorized',
-  //         data,
-  //         actions
-  //       );
-  //       actions.order.get().then((details: any) => {
-  //         console.log(
-  //           'onApprove - you can get full order details inside onApprove: ',
-  //           details
-  //         );
-  //       });
-  //     },
-  //     onClientAuthorization: (data) => {
-  //       console.log(
-  //         'onClientAuthorization - you should probably inform your server about completed transaction at this point',
-  //         data
-  //       );
-  //       this.submitOrderAndClearBasket();
-  //     },
-  //     onCancel: (data, actions) => {
-  //       console.log('OnCancel', data, actions);
-  //     },
-  //     onError: (err) => {
-  //       console.log('OnError', err);
-  //     },
-  //     onClick: (data, actions) => {
-  //       console.log('onClick', data, actions);
-  //     },
-  //   };
-  // }
+  private initConfig(): void {
+    this.payPalConfig = {
+      currency: 'USD',
+      clientId:
+        'AWMH-v3wyJSJCa1Q7rw-C7w1jQvLjaplxHTbLsQC_SX7eHhqz6r3STFDmDSPfXfzDMdY0S3-LptnjhjA',
+      createOrderOnClient: (data) =>
+        <ICreateOrderRequest>{
+          intent: 'CAPTURE',
+          purchase_units: [
+            {
+              amount: {
+                currency_code: 'USD',
+                value: this.basketService
+                  .getCurrentTotalBasketValue()
+                  .total.toFixed(2),
+                breakdown: {
+                  item_total: {
+                    currency_code: 'USD',
+                    value: this.basketService
+                      .getCurrentTotalBasketValue()
+                      .subtotal.toFixed(2),
+                  },
+                  shipping: {
+                    currency_code: 'USD',
+                    value: this.basketService
+                      .getCurrentTotalBasketValue()
+                      .shipping.toFixed(2),
+                  },
+                },
+              },
+              items: this.itemListToPaypal,
+              shipping: {
+                name: {
+                  full_name:
+                    this.userAddress!.firstName +
+                    ' ' +
+                    this.userAddress!.lastName,
+                },
+                address: {
+                  address_line_1: this.userAddress!.street,
+                  address_line_2: '',
+                  admin_area_2: this.userAddress!.city,
+                  admin_area_1: this.userAddress!.state,
+                  postal_code: this.userAddress!.zipcode,
+                  country_code: 'VN',
+                },
+              },
+            },
+          ],
+        },
+      advanced: {
+        commit: 'true',
+      },
+      style: {
+        label: 'paypal',
+        layout: 'vertical',
+      },
+      onApprove: (data, actions) => {
+        console.log(
+          'onApprove - transaction was approved, but not authorized',
+          data,
+          actions
+        );
+        actions.order.get().then((details: any) => {
+          console.log(
+            'onApprove - you can get full order details inside onApprove: ',
+            details
+          );
+        });
+      },
+      onClientAuthorization: (data) => {
+        console.log(
+          'onClientAuthorization - you should probably inform your server about completed transaction at this point',
+          data
+        );
+        this.submitOrderAndClearBasket();
+      },
+      onCancel: (data, actions) => {
+        console.log('OnCancel', data, actions);
+      },
+      onError: (err) => {
+        console.log('OnError', err);
+      },
+      onClick: (data, actions) => {
+        console.log('onClick', data, actions);
+      },
+    };
+  }
 }

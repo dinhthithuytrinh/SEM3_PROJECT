@@ -1,29 +1,142 @@
 <app-client-nav></app-client-nav>
-<div class="position-relative overflow-hidden text-center bg-body-dark mainvisual" style="
-    background-image: url(/assets/img/mv3.jpg);
-    background-size: cover;
-    background-position: center;
-  ">
-  <div class="col-md-6 p-lg-5 mx-auto my-5">
-    <h1 class="display-3 fw-bold">Arts for everybody</h1>
-    <h3 class="fw-normal mb-3">All art is but imitation of nature.</h3>
-    <div class="d-flex gap-3 justify-content-center lead fw-normal">
-      <a class="icon-link" href="#">
-        Learn more
-        <svg class="bi">
-          <use xlink:href="#chevron-right"></use>
-        </svg>
-      </a>
-      <a class="icon-link" href="#">
-        Buy
-        <svg class="bi">
-          <use xlink:href="#chevron-right"></use>
-        </svg>
-      </a>
+<ngx-slick-carousel class="carousel" #slickModal="slick-carousel" [config]="slideConfig2">
+  <div ngxSlickItem *ngFor="let slide of slides" class="slide">
+    <div class="position-relative overflow-hidden text-center bg-body-dark mainvisual" style="
+  background-image: url({{slide.img}});
+  background-size: cover;
+  background-position: center;
+  height: 600px;
+  display: flex;
+  align-items: center;
+">
+      <div class="col-md-6 p-lg-5 mx-auto my-5" style="background-color: #000000c9; margin: 0 auto; max-width: 1000px;display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; max-height: 300px;">
+        <h1 class="display-3 fw-bold">Arts for everybody</h1>
+        <h3 class="fw-normal mb-3">All art is but imitation of nature.</h3>
+        <div class="d-flex gap-3 justify-content-center lead fw-normal">
+          <a class="icon-link" href="#">
+            Learn more
+            <svg class="bi">
+              <use xlink:href="#chevron-right"></use>
+            </svg>
+          </a>
+          <a class="icon-link" href="#">
+            Buy
+            <svg class="bi">
+              <use xlink:href="#chevron-right"></use>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="product-device shadow-sm d-none d-md-block"></div>
+      <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
     </div>
   </div>
-  <div class="product-device shadow-sm d-none d-md-block"></div>
-  <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+</ngx-slick-carousel>
+
+
+<div class="container home-container">
+  <h2>New Arrivals</h2>
+
+  <ngx-slick-carousel class="carousel" [config]="slideConfig">
+    <div ngxSlickItem *ngFor="let item of products" class="slide" style="max-width: 570px;">
+      <!-- <img src="{{ item?.pictureUrl }}" alt="" width="100%"> -->
+      <div class="col">
+        <div class="card">
+          <img src="{{ item?.pictureUrl ? item?.pictureUrl : '/assets/img/noimage.jpg' }}" alt="" />
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h4>{{ item?.name }}</h4>
+            <p class="card-text">
+              <fa-icon [icon]="faTags"></fa-icon><span class="mx-2">:</span>
+              <span>{{ item?.price | currency }}</span>
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button routerLink="product/{{ item?.productCode }}" type="button"
+                  class="btn btn-sm btn-outline-secondary">
+                  View
+                </button>
+                <button (click)="addItemToBasket()" type="button" class="btn btn-sm btn-outline-secondary  {{
+                      item?.quantity === 0 ? 'disabled' : ''
+                    }}">
+                  Add to cart
+                </button>
+              </div>
+              <small class="text-body-secondary">
+                <span class="text-number {{ item?.quantity === 0 ? 'out' : '' }}">
+                  {{
+                  item?.quantity !== 0
+                  ? "Avaiable: " + item?.quantity + "pcs"
+                  : "Out stock"
+                  }}
+                </span>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ngx-slick-carousel>
+  <!-- <a routerLink="./products">
+        <div class="text-center overflow-hidden">
+          <div class="">
+            <h3 class="">{{ item?.name }}</h3>
+            <p class="">{{ item?.description }}</p>
+          </div>
+          <div class="bg-body-tertiary shadow-sm mx-auto"
+            style="width: 80%; height: 115px; border-radius: 21px 21px 0 0">
+            <img src="{{ item?.pictureUrl }}" alt="" />
+          </div>
+        </div>
+      </a> -->
+</div>
+
+<div class="container home-container">
+  <h2>Popular</h2>
+
+  <ngx-slick-carousel class="carousel" [config]="slideConfig">
+    <div ngxSlickItem *ngFor="let item of products2" class="slide" style="max-width: 570px;">
+      <!-- <img src="{{ item?.pictureUrl }}" alt="" width="100%"> -->
+      <div class="col">
+        <div class="card">
+          <img src="{{ item?.pictureUrl ? item?.pictureUrl : '/assets/img/noimage.jpg' }}" alt="" />
+          <div class="card-body d-flex flex-column justify-content-between">
+            <h4>{{ item?.name }}</h4>
+            <p class="card-text">
+              <fa-icon [icon]="faTags"></fa-icon><span class="mx-2">:</span>
+              <span>{{ item?.price | currency }}</span>
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button routerLink="product/{{ item?.productCode }}" type="button"
+                  class="btn btn-sm btn-outline-secondary">
+                  View
+                </button>
+                <button (click)="addItemToBasket()" type="button" class="btn btn-sm btn-outline-secondary  {{
+                      item?.quantity === 0 ? 'disabled' : ''
+                    }}">
+                  Add to cart
+                </button>
+              </div>
+              <small class="text-body-secondary">
+                <span class="text-number {{ item?.quantity === 0 ? 'out' : '' }}">
+                  {{
+                  item?.quantity !== 0
+                  ? "Avaiable: " + item?.quantity + "pcs"
+                  : "Out stock"
+                  }}
+                </span>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ngx-slick-carousel>
 </div>
 
 <div class="container home-container">
@@ -37,7 +150,7 @@
             <p class="">{{ item?.description }}</p>
           </div>
           <div class="bg-body-tertiary shadow-sm mx-auto"
-            style="width: 80%; height: 300px; border-radius: 21px 21px 0 0">
+            style="width: 80%; height: 115px; border-radius: 21px 21px 0 0">
             <img src="{{ item?.pictureUrl }}" alt="" />
           </div>
         </div>
@@ -57,7 +170,7 @@
             <p class="">{{ item?.description }}</p>
           </div>
           <div class="bg-body-tertiary shadow-sm mx-auto"
-            style="width: 80%; height: 300px; border-radius: 21px 21px 0 0">
+            style="width: 80%; height: 115px; border-radius: 21px 21px 0 0">
             <img src="{{ item?.pictureUrl }}" alt="" />
           </div>
         </div>
